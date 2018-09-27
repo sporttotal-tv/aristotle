@@ -1,0 +1,6 @@
+{
+  "name": "hello",
+  "alias": {
+    "something": "./something.js"
+  }
+}

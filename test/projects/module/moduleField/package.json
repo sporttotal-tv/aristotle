@@ -1,0 +1,10 @@
+{
+  "name": "hello",
+  "module": "./es/index",
+  "main": "lib/index.js",
+  "version": "flups",
+  "dependencies": {
+    "css-animation": "latest",
+    "mini-store": "latest"
+  }
+}
