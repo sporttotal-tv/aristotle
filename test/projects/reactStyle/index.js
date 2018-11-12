@@ -1,39 +1,10 @@
 import React from 'react'
+import App from './App'
 import ReactDOM from 'react-dom'
-import ua from 'vigour-ua'
+// import React from 'react'
+// import { Route, Switch, createClient, Provider } from 'hub'
+// import ua from 'vigour-ua'
+// const hub = createClient()
+// console.log(hub)
 
-const blue = 'blue'
-
-const Bla = () => {
-  const styleX = {
-    height: 500,
-    fontFamily: 'andale mono'
-  }
-
-  return (
-    <div
-      style={{
-        ...styleX,
-        border: '100px solid blue',
-        background: 'grey',
-        '::-webkit-overflow-scrolling': 'touch',
-        ':hover': {
-          color: blue
-        }
-      }}
-    >
-      hahaha
-    </div>
-  )
-}
-
-const wait = () => new Promise(resolve => setTimeout(resolve, 100))
-
-console.log(Bla, ua)
-
-import('./Component').then(async val => {
-  await wait()
-  console.log('LOAD Component', val)
-})
-
-ReactDOM.render(<Bla />, document.body)
+ReactDOM.render(<App />, document.body)

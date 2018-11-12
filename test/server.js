@@ -82,7 +82,7 @@ const fs = require('mz/fs')
 //   path.join(__dirname, '../dist')
 // ).then(val => console.log('done'))
 
-startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3000)
+// startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3000)
 
 // production(
 //   path.join(__dirname, './projects/reactStyle/index.js'),
@@ -109,11 +109,21 @@ startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3000)
 // startServer(path.join(__dirname, '../../ops-front-app/src/index.js'), 3000)
 
 // startServer(path.join(__dirname, './projects/attr/index.js'), 3002)
-// buildProduction(path.join(__dirname, './projects/chalk/index.js'), 'node').then(
+// buildProduction(path.join(__dirname, './projects/reactStyle/index.js')).then(
 //   async val => {
-//     await fs.writeFile(
-//       path.join(__dirname, '../dist/', 'fun.js'),
-//       val.nodeBundle.code
-//     )
+//     console.log(Object.keys(val))
+//     // console.log(val.browserBundle.min)
 //   }
 // )
+
+production(
+  path.join(__dirname, './projects/reactStyle/index.js'),
+  path.join(__dirname, '../dist')
+).then(val => console.log('done'))
+
+// startServer(path.join(__dirname, './projects/errors/indcccex.js'), 3002)
+
+// startServer(path.join(__dirname, './projects/errors/syntaxError.js'), 3002)
+// startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
+
+// startServer(path.join(__dirname, '../../ops-front-app/src/index.js'), 3002)

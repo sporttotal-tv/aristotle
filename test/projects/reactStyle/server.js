@@ -1,7 +1,11 @@
-// import bla from './'
-// console.log(bla)
+import ReactDOMServer from 'react-dom/server'
+import React from 'react'
+import App from './App'
+import hub from './hub'
 
 export default async (req, files) => {
+  hub.set('device.history', req.url)
+  console.log('INCOMING SSR', req.url)
   return `
     <html>
       <meta charset="UTF-8">
@@ -11,7 +15,7 @@ export default async (req, files) => {
         </style>
       </head>
       <body>
-        ssr!!!!!????xxx
+        ${ReactDOMServer.renderToString(<App />)}
         <script src="${files.js.path}"></script>
       </body>
     </html>

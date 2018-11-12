@@ -151,3 +151,8 @@ select:-moz-focusring {
 body {
   box-sizing: border-box;
 }
+
+html,body {
+  min-height: 100%;
+  min-width: 100%;
+}

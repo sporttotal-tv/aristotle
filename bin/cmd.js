@@ -4,10 +4,7 @@ const { startServer, production } = require('../') // dev server
 const { isDir } = require('../lib/util/file')
 const cwd = process.cwd()
 const program = require('commander')
-const isPortFree = require('is-port-free')
-
-// const dev = ~process.argv.indexOf('-d') || ~process.argv.indexOf('--dev')
-
+const findPort = require('../lib/util/port')
 const file = process.argv[2]
 const dest = process.argv[3]
 
@@ -15,16 +12,6 @@ var input = isAbsolute(file) ? file : join(cwd, file)
 
 if (isDir(input)) {
   input += '/index.js'
-}
-
-const findPort = async port => {
-  try {
-    await isPortFree(port)
-    return port
-  } catch (notFree) {
-    port = await findPort(++port)
-    return port
-  }
 }
 
 const startDev = async () => {

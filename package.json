@@ -1,6 +1,19 @@
 {
     "name": "aristotle",
-    "version": "0.0.6",
+    "version": "0.0.7",
+    "bin": {
+        "aristotle": "bin/cmd.js"
+    },
+    "main": "lib",
+    "scripts": {
+        "install-tests": "cd test/projects/node && npm i",
+        "aristotle": "node bin/cmd.js",
+        "test": "ava",
+        "format": "prettier --write '{lib,test}/**/*.{js,json}'",
+        "lint": "eslint '{lib,test}/**/*.js' --fix",
+        "gen-builtin": "node ./tools/generateBuildins.js",
+        "gen-prodserver": "node ./tools/generateProdserver.js"
+    },
     "dependencies": {
         "autoprefixer": "^8.6.5",
         "babel-core": "^6.26.3",
@@ -34,20 +47,24 @@
         "events-browserify": "0.0.1",
         "freeport": "^1.0.5",
         "fs-extra": "^7.0.0",
+        "html-minifier": "^3.5.21",
         "http-browserify": "1.7.0",
         "https-browserify": "1.0.0",
         "imagemin": "^5.3.1",
         "imagemin-mozjpeg": "^7.0.0",
         "imagemin-pngquant": "^6.0.0",
         "imagemin-svgo": "^6.0.0",
+        "install": "^0.12.2",
         "ip": "^1.1.5",
         "is-port-free": "^1.0.7",
         "klaw": "^2.1.1",
         "mime-types": "^2.1.18",
         "mz": "^2.7.0",
+        "npm": "^6.4.1",
         "os-browserify": "0.3.0",
         "path-browserify": "1.0.0",
         "postcss": "^6.0.23",
+        "postcss-default-unit": "^1.0.0",
         "precss": "^3.1.2",
         "promise-polyfill": "8.0.0",
         "readline-browserify": "0.0.4",
@@ -58,7 +75,7 @@
         "string-hash": "^1.1.3",
         "timers-browserify": "2.0.10",
         "tty-browserify": "0.0.1",
-        "uglify-js": "^3.4.4",
+        "uglify-es": "^3.3.9",
         "vm-browserify": "1.1.0",
         "ws": "^5.2.0",
         "zen-observable": "^0.8.9",
@@ -109,19 +126,6 @@
         "./lib/file/builtin/vm/index.js": "./lib/file/builtin/vm/browser.js",
         "./lib/file/builtin/zlib/index.js": "./lib/file/builtin/zlib/browser.js"
     },
-    "bin": {
-        "aristotle": "bin/cmd.js"
-    },
-    "main": "lib",
-    "scripts": {
-        "install-tests": "cd test/projects/node && npm i",
-        "aristotle": "node bin/cmd.js",
-        "test": "ava",
-        "format": "prettier --write '{lib,test}/**/*.{js,json}'",
-        "lint": "eslint '{lib,test}/**/*.js' --fix",
-        "gen-builtin": "node ./tools/generateBuildins.js",
-        "gen-prodserver": "node ./tools/generateProdserver.js"
-    },
     "pre-commit": ["format", "lint"],
     "eslintConfig": {
         "parser": "babel-eslint",
@@ -138,6 +142,12 @@
         "semi": false
     },
     "devDependencies": {
+        "@grpc/proto-loader": "^0.3.0",
+        "async": "^1.5.2",
+        "google-protobuf": "^3.6.1",
+        "grpc": "^1.15.0",
+        "grpc-web": "^1.0.0",
+        "lodash": "^4.6.1",
         "@material-ui/core": "^3.0.1",
         "antd": "^3.8.4",
         "ava": "1.0.0-beta.7",
@@ -170,6 +180,7 @@
         "react-router-dom": "^4.3.1",
         "redux": "^4.0.0",
         "standard": "^10.0.3",
-        "vigour-ua": "latest"
+        "vigour-ua": "latest",
+        "hub": "atelier-saulx/hub"
     }
 }
