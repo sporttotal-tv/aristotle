@@ -20,7 +20,6 @@ const App = () => {
               }}
             >
               hahaha
-              <div>xxx</div>
             </div>
           )}
           path="/"
@@ -29,6 +28,8 @@ const App = () => {
     </Provider>
   )
 }
+
+const X = () => <div style={{}} />
 
 // console.log(App.toString())
 

@@ -116,14 +116,14 @@ const fs = require('mz/fs')
 //   }
 // )
 
-production(
-  path.join(__dirname, './projects/reactStyle/index.js'),
-  path.join(__dirname, '../dist')
-).then(val => console.log('done'))
+// production(
+//   path.join(__dirname, './projects/reactStyle/index.js'),
+//   path.join(__dirname, '../dist')
+// ).then(val => console.log('done'))
 
 // startServer(path.join(__dirname, './projects/errors/indcccex.js'), 3002)
 
 // startServer(path.join(__dirname, './projects/errors/syntaxError.js'), 3002)
-// startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
+startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
 
 // startServer(path.join(__dirname, '../../ops-front-app/src/index.js'), 3002)

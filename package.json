@@ -181,6 +181,6 @@
         "redux": "^4.0.0",
         "standard": "^10.0.3",
         "vigour-ua": "latest",
-        "hub": "atelier-saulx/hub"
+        "hub": "git+ssh://git@git.d.ops.com:x.ops.com/hub.git#9da36c84d35f23473afb9b85bb9f757c28442ba8"
     }
 }
