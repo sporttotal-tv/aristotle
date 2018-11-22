@@ -7,6 +7,7 @@ export default async (req, files) => {
   hub.set('device.history', req.url)
   console.log('INCOMING SSR', req.url)
   return `
+    <!DOCTYPE html>
     <html>
       <meta charset="UTF-8">
       <head>

@@ -15,7 +15,8 @@ const App = () => {
             <div
               style={{
                 background: 'blue',
-                padding: 30
+                padding: 30,
+                display: 'flex'
                 // transform: 'translate('
               }}
             >
@@ -29,8 +30,7 @@ const App = () => {
   )
 }
 
-const X = () => <div style={{}} />
-
+// const X = () => <div style={{}} />
 // console.log(App.toString())
 
 export default App
