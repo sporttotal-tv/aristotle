@@ -1,6 +1,6 @@
 {
     "name": "aristotle",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "bin": {
         "aristotle": "bin/cmd.js"
     },
@@ -109,25 +109,16 @@
         "./lib/file/builtin/vm/index.js": "./lib/file/builtin/vm/browser.js",
         "./lib/file/builtin/zlib/index.js": "./lib/file/builtin/zlib/browser.js"
     },
-    "pre-commit": [
-        "format",
-        "lint"
-    ],
+    "pre-commit": ["format", "lint"],
     "eslintConfig": {
         "parser": "babel-eslint",
-        "extends": [
-            "standard",
-            "standard-react",
-            "prettier"
-        ],
+        "extends": ["standard", "standard-react", "prettier"],
         "rules": {
             "react/prop-types": 0
         }
     },
     "ava": {
-        "files": [
-            "test/unit.js"
-        ]
+        "files": ["test/unit.js"]
     },
     "prettier": {
         "singleQuote": true,
