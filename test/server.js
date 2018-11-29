@@ -8,7 +8,7 @@ const {
 } = require('../lib')
 const fs = require('mz/fs')
 
-// store.noCache = true
+store.noCache = true
 
 // build(path.join(__dirname, '/projects/fetch/index.js')).then(async val => {
 //   await fs.writeFile(
@@ -117,23 +117,28 @@ const fs = require('mz/fs')
 // )
 
 // production(
-//   path.join(__dirname, './projects/reactStyle/index.js'),
-//   path.join(__dirname, '../dist')
+//   path.join(__dirname, '../../../flowmatik/flowmatik/src/index.js'),
+//   path.join(__dirname, '../dist'),
+//   { minify: true }
 // ).then(val => console.log('done'))
 
-startServer(
-  path.join(__dirname, '../../../flowmatik/flowmatik/src/index.js'),
-  3002
-)
+// startServer(
+//   path.join(__dirname, '../../../flowmatik/flowmatik/src/index.js'),
+//   3000
+// )
+
+// startServer(path.join(__dirname, './projects/webpack/index.js'), 3000)
+
+// startServer(path.join(__dirname, './projects/module/index.js'), 3000)
 
 // startServer(path.join(__dirname, './projects/alias/index.js'), 3002)
 
 // startServer(path.join(__dirname, './projects/errors/syntaxError.js'), 3002)
 // startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
 
-// startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
+startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3000)
 
 // startServer(path.join(__dirname, './projects/dynamicExports/index.js'), 3002)
 
 //
-// startServer(path.join(__dirname, '../../ops-front-app/src/index.js'), 3002)
+// startServer(path.join(__dirname, '../../ops-front-app/src/index.js'), 3000)
