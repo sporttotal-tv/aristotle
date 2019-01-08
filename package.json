@@ -33,6 +33,7 @@
         "babel-traverse": "^6.26.0",
         "babel-types": "^6.26.0",
         "babylon": "^6.18.0",
+        "vigour-ua": "latest",
         "browserslist": "^4.1.1",
         "builtin-modules": "^3.0.0",
         "chalk": "^2.4.1",
@@ -166,7 +167,6 @@
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
         "redux": "^4.0.0",
-        "standard": "^10.0.3",
-        "vigour-ua": "latest"
+        "standard": "^10.0.3"
     }
 }
