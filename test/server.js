@@ -8,7 +8,7 @@ const {
 } = require('../lib')
 const fs = require('mz/fs')
 
-store.noCache = true
+// store.noCache = true
 
 // build(path.join(__dirname, '/projects/fetch/index.js')).then(async val => {
 //   await fs.writeFile(
@@ -139,3 +139,5 @@ store.noCache = true
 // startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3000)
 
 // startServer(path.join(__dirname, './projects/dynamicExports/index.js'), 3002)
+
+startServer(path.join(__dirname, '../../v2/apps/app/index.web.js'), 3002)
