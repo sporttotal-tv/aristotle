@@ -139,9 +139,3 @@ store.noCache = true
 // startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3000)
 
 // startServer(path.join(__dirname, './projects/dynamicExports/index.js'), 3002)
-
-startServer(path.join(__dirname, '../../v2/apps/app/index.web.js'), 3000)
-
-// startServer(path.join(__dirname, './projects/simple/index.js'), 3000)
-
-// startServer(path.join(__dirname, './projects/reactNative/index.js'), 3000)
