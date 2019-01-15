@@ -1,15 +1,22 @@
-import bla from './bla'
+import scrollbarSize from './bla'
+import shurf from './shurf'
 
-console.log(bla)
+// const scrollbarSize = require('./bla')
 
-const foo = () => {
-  const bla = {
-    bla: true
+function x() {
+  if (Math.random() < 1) {
+    return
   }
-  const x = {}
-  x.bla = bla
-  console.log(x)
-  return bla
+
+  function bla() {
+    var scrollbarSize = this.blurf
+    return scrollbarSize
+  }
+
+  console.log(bla(), shurf)
+
+  var scrollbarSize = this.xyz
+  return { scrollbarSize, bla }
 }
 
-foo()
+console.log('x')
