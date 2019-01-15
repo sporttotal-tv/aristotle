@@ -8,7 +8,7 @@ const {
 } = require('../lib')
 const fs = require('mz/fs')
 
-// store.noCache = true
+store.noCache = true
 
 // build(path.join(__dirname, '/projects/fetch/index.js')).then(async val => {
 //   await fs.writeFile(

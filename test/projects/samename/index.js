@@ -1,6 +1,7 @@
 import scrollbarSize from './bla'
 import shurf from './shurf'
 
+import tree from 'react-sortable-tree'
 // const scrollbarSize = require('./bla')
 
 function x() {
