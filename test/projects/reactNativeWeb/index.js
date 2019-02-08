@@ -1,16 +1,17 @@
-import React from 'react'
-import { View, Text } from 'react-native'
 import ReactDOM from 'react-dom'
+import React from 'react'
+import Image2 from './x'
+import { View, Text, Image } from 'react-native'
 
 const App = () => {
   return (
     <View>
-      <Text>xx</Text>
+      <Text>xxxxxxxxxxxxxxxxx</Text>
     </View>
   )
 }
 
-console.log('hello', View)
+console.log('hello', Image, Image2)
 
 ReactDOM.render(<App />, document.body)
 

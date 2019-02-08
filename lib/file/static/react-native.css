@@ -1,5 +1,51 @@
 /* can make this into a class as well */
-div {
-  display: flex;
+.v,
+.t {
+  position: relative;
+  z-index: 0;
+  padding-left: 0px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  min-width: 0px;
+  min-height: 0px;
+  margin-left: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  -webkit-box-direction: normal;
+  -webkit-box-orient: vertical;
   flex-direction: column;
+  flex-basis: auto;
+  flex-shrink: 0;
+  display: flex;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-left-width: 0px;
+  border-bottom-width: 0px;
+  border-right-width: 0px;
+  border-top-width: 0px;
+  border-left-style: solid;
+  border-bottom-style: solid;
+  border-right-style: solid;
+  border-top-style: solid;
+  -webkit-box-align: stretch;
+  align-items: stretch;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Ubuntu, 'Helvetica Neue', sans-serif;
+  unicode-bidi: -webkit-isolate;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.t {
+  display: inline;
+  position: static;
+}
+
+.i {
+  background-repeat: no-repeat;
+  background-position: center center;
 }
