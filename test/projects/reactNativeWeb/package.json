@@ -1,0 +1,9 @@
+{
+  "name": "rnativeweb",
+  "dependencies": {
+    "react-native-web": "^0.9.10"
+  },
+  "alias": {
+    "react-native": "react-native-web"
+  }
+}
