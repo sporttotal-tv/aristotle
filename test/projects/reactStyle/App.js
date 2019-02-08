@@ -4,13 +4,21 @@ import hub from './hub'
 
 const Awesome = () => {
   const [purple, setPurple] = useState(false)
+
+  const bla = {
+    border: '1px solid blue'
+  }
+
+  console.log('xxx')
+
   return (
     <div
       onClick={() => setPurple(!purple)}
       style={{
         background: purple ? 'purple' : 'blue',
         padding: 30,
-        display: 'flex'
+        display: 'flex',
+        ...bla
         // transform: 'translate('
       }}
     >
