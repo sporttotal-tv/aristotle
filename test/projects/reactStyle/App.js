@@ -9,8 +9,6 @@ const Awesome = () => {
     border: '1px solid blue'
   }
 
-  console.log('xxx')
-
   return (
     <div
       onClick={() => setPurple(!purple)}
