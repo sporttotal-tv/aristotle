@@ -49,3 +49,9 @@
   background-repeat: no-repeat;
   background-position: center center;
 }
+
+._t {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
