@@ -42,6 +42,34 @@ class Styled4 extends Component {
   }
 }
 
+const Arrow = ({ color, height = 15, left = 1, style }) => {
+  return left ? (
+    <svg
+      style={style}
+      height={height}
+      width={height}
+      viewBox={`0 0 ${height} ${height}`}
+      fill={color}
+      fillRule="evenodd"
+    >
+      <path d={`M0 0 L 0 ${height}  L ${0.6 * height} ${0.5 * height}  L0 0`} />
+    </svg>
+  ) : (
+    <svg
+      style={style}
+      height={height}
+      width={height}
+      viewBox={`0 0 ${height} ${height}`}
+      fill={color}
+      fillRule="evenodd"
+    >
+      <path
+        d={`M0 ${height} L${height} ${height} L ${height} 0 L0 ${height}`}
+      />
+    </svg>
+  )
+}
+
 const Awesome = ({ flap, snurf }) => {
   const [purple, setPurple] = useState(false)
   const bla = {
@@ -53,9 +81,9 @@ const Awesome = ({ flap, snurf }) => {
   const x = purple ? 10 : 5
   const xx = xxx - x
 
-  console.log('xxx', xx, xxx)
+  // console.log('xxx', xx, xxx)
 
-  console.log('shurpie', Styled)
+  console.log('shurpie', Arrow)
 
   const flaps = purple ? 20 : 10
   return (
