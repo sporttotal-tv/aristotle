@@ -9,7 +9,12 @@ const Awesome = ({ flap, snurf }) => {
     border: '1px solid blue'
   }
 
-  console.log('xxx')
+  const xxx = 100
+
+  const x = purple ? 10 : 5
+  const xx = xxx - x
+
+  console.log('xxx', xx, xxx)
 
   const flaps = purple ? 20 : 10
   return (
@@ -17,6 +22,8 @@ const Awesome = ({ flap, snurf }) => {
       onClick={() => setPurple(!purple)}
       style={{
         padding: flaps,
+        marginBottom: x,
+        marginLeft: x,
         marginTop: purple ? 10 : flap ? 5 : snurf ? 1 : -10,
         ...bla
       }}
