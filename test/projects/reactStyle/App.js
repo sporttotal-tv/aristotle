@@ -1,10 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, Component } from 'react'
 import { Route, Switch, Provider } from 'hub'
 import hub from './hub'
 
+const Styled = props => {
+  return <div style={props.style}>hello</div>
+}
+
+const Styled2 = props => {
+  const { style } = props
+  return <div style={style}>hello</div>
+}
+
+class Styled3 extends Component {
+  render() {
+    const { style } = this.props
+    return <div style={style}>hello</div>
+  }
+}
+
+class Styled4 extends Component {
+  render() {
+    return <div style={this.props.style}>hello</div>
+  }
+}
+
 const Awesome = ({ flap, snurf }) => {
   const [purple, setPurple] = useState(false)
-
   const bla = {
     border: '1px solid blue'
   }
