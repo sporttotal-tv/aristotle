@@ -5,7 +5,9 @@ import hub from './hub'
 
 // ${ReactDOMServer.renderToString(<App />)}
 
-console.log('yes', ReactDOMServer)
+// console.log('yes', ReactDOMServer)
+
+ReactDOMServer.renderToString(<App />)
 
 export default async (req, files) => {
   hub.set('device.history', req.url)

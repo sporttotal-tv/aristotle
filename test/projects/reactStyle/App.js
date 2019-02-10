@@ -6,15 +6,33 @@ const Styled = props => {
   return <div style={props.style}>hello</div>
 }
 
-const Styled2 = props => {
-  const { style } = props
+const Styled2 = ({ style }) => {
+  // const { style } = props
   return <div style={style}>hello</div>
 }
 
-class Styled3 extends Component {
+const Styled3 = props => {
+  const { style } = props
+  return (
+    <div
+      style={{
+        border: '1px solid red',
+        ...style
+      }}
+    >
+      hello
+    </div>
+  )
+}
+
+class Styled5 extends Component {
   render() {
     const { style } = this.props
-    return <div style={style}>hello</div>
+    return (
+      <div className={this.props.className} style={style}>
+        hello
+      </div>
+    )
   }
 }
 
@@ -36,6 +54,8 @@ const Awesome = ({ flap, snurf }) => {
   const xx = xxx - x
 
   console.log('xxx', xx, xxx)
+
+  console.log('shurpie', Styled)
 
   const flaps = purple ? 20 : 10
   return (
@@ -67,8 +87,5 @@ const App = () => {
     </Provider>
   )
 }
-
-// const X = () => <div style={{}} />
-// console.log(App.toString())
 
 export default App
