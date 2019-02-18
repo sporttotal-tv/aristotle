@@ -1,12 +1,15 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
 import Image2 from './x'
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, Animated } from 'react-native'
 
 const App = () => {
   return (
     <View>
       <Text>xxxxxxxxxxxxxxxxx</Text>
+      <Animated.View>
+        <Text>xxx</Text>
+      </Animated.View>
     </View>
   )
 }

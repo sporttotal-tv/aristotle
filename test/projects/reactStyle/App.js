@@ -2,6 +2,12 @@ import React, { useState, Component } from 'react'
 import { Route, Switch, Provider } from 'hub'
 import hub from './hub'
 
+const Bla = {
+  Flap: () => {
+    return <div>HELLO</div>
+  }
+}
+
 const Styled = props => {
   return <div style={props.style}>hello</div>
 }
@@ -106,6 +112,8 @@ const App = () => {
   return (
     <Provider hub={hub} x="1111">
       <Switch>
+        <Bla.Flap />
+
         <Route
           asyncComponent={async () => import('./Component')}
           path="/x/flups"
