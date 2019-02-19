@@ -42,6 +42,7 @@
 .t {
   display: inline;
   position: static;
+  /* width: 100%; */
 }
 
 .i {
@@ -53,4 +54,5 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  width: 100%;
 }
