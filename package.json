@@ -42,6 +42,7 @@
     "css-tree": "^1.0.0-alpha9",
     "cssnano": "^4.0.2",
     "es6-object-assign": "^1.1.0",
+    "events": "^3.0.0",
     "freeport": "^1.0.5",
     "fs-extra": "^7.0.0",
     "html-minifier": "^3.5.21",
