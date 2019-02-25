@@ -8,45 +8,45 @@ const Bla = {
   }
 }
 
-const Styled = props => {
-  return <div style={props.style}>hello</div>
-}
+// const Styled = props => {
+//   return <div style={props.style}>hello</div>
+// }
 
-const Styled2 = ({ style }) => {
-  // const { style } = props
-  return <div style={style}>hello</div>
-}
+// const Styled2 = ({ style }) => {
+//   // const { style } = props
+//   return <div style={style}>hello</div>
+// }
 
-const Styled3 = props => {
-  const { style } = props
-  return (
-    <div
-      style={{
-        border: '1px solid red',
-        ...style
-      }}
-    >
-      hello
-    </div>
-  )
-}
+// const Styled3 = props => {
+//   const { style } = props
+//   return (
+//     <div
+//       style={{
+//         border: '1px solid red',
+//         ...style
+//       }}
+//     >
+//       hello
+//     </div>
+//   )
+// }
 
-class Styled5 extends Component {
-  render() {
-    const { style } = this.props
-    return (
-      <div className={this.props.className} style={style}>
-        hello
-      </div>
-    )
-  }
-}
+// class Styled5 extends Component {
+//   render() {
+//     const { style } = this.props
+//     return (
+//       <div className={this.props.className} style={style}>
+//         hello
+//       </div>
+//     )
+//   }
+// }
 
-class Styled4 extends Component {
-  render() {
-    return <div style={this.props.style}>hello</div>
-  }
-}
+// class Styled4 extends Component {
+//   render() {
+//     return <div style={this.props.style}>hello</div>
+//   }
+// }
 
 const Arrow = ({ color, height = 15, left = 1, style }) => {
   return left ? (
@@ -87,6 +87,8 @@ const Awesome = ({ flap, snurf }) => {
   const x = purple ? 10 : 5
   const xx = xxx - x
 
+  const size = 501
+
   // console.log('xxx', xx, xxx)
 
   console.log('shurpie', Arrow)
@@ -104,6 +106,14 @@ const Awesome = ({ flap, snurf }) => {
       }}
     >
       hahaha
+      <div
+        style={{
+          width: size,
+          minWidth: size
+        }}
+      >
+        dsdssd
+      </div>
     </div>
   )
 }
