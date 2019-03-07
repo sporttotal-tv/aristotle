@@ -129,7 +129,9 @@ class Blaxxx extends Component {
           height: smurfen,
           minHeight: smurfen
         }}
-      />
+      >
+        gur
+      </div>
     )
   }
 }
