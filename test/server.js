@@ -1,7 +1,7 @@
 const path = require('path')
 const {
   startServer,
-  // store,
+  store,
   // build,
   // buildProduction,
   production
@@ -11,7 +11,9 @@ const {
 // store.noCache = true
 
 process.env.NODE_ENV = 'production'
-startServer(path.join(__dirname, '../../v2/apps/cms'), 3002)
+startServer(path.join(__dirname, '../../v2/apps/cms/index.js'), 3002)
+
+// startServer(, 3002)
 
 // startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
 // startServer(path.join(__dirname, './projects/reactNativeWeb/index.js'), 3002)
