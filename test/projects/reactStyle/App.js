@@ -122,7 +122,6 @@ import hub from './hub'
 class Blaxxx extends Component {
   render() {
     const smurfen = 50
-    console.log('???')
     return (
       <div
         style={{
@@ -130,7 +129,7 @@ class Blaxxx extends Component {
           minHeight: smurfen
         }}
       >
-        gur
+        !!!gur!!!
       </div>
     )
   }
