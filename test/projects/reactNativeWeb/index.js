@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
 import Image2 from './x'
-import { View, Text, Image, Animated } from 'react-native'
+import { View, Text, Image, Animated, ActivityIndicator } from 'react-native'
 
 const App = () => {
   return (
@@ -14,7 +14,7 @@ const App = () => {
   )
 }
 
-console.log('hello', Image, Image2)
+console.log('hello', Image, Image2, ActivityIndicator)
 
 ReactDOM.render(<App />, document.body)
 
