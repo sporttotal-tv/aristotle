@@ -1,3 +1,6 @@
 import bla from './bla'
 
-console.log(bla)
+if (typeof window !== 'undefined') {
+  document.write('fun!')
+  document.write(bla)
+}
