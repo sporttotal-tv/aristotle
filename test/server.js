@@ -11,9 +11,10 @@ const {
 // store.noCache = true
 
 // process.env.NODE_ENV = 'production'
-production(path.join(__dirname, '../../v2/apps/app/index.js'), './dist')
+// production(path.join(__dirname, '../../v2/apps/app/index.js'), './dist')
 
 // startServer(, 3002)
+startServer(path.join(__dirname, '../../v2/apps/app/index.js'), 3002)
 
 // startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
 // startServer(path.join(__dirname, './projects/reactNativeWeb/index.js'), 3002)

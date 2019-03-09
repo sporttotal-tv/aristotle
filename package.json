@@ -1,6 +1,6 @@
 {
   "name": "aristotle",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "bin": {
     "aristotle": "bin/cmd.js"
   },
