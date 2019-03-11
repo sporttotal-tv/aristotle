@@ -10,4 +10,7 @@ import ReactDOM from 'react-dom'
 
 // console.log(redux)
 
+this.bla = true
+console.log('???')
+
 ReactDOM.render(<App />, document.body)
