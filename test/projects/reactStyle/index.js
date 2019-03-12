@@ -1,6 +1,9 @@
 import React from 'react'
 import App from './App'
 import ReactDOM from 'react-dom'
+import item from './schema.gql'
+import bla from './bla.json'
+
 // // import * as Redux from 'redux'
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
@@ -11,6 +14,7 @@ import ReactDOM from 'react-dom'
 // console.log(redux)
 
 this.bla = true
-console.log('???')
+console.log('???', bla)
+console.log(item)
 
 ReactDOM.render(<App />, document.body)
