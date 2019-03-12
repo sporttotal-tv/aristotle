@@ -11,6 +11,7 @@ ReactDOMServer.renderToString(<App />)
 
 export default async (req, files) => {
   hub.set('device.history', req.url)
+  const app = ReactDOMServer.renderToString(<App />)
   console.log('INCOMING SSR', req.url)
   return `
     <!DOCTYPE html>
@@ -19,10 +20,11 @@ export default async (req, files) => {
       <head>
         <style>
           ${files.css.contents}
+          ${global.aristotle.css}
         </style>
       </head>
       <body>
-        ${ReactDOMServer.renderToString(<App />)}
+        ${app}
         <script src="${files.js.path}"></script>
       </body>
     </html>
