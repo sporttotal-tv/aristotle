@@ -121,18 +121,24 @@ import hub from './hub'
 
 class Blaxxx extends Component {
   render() {
-    const bla = {
-      border: '1px solid blue'
-    }
+    // const bla = {
+    //   border: '1px solid blue'
+    // }
     const smurfen = 50
+    const { bg = 'red' } = this.props
     console.log(smurfen)
     return (
       <>
         <div
           style={{
-            height: smurfen,
-            minHeight: smurfen,
-            ...bla
+            ':hover': {
+              border: `1px solid ${bg}`
+            },
+            // border: '1px solid blue',
+            // height: smurfen,
+            // minHeight: smurfen,
+            backgroundColor: bg
+            // ...bla
           }}
         >
           !!!gur!!!
