@@ -3,6 +3,10 @@ import App from './App'
 import ReactDOM from 'react-dom'
 import item from './schema.gql'
 import bla from './bla.json'
+// import ts from './weirdts'
+import * as ts from './weirdts'
+
+console.log(ts)
 
 // // import * as Redux from 'redux'
 // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
