@@ -12,13 +12,10 @@
   margin-bottom: 0px;
   margin-right: 0px;
   margin-top: 0px;
-  -webkit-box-direction: normal;
-  -webkit-box-orient: vertical;
   flex-direction: column;
   flex-basis: auto;
   flex-shrink: 0;
   display: flex;
-  cursor: pointer;
   box-sizing: border-box;
   border-left-width: 0px;
   border-bottom-width: 0px;
@@ -28,7 +25,6 @@
   border-bottom-style: solid;
   border-right-style: solid;
   border-top-style: solid;
-  -webkit-box-align: stretch;
   align-items: stretch;
   text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
