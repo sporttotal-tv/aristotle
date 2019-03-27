@@ -17,15 +17,15 @@ Front end build tool to replace webpack without any configuration
 
 To install
 
-`npm install -g aristotle`
+`npm install -g @saulx/aristotle`
 
 To use for development
 
-`aristotle index.js`
+`@saulx/aristotle index.js`
 
 To use for building of a project, and adds the build project in a folder
 
-`aristotle index.js some/dist/folder/`
+`@saulx/aristotle index.js some/dist/folder/`
 
 ### Server side rendering
 
