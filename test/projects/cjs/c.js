@@ -19,8 +19,8 @@ var $export = function(type, name, source) {
   var target = IS_GLOBAL
     ? global
     : IS_STATIC
-      ? global[name]
-      : (global[name] || {})[PROTOTYPE]
+    ? global[name]
+    : (global[name] || {})[PROTOTYPE]
   var key, own, out
   if (IS_GLOBAL) source = name
   for (key in source) {
@@ -34,32 +34,32 @@ var $export = function(type, name, source) {
       IS_GLOBAL && typeof target[key] != 'function'
         ? source[key]
         : // bind timers to global for call from export context
-          IS_BIND && own
-          ? ctx(out, global)
-          : // wrap global constructors for prevent change them in library
-            IS_WRAP && target[key] == out
-            ? (function(C) {
-                var F = function(a, b, c) {
-                  if (this instanceof C) {
-                    switch (arguments.length) {
-                      case 0:
-                        return new C()
-                      case 1:
-                        return new C(a)
-                      case 2:
-                        return new C(a, b)
-                    }
-                    return new C(a, b, c)
-                  }
-                  return C.apply(this, arguments)
+        IS_BIND && own
+        ? ctx(out, global)
+        : // wrap global constructors for prevent change them in library
+        IS_WRAP && target[key] == out
+        ? (function(C) {
+            var F = function(a, b, c) {
+              if (this instanceof C) {
+                switch (arguments.length) {
+                  case 0:
+                    return new C()
+                  case 1:
+                    return new C(a)
+                  case 2:
+                    return new C(a, b)
                 }
-                F[PROTOTYPE] = C[PROTOTYPE]
-                return F
-                // make static versions for prototype methods
-              })(out)
-            : IS_PROTO && typeof out == 'function'
-              ? ctx(Function.call, out)
-              : out
+                return new C(a, b, c)
+              }
+              return C.apply(this, arguments)
+            }
+            F[PROTOTYPE] = C[PROTOTYPE]
+            return F
+            // make static versions for prototype methods
+          })(out)
+        : IS_PROTO && typeof out == 'function'
+        ? ctx(Function.call, out)
+        : out
     // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
     if (IS_PROTO) {
       ;(exports.virtual || (exports.virtual = {}))[key] = out

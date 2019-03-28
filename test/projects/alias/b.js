@@ -1,4 +1,4 @@
-const bla = require("./something");
-const shurf = require("./blurf/shurf");
+const bla = require('./something')
+const shurf = require('./blurf/shurf')
 
-module.exports = bla;
+module.exports = bla

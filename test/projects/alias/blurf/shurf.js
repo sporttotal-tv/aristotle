@@ -1,3 +1,3 @@
-console.log("SHURF");
-const x = true;
-console.log(x);
+console.log('SHURF')
+const x = true
+console.log(x)

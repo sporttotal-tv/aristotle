@@ -1,3 +1,3 @@
-import bla from "./shurf";
+import bla from './shurf'
 
-export { bla };
+export { bla }

@@ -1,1 +1,1 @@
-module.exports = { "default": require('./blurf'), __esModule: true }
+module.exports = { default: require('./blurf'), __esModule: true }
