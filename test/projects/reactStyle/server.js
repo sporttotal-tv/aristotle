@@ -25,7 +25,7 @@ export default async (req, files) => {
       </head>
       <body>
         ${app}
-        <script src="${files.js.path}"></script>
+        <script src="/flapflap${files.js.path}"></script>
       </body>
     </html>
   `
