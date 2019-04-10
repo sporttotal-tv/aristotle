@@ -38,7 +38,9 @@
 .t {
   display: inline;
   position: static;
-  /* width: 100%; */
+  color: inherit;
+  appearance: none;
+  font-size: inherit;
 }
 
 .i {
