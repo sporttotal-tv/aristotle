@@ -54,3 +54,10 @@
   white-space: nowrap;
   /* width: 100%; */
 }
+
+._s {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+}
