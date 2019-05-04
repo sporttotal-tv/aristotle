@@ -8,10 +8,22 @@ import { View, Text, SectionList } from 'react-native'
 
 const renderSectionHeader = props => {
   const {
+    index,
     section: {}
   } = props
 
-  return <Text>HEADER</Text>
+  return (
+    <View
+      style={{
+        width: '100%',
+        padding: 10,
+        color: 'white',
+        backgroundColor: 'purple'
+      }}
+    >
+      <Text>HEADER TIMES {index}</Text>{' '}
+    </View>
+  )
 }
 
 const sections = []
@@ -21,11 +33,9 @@ for (let i = 0; i < 10; i++) {
     data: []
   }
   sections.push(obj)
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1000; i++) {
     obj.data.push({
-      text: Array.from(Array(~~(Math.random() * 1e3))).map(
-        () => ~~(Math.random() * 1e4) + ' '
-      )
+      text: Array.from(Array(~~(Math.random() * 100))).map((v, i) => i)
     })
   }
 }
@@ -51,10 +61,29 @@ export default () => {
           onEndReachedThreshold={0.2}
           stickySectionHeadersEnabled
           ListFooterComponent={() => {
-            return <Text>FOOTER</Text>
+            return (
+              <View
+                style={{
+                  width: '100%',
+                  padding: 200,
+                  backgroundColor: 'brown'
+                }}
+              >
+                <Text>FOOTER</Text>{' '}
+              </View>
+            )
           }}
           renderSectionFooter={({ section }) => {
-            return <Text>SECTION FOOTER</Text>
+            return (
+              <View
+                style={{
+                  width: '100%',
+                  backgroundColor: 'blue'
+                }}
+              >
+                <Text>SECTION FOOTER</Text>{' '}
+              </View>
+            )
           }}
           renderSectionHeader={renderSectionHeader}
           keyExtractor={(item, index) => index}
@@ -66,7 +95,14 @@ export default () => {
                   borderBottom: '1px solid blue'
                 }}
               >
-                <Text>{item.text}</Text>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap'
+                  }}
+                >
+                  {item.text}
+                </div>
               </View>
             )
           }}

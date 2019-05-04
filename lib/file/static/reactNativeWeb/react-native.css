@@ -58,6 +58,25 @@
 ._s {
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 100%;
   width: 100%;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+}
+
+._p {
+  appearance: none;
+  border: 1px solid transparent;
+}
+
+._p:focus {
+  appearance: none;
+  color: inherit;
+  border: 1px solid transparent;
+}
+
+._p:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
 }
