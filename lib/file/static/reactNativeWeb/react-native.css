@@ -68,6 +68,7 @@
 ._p {
   appearance: none;
   border: 1px solid transparent;
+  color: inherit;
 }
 
 ._p:focus {
