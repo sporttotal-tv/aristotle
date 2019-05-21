@@ -1,38 +1,13 @@
-import bla from 'date-fns'
-import DatePicker from 'react-datepicker'
+const React = require('react')
+require('./bla.css')
+const ReactDom = require('react-dom')
 
-// import 'react-datepicker/dist/react-datepicker.css'
+const Datetime = require('react-datetime')
 
-import React from 'react'
-import ReactDom from 'react-dom'
-// CSS Modules, react-datepicker-cssmodules.css
-// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-
-class Example extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      startDate: new Date()
-    }
-    this.handleChange = this.handleChange.bind(this)
-  }
-
-  handleChange(date) {
-    this.setState({
-      startDate: date
-    })
-  }
-
+class MyDTPicker extends React.Component {
   render() {
-    return (
-      <DatePicker
-        showTimeSelect
-        dateFormat="Pp"
-        selected={this.state.startDate}
-        onChange={this.handleChange}
-      />
-    )
+    return <Datetime locale="de" />
   }
 }
 
-ReactDom.render(<Example />, document.body)
+ReactDom.render(<MyDTPicker />, document.body)
