@@ -1,4 +1,5 @@
-// import { SingleDatePicker } from 'react-dates'
+import 'react-dates/initialize'
+import { SingleDatePicker } from 'react-dates'
 
 Object.defineProperty(exports, 'CalendarDay', {
   enumerable: true,

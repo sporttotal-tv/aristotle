@@ -1,24 +1,58 @@
 import React from 'react'
-import App from './App'
+// import App from './App'
 import ReactDOM from 'react-dom'
-import item from './schema.gql'
-import bla from './bla.json'
-// import ts from './weirdts'
-import * as ts from './weirdts'
+import 'react-dates/initialize'
+import { SingleDatePicker } from 'react-dates'
 
-console.log(ts)
+// import ThemedStyleSheet from 'react-with-styles/lib/ThemedStyleSheet'
+// import aphroditeInterface from 'react-with-styles-interface-aphrodite'
+// import { css, withStyles } from 'react-with-styles'
 
-// // import * as Redux from 'redux'
-// import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+// const MyTheme = {
+//   color: {
+//     primary: '#FF5A5F',
+//     secondary: '#00A699'
+//   }
+// }
 
-// import redux from '/Users/jim/saulx/v2/apps/cms/node_modules/redux/es/redux.js'
+// ThemedStyleSheet.registerTheme(MyTheme)
+// ThemedStyleSheet.registerInterface(aphroditeInterface)
+// import item from './schema.gql'
+// import bla from './bla.json'
+// // import ts from './weirdts'
+// import * as ts from './weirdts'
 
-// console.log(Droppable, Draggable)
+// console.log(ts)
 
-// console.log(redux)
+// // // import * as Redux from 'redux'
+// // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
-this.bla = true
-console.log('???', bla)
-console.log(item)
+// // import redux from '/Users/jim/saulx/v2/apps/cms/node_modules/redux/es/redux.js'
 
-ReactDOM.render(<App />, document.body)
+// // console.log(Droppable, Draggable)
+
+// // console.log(redux)
+
+// this.bla = true
+// console.log('???', bla)
+// console.log(item)
+
+// console.log(css, withStyles)
+
+// function MyComponent({ styles }) {
+//   return null
+// }
+
+// const X = withStyles(({ color }) => ({
+//   firstLink: {
+//     color: color.primary
+//   },
+
+//   secondLink: {
+//     color: color.secondary
+//   }
+// }))(MyComponent)
+
+// console.log(X)
+
+ReactDOM.render(<SingleDatePicker />, document.body)
