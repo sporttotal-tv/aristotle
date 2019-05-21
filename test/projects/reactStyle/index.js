@@ -1,58 +1,38 @@
+import bla from 'date-fns'
+import DatePicker from 'react-datepicker'
+
+// import 'react-datepicker/dist/react-datepicker.css'
+
 import React from 'react'
-// import App from './App'
-import ReactDOM from 'react-dom'
-import 'react-dates/initialize'
-import { SingleDatePicker } from 'react-dates'
+import ReactDom from 'react-dom'
+// CSS Modules, react-datepicker-cssmodules.css
+// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
-// import ThemedStyleSheet from 'react-with-styles/lib/ThemedStyleSheet'
-// import aphroditeInterface from 'react-with-styles-interface-aphrodite'
-// import { css, withStyles } from 'react-with-styles'
+class Example extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      startDate: new Date()
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
 
-// const MyTheme = {
-//   color: {
-//     primary: '#FF5A5F',
-//     secondary: '#00A699'
-//   }
-// }
+  handleChange(date) {
+    this.setState({
+      startDate: date
+    })
+  }
 
-// ThemedStyleSheet.registerTheme(MyTheme)
-// ThemedStyleSheet.registerInterface(aphroditeInterface)
-// import item from './schema.gql'
-// import bla from './bla.json'
-// // import ts from './weirdts'
-// import * as ts from './weirdts'
+  render() {
+    return (
+      <DatePicker
+        showTimeSelect
+        dateFormat="Pp"
+        selected={this.state.startDate}
+        onChange={this.handleChange}
+      />
+    )
+  }
+}
 
-// console.log(ts)
-
-// // // import * as Redux from 'redux'
-// // import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-
-// // import redux from '/Users/jim/saulx/v2/apps/cms/node_modules/redux/es/redux.js'
-
-// // console.log(Droppable, Draggable)
-
-// // console.log(redux)
-
-// this.bla = true
-// console.log('???', bla)
-// console.log(item)
-
-// console.log(css, withStyles)
-
-// function MyComponent({ styles }) {
-//   return null
-// }
-
-// const X = withStyles(({ color }) => ({
-//   firstLink: {
-//     color: color.primary
-//   },
-
-//   secondLink: {
-//     color: color.secondary
-//   }
-// }))(MyComponent)
-
-// console.log(X)
-
-ReactDOM.render(<SingleDatePicker />, document.body)
+ReactDom.render(<Example />, document.body)

@@ -8,7 +8,7 @@ const {
 } = require('../lib')
 // const fs = require('mz/fs')
 
-store.noCache = true
+// store.noCache = true
 
 // process.env.NODE_ENV = 'production'
 // production(path.join(__dirname, '../../v2/apps/app/index.js'), './dist')
