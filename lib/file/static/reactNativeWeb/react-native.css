@@ -82,3 +82,19 @@
   color: transparent;
   text-shadow: 0 0 0 #000;
 }
+
+._x {
+  pointer-events: none;
+}
+._x * {
+  pointer-events: all;
+}
+._y {
+  pointer-events: all;
+}
+._y * {
+  pointer-events: none;
+}
+._z {
+  pointer-events: none;
+}
