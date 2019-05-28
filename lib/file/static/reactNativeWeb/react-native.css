@@ -84,16 +84,16 @@
 }
 
 ._x {
-  pointer-events: none;
+  pointer-events: all;
 }
 ._x * {
-  pointer-events: all;
+  pointer-events: none;
 }
 ._y {
-  pointer-events: all;
+  pointer-events: none;
 }
 ._y * {
-  pointer-events: none;
+  pointer-events: all;
 }
 ._z {
   pointer-events: none;
