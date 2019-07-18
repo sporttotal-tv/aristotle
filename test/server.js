@@ -18,7 +18,9 @@ store.noCache = true
 // startServer(path.join(__dirname, './projects/playground/index.js'), 3002)
 // production(path.join(__dirname, './projects/reactdates/index.js'), './dist')
 
-startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
+startServer(path.join(__dirname, './projects/hub/index.js'), 3002)
+
+// also check murmur hash after this
 
 // startServer(path.join(__dirname, './projects/sectionList/index.js'), 3002)
 // startServer(path.join(__dirname, './projects/reactNativeWeb/index.js'), 3002)
