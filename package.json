@@ -165,7 +165,7 @@
     "got": "^9.6.0",
     "grpc": "^1.18.0",
     "grpc-web": "^1.0.0",
-    "hub": "git+ssh://git@git.d.ops.com:x.ops.com/hub.git#9da36c84d35f23473afb9b85bb9f757c28442ba8",
+    "@saulx/hub": "^2.1.4",
     "lodash": "^4.6.1",
     "nodemon": "^1.18.10",
     "pre-commit": "^1.2.2",
