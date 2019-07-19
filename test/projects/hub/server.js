@@ -1,3 +1,7 @@
-import { createClient } from '@saulx/hub'
+// import { createClient } from '@saulx/hub'
 
-console.log('ssr go go go', createClient)
+// console.log('ssr go go go', createClient)
+
+export default async () => {
+  return 'flapdrol'
+}
