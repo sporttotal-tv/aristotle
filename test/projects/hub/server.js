@@ -1,7 +1,5 @@
 import { createClient } from '@saulx/hub'
-
-const fs = require('fs')
-
+// const fs = require('fs')
 const hub = createClient()
 // ;xw!@#
 // console.log('ssr go go go', createClient)
