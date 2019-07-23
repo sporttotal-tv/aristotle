@@ -3,5 +3,5 @@
 // console.log('ssr go go go', createClient)
 
 export default async () => {
-  return 'flapdrol'
+  return 'flapxxxxxxxxxxxxxxxdrol'
 }
