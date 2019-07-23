@@ -5,5 +5,5 @@ const fs = require('fs')
 // console.log('ssr go go go', createClient)
 console.log('SERVER go go')
 export default async (req, files, ua) => {
-  return '<html>flurkenstrux what------ </html>'
+  return '<html>flurkenstxxxrsxxxdpofjdp iofhw------ </html>'
 }
