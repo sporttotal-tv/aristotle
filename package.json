@@ -19,7 +19,6 @@
     "graphql": "^14.1.1"
   },
   "dependencies": {
-    "mmap-object": "^1.4.1",
     "@babel/core": "^7.0.0",
     "@babel/generator": "^7.0.0",
     "@babel/parser": "^7.3.4",
