@@ -8,6 +8,7 @@ cache/
 tmp/
 dist/
 *.pbxuser
+
 !default.pbxuser
 *.mode1v3
 !default.mode1v3
@@ -33,6 +34,7 @@ local.properties
 
 # node.js
 #
+.cache/
 node_modules/
 npm-debug.log
 yarn-error.log
