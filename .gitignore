@@ -3,6 +3,7 @@
 .DS_Store
 package-lock.json
 cache/
+.cache/
 # Xcode
 #
 tmp/
