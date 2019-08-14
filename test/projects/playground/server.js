@@ -4,7 +4,7 @@ global.fetch('http://google.com').then(val => {
 
 const timer = () =>
   new Promise((resolve, reject) => {
-    setTimeout(resolve, 300)
+    setTimeout(resolve, Math.random() * 300)
   })
 
 export default async (req, files) => {
@@ -19,6 +19,7 @@ export default async (req, files) => {
         </style>
       </head>
       <body>
+      XXXXXXXXXXXXXXX
         ssr!!!!!
         <script src="${files.js.path}"></script>
       </body>
