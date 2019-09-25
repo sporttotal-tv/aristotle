@@ -15,10 +15,10 @@ store.noCache = true
 
 // startServer(, 3002)
 // startServer(path.join(__dirname, '../../v2/apps/app/index.js'), 3002)
-startServer(path.join(__dirname, './projects/playground/index.js'), 3002)
-// production(path.join(__dirname, './projects/hub/index.js'), './dist')
+// startServer(path.join(__dirname, './projects/playground/index.js'), 3002)
+// production(path.join(__dirname, './projects/x/index.js'), './dist')
 
-// startServer(path.join(__dirname, './projects/hub/index.js'), 3002)
+startServer(path.join(__dirname, './projects/x/index.js'), 3003)
 
 // also check murmur hash after this
 
