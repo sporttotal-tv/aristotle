@@ -3,7 +3,7 @@ import React from 'react'
 import App from '../App'
 
 global.fetch('http://google.com').then(val => {
-  console.log('yes from google')
+  console.log('yes from google!')
 })
 
 export default async (req, files) => {

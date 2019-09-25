@@ -4,7 +4,7 @@ const App = () => {
   return (
     <div
       style={{
-        border: '1px solid blue',
+        border: '51px solid blue',
         background: 'url("/public/space.jpg")',
         '@font-face': [
           {
@@ -16,16 +16,16 @@ const App = () => {
           {
             fontFamily: 'Retina',
             fontStyle: 'normal',
-            fontWeight: 400,
+            fontWeight: '500',
             src: "url(/static/font/sf/light.woff) format('woff')"
           }
         ],
         ':hover': {
-          border: `${~~(Math.random() * 20)}px solid blue`
+          border: `${~~(Math.random() * 120)}px solid blue`
         }
       }}
     >
-      this is reactxxxxxxxxxxxxxxxxxxxx x x x!!!
+      no no! do it fun times yeshhh
     </div>
   )
 }
