@@ -4,6 +4,10 @@
   "bin": {
     "aristotle": "bin/cmd.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atelier-saulx/aristotle.git"
+  },
   "main": "lib",
   "scripts": {
     "install-tests": "cd test/projects/node && npm i",
@@ -19,6 +23,7 @@
     "graphql": "^14.5.8"
   },
   "dependencies": {
+    "@saulx/get-package": "^1.0.1",
     "@babel/core": "^7.6.2",
     "@babel/generator": "^7.6.2",
     "@babel/parser": "^7.6.2",
