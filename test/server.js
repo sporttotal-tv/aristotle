@@ -11,7 +11,7 @@ const { startServer } = require('../lib')
 // startServer(path.join(__dirname, './projects/playground/index.js'), 3002)
 // production(path.join(__dirname, './projects/x/index.js'), './dist')
 
-startServer(path.join(__dirname, './projects/x/index.js'), 3003)
+startServer(path.join(__dirname, './projects/redis/index.js'), 3003)
 
 // also check murmur hash after this
 
