@@ -2,7 +2,7 @@
   "name": "flapdrol",
   "dependencies": {
     "redis": "^2.8.0",
-    "react": "^16.10.2"
+    "@saulx/hub": "^2.3.6"
   },
   "aristotle": {
     "excludes": [

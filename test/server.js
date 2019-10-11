@@ -1,5 +1,5 @@
 const path = require('path')
-const { startServer } = require('../lib')
+const { startServer, store, production } = require('../lib')
 
 // store.noCache = true
 
@@ -12,7 +12,7 @@ const { startServer } = require('../lib')
 // production(path.join(__dirname, './projects/x/index.js'), './dist')
 // startServer(path.join(__dirname, './projects/reactNativeWeb/index.js'), 3002)
 
-startServer(path.join(__dirname, './projects/redis/index.js'), 3003)
+production(path.join(__dirname, './projects/redis/index.js'), './dist')
 
 // also check murmur hash after this
 
