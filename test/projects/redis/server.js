@@ -1,4 +1,5 @@
 const redis = require('redis')
-console.info('flapper de flap', redis)
-
+const hub = require('@saulx/hub')
+console.info('flapper de flap', !!redis, !!hub)
+// console.log(!!redis)
 export default () => {}

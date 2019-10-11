@@ -1,0 +1,12 @@
+{
+  "name": "flapdrol",
+  "dependencies": {
+    "redis": "^2.8.0",
+    "@saulx/hub": "^2.3.6"
+  },
+  "aristotle": {
+    "excludes": [
+      "react"
+    ]
+  }
+}
