@@ -1,4 +1,5 @@
 const redis = require('redis')
-console.info('flapper de flap', redis)
+const react = require('react')
+console.info('flapper de flap', !!redis, !!react)
 
 export default () => {}
