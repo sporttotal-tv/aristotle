@@ -1,0 +1,6 @@
+{
+  "name": "linked",
+  "dependencies": {
+    "internal-ip": "^4.3.0"
+  }
+}

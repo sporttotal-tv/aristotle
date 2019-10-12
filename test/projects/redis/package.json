@@ -2,7 +2,11 @@
   "name": "flapdrol",
   "dependencies": {
     "redis": "^2.8.0",
-    "@saulx/hub": "^2.3.6"
+    "@saulx/hub": "^2.3.6",
+    "linked": "*"
+  },
+  "scripts": {
+    "link": "ln -s ./linked ./node_modules/linked"
   },
   "aristotle": {
     "excludes": [
