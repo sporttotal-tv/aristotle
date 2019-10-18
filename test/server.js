@@ -12,8 +12,8 @@ store.noCache = true
 // production(path.join(__dirname, './projects/x/index.js'), './dist')
 // startServer(path.join(__dirname, './projects/reactNativeWeb/index.js'), 3002)
 
-production(path.join(__dirname, './projects/redis/index.js'), './dist')
-// startServer(path.join(__dirname, './projects/redis/index.js'), 3002)
+production(path.join(__dirname, './projects/dynamicImports/index.js'), './dist')
+// startServer(path.join(__dirname, './projects/dynamicImports/index.js'), 3002)
 
 // also check murmur hash after this
 // startServer(path.join(__dirname, './projects/sectionList/index.js'), 3002)

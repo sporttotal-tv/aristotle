@@ -1,7 +1,8 @@
-import got from 'npm-exists'
 import React from 'react'
+import Deep from './Deep'
+import Bla from './Bla'
 
-console.log('exitst times', got)
+console.log('exitst times', React)
 
 import('string-hash').then(val => {
   console.log('lullz its string-hash!', val)
@@ -12,9 +13,9 @@ import('string-hash').then(val => {
 // })
 
 export default () => {
-  return (
-    <div style={{ border: '1px solid blue', fontSize: 13 }}>
-      Hello this is a div
-    </div>
-  )
+  console.log('flapperboy', Deep, Bla)
+  return 'XYXYXYX'
+  // <div style={{ border: '1px solid blue', fontSize: 13 }}>
+  //   Hello this is a div
+  // </div>
 }
