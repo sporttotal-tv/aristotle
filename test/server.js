@@ -1,7 +1,7 @@
 const path = require('path')
 const { startServer, store, production } = require('../lib')
 
-store.noCache = true
+// store.noCache = true
 
 // process.env.NODE_ENV = 'production'
 // production(path.join(__dirname, '../../v2/apps/app/index.js'), './dist')

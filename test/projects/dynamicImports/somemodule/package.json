@@ -1,0 +1,10 @@
+{
+  "name": "simpledep",
+  "dependencies": {
+    "react-native-web": "^0.9.10",
+    "react": "^16.10.2"
+  },
+  "alias": {
+    "react-native": "react-native-web"
+  }
+}

@@ -1,8 +1,7 @@
 import React, { useRef } from 'react'
 import { View } from 'react-native'
-// import somemodule from './somemodule'
 setTimeout(async () => {
-  const Component = await import('./Component')
+  const Component = await import('./DynamicSomeModule')
   console.log(Component, React)
 }, 100)
 
@@ -11,6 +10,6 @@ const App = () => {
   return 'xxxx'
 }
 
-console.log('FLAPDROL', useRef, View)
+console.log('2', useRef, View)
 
 export default App
