@@ -1,6 +1,6 @@
 {
   "name": "@saulx/aristotle",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "bin": {
     "aristotle": "bin/cmd.js"
   },
@@ -17,7 +17,7 @@
     "lint": "eslint '{lib,test}/**/*.js' --fix",
     "gen-builtin": "node ./tools/generateBuildins.js",
     "gen-prodserver": "node ./tools/generateProdserver.js",
-    "gen-polyfill": "node ./tools/generatePolyfills.js"
+    "gen-polyfill": "node ./tools/generatePolyfgit ills.js"
   },
   "peerDependencies": {
     "graphql": "^14.5.8"
