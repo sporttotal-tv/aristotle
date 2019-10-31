@@ -23,7 +23,6 @@
     "graphql": "^14.5.8"
   },
   "dependencies": {
-    "@saulx/get-package": "^1.0.7",
     "@babel/core": "^7.6.2",
     "@babel/generator": "^7.6.2",
     "@babel/parser": "^7.6.2",
@@ -35,6 +34,7 @@
     "@babel/template": "^7.6.0",
     "@babel/traverse": "^7.6.2",
     "@babel/types": "^7.6.1",
+    "@saulx/get-package": "^1.0.7",
     "autoprefixer": "^9.6.4",
     "babel-plugin-minify-dead-code-elimination": "^0.5.1",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
@@ -64,7 +64,7 @@
     "klaw": "^3.0.0",
     "mime-types": "^2.1.24",
     "mz": "^2.7.0",
-    "npm": "^6.11.3",
+    "npm": "^6.12.1",
     "path-browserify": "^1.0.0",
     "postcss": "^7.0.18",
     "postcss-default-unit": "^1.0.0",
