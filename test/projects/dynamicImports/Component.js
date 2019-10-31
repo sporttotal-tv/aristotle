@@ -1,20 +1,16 @@
-import got from 'npm-exists'
 import React from 'react'
+import Bla from './Bla'
 
-console.log('exitst times', got)
+import { View } from 'react-native'
+console.log(View)
+
+console.log('exitst times', React)
 
 import('string-hash').then(val => {
   console.log('lullz its string-hash!', val)
 })
 
-// import('./Deep').then(val => {
-//   console.log('lullz its deep!', val)
-// })
-
 export default () => {
-  return (
-    <div style={{ border: '1px solid blue', fontSize: 13 }}>
-      Hello this is a div
-    </div>
-  )
+  console.log('flapper-boy', Bla)
+  return 'XYXYXYX'
 }
