@@ -1,5 +1,5 @@
 {
-  "name": "flapdrol",
+  "name": "flapdrol2",
   "dependencies": {
     "redis": "^2.8.0",
     "@saulx/hub": "^2.3.6"
