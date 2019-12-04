@@ -26,7 +26,7 @@ const { startServer, store, production } = require('../lib')
 // also check murmur hash after this
 // startServer(path.join(__dirname, './projects/sectionList/index.js'), 3002)
 // production(path.join(__dirname, './projects/reactStyle/index.js'), './dist')
-startServer(path.join(__dirname, './projects/reactStyle/index.js'), 3002)
+startServer(path.join(__dirname, './projects/reactNativeWeb/index.js'), 3002)
 // startServer(path.join(__dirname, './projects/events/index.js'), 3002)
 // startServer(path.join(__dirname, './projects/color/index.js'), 3002)
 // startServer(path.join(__dirname, './projects/color/index.js'), 3002)
