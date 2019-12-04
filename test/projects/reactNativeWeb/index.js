@@ -1,15 +1,8 @@
 import ReactDOM from 'react-dom'
-import React from 'react'
-import Image2 from './x'
-import {
-  View,
-  Text,
-  Image,
-  Animated,
-  ActivityIndicator,
-  ScrollView,
-  TouchableOpacity
-} from 'react-native'
+import React, { useEffect, useReducer } from 'react'
+import { View, Image, Animated } from 'react-native'
+// import { useHub } from '@saulx/hub'
+// import { rgba } from '@sporttotaltv/v2-ui-utils'
 
 const images = [
   'https://www.rtlnieuws.nl/sites/default/files/styles/liggend/public/content/images/2019/07/28/The-Lion-King-OV-_st_1_jpg_sd-high_%C2%A9-2019-Disney-Enterprises-Inc-All-Rights-Reserved.jpg?itok=jwpKUA67',
@@ -18,20 +11,48 @@ const images = [
 ]
 
 class ImageLoader extends React.Component {
+  constructor(props) {
+    super()
+    this.state.img = props.img
+  }
+
   state = {
     opacity: new Animated.Value(0)
   }
 
   onLoad = () => {
-    console.log('bitch load')
+    console.log('go')
     Animated.timing(this.state.opacity, {
       toValue: 1,
-      duration: 3500,
+      duration: 2000,
       useNativeDriver: true
     }).start()
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('ok go-0--', nextProps)
+    if (nextProps.img !== this.state.img && !this._timer) {
+      this._timer = setTimeout(() => {
+        console.log('reset opacity')
+        this.state.opacity.setValue(0)
+        this._timer = setTimeout(() => {
+          console.log('set state')
+          this.setState({ img: nextProps.img })
+          this._timer = setTimeout(() => {
+            this._timer = false
+          })
+        }, 500)
+      }, 500)
+    }
+  }
+
+  shouldComponentUpdate(n, ns) {
+    return this.state.img !== ns.img
+  }
+
   render() {
+    console.log('set img', this.state.img)
+
     return (
       <View
         style={{
@@ -39,18 +60,10 @@ class ImageLoader extends React.Component {
           height: '100%'
         }}
       >
-        <Image
-          {...this.props}
-          source={this.props.prev}
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%'
-          }}
-        />
         <Animated.Image
           onLoad={this.onLoad}
-          source={this.props.source}
+          resizeMode="cover"
+          source={{ uri: this.state.img }}
           style={{
             position: 'absolute',
             width: '100%',
@@ -63,9 +76,27 @@ class ImageLoader extends React.Component {
   }
 }
 
-const Poop = () => {
-  const img = images[0]
-  const prev = images[images.length - 1]
+const reducer = (state, arr) => {
+  if (state === arr.length - 1) {
+    return 0
+  }
+  return ++state
+}
+const App = () => {
+  const [index, update] = useReducer(reducer, 0)
+
+  const prev = images[index === 0 ? images.length - 1 : index - 1]
+  const img = images[index]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      update(images)
+    }, 4000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
   return (
     <View
       style={{
@@ -78,73 +109,19 @@ const Poop = () => {
         bottom: 0
       }}
     >
-      <ImageLoader
-        prev={{ uri: prev }}
-        source={{ uri: img }}
+      <Image
         resizeMode="cover"
-      />
-    </View>
-  )
-}
-
-console.log(Poop)
-
-const App = () => {
-  // const children = []
-
-  // for (let i = 0; i < 200; i++) {
-  //   children.push(
-  //     <Text style={{ marginLeft: 30 }} key={i}>
-  //       hello {i}
-  //     </Text>
-  //   )
-  // }
-
-  return (
-    <View
-      ref={e => {
-        console.log('x yes', e)
-      }}
-      style={{
-        width: '100%',
-        height: '50vh'
-      }}
-    >
-      <Poop />
-      {/* <TouchableOpacity>
-        <Text>CLICK IT</Text>
-      </TouchableOpacity>
-      <Animated.View>
-        <Text>xxx</Text>
-      </Animated.View>
-      <ScrollView
-        contentContainerStyle={{
-          border: '10px solid blue'
-        }}
-        onScroll={e => {
-          console.log('xxx', e.nativeEvent.contentOffset.x)
-        }}
-        ref={e => {
-          console.log('this!')
-          e.measure((x, y, w, h, px, py) => {
-            console.log(w, h, px, py)
-          })
-        }}
-        horizontal
+        source={{ uri: prev }}
         style={{
-          alignItems: 'center',
-          flexDirection: 'row',
+          position: 'absolute',
           width: '100%',
-          border: '1px solid blue'
+          height: '100%'
         }}
-      >
-        {children}
-      </ScrollView> */}
+      />
+      <ImageLoader img={img} />
     </View>
   )
 }
-
-// console.log('hello', Image, Image2, ActivityIndicator)
 
 ReactDOM.render(<App />, document.body)
 
