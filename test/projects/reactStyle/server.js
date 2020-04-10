@@ -7,12 +7,9 @@ import hub from './hub'
 
 // console.log('yes', ReactDOMServer)
 
-ReactDOMServer.renderToString(<App />)
-
 export default async (req, files) => {
   hub.set('device.history', req.url)
   const app = ReactDOMServer.renderToString(<App />)
-  console.log('INCOMING SSR', req.url)
   return `
     <!DOCTYPE html>
     <html>
@@ -20,12 +17,11 @@ export default async (req, files) => {
       <head>
         <style>
           ${files.css.contents}
-          ${global.aristotle.css}
         </style>
       </head>
       <body>
         ${app}
-        <script src="/flapflap${files.js.path}"></script>
+        <script src="${files.js.path + '.es5'}"></script>
       </body>
     </html>
   `
