@@ -18,10 +18,11 @@ const { startServer, store, production } = require('../lib')
 // production(
 //   path.join(__dirname, './projects/redis2/index.js'),
 //   path.join(__dirname, './projects/redis2', 'dist')
-// ) // startServer(path.join(__dirname, './projects/reactNativeWeb/index.js'), 3002)
+// )
+// startServer(path.join(__dirname, './projects/reactNativeWeb/index.js'), 3002)
 
 // production(path.join(__dirname, './projects/dynamicImports/index.js'), './dist')
-startServer(path.join(__dirname, './projects/datePicker/index.js'), 3002)
+// startServer(path.join(__dirname, './projects/datePicker/index.js'), 3002)
 
 // startServer(path.join(__dirname, './projects/babelRuntime/index.js'), 3002)
 // startServer(path.join(__dirname, './projects/webpack/index.js'), 3003)

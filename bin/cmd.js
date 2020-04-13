@@ -16,17 +16,24 @@ if (isDir(input)) {
 
 const startDev = async () => {
   var port = 3000
-  program.option('-p, --port <port>', 'Use port').action((cmd, options) => {
+  program.option('-p, --port <port>', 'Use port').action((_cmd, options) => {
     if (options.port) port = options.port
   })
+
   program.parse(process.argv)
   port = await findPort(port)
   startServer(input, port)
 }
 
 if (dest && dest[0] !== '-') {
+  var treeshake
+  program
+    .option('-t, --treeshake <treeshake>', 'Use treeshake')
+    .action((_cmd, options) => {
+      if (options.treeshake) treeshake = options.treeshake
+    })
   const output = isAbsolute(dest) ? dest : join(cwd, dest)
-  production(input, output, {})
+  production(input, output, { treeshake })
     .then(val => {
       process.exit()
     })
