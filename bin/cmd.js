@@ -6,10 +6,6 @@ const cwd = process.cwd()
 const program = require('commander')
 const findPort = require('../lib/util/port')
 
-if (isDir(input)) {
-  input += '/index.js'
-}
-
 console.log('aristotle!')
 
 program
@@ -26,6 +22,10 @@ const file = args[0]
 const dest = args[1]
 
 var input = isAbsolute(file) ? file : join(cwd, file)
+
+if (isDir(input)) {
+  input += '/index.js'
+}
 
 const startDev = async () => {
   var port = program.port ? program.port * 1 : 3000
