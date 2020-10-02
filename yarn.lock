@@ -1562,6 +1562,18 @@
     vigour-ua "^4.0.0"
     ws "^6.1.2"
 
+"@saulx/selva-diff@^1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@saulx/selva-diff/-/selva-diff-1.0.11.tgz#032317cefb17fba43d29230003c32155fabff82a"
+  integrity sha512-8843olW0/533Yf5zAHS8zD28lG9gPuBvBmFe+ybFqTo3ZDr00783v4EPhX4BXvOFRG9ydAGCrAxLVdNxOILzPw==
+  dependencies:
+    "@saulx/utils" "^1.0.6"
+
+"@saulx/utils@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@saulx/utils/-/utils-1.0.6.tgz#80f62c79ad04898ce02518bb7e3d4e1a93dab3d5"
+  integrity sha512-fmC3Dj7PknuSWldQXWZgoiKWP7knFvB9otwQaHPYMmDIqZNyrA/naBOM7xgBJydtX5kC8FsZ8BQVwBJR8XUSTQ==
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"

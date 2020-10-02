@@ -21,9 +21,18 @@ store.noCache = true
 // )
 // startServer(path.join(__dirname, './projects/reactNativeWeb/y.js'), 3002)
 
-production(path.join(__dirname, './projects/reactNativeWeb/a.js'), './dist', {
+console.error('xxx')
+production(path.join(__dirname, './projects/flurp/index.js'), './dist', {
   minify: false
 })
+  .then(v => {
+    console.error('x', v)
+  })
+  .catch(v => {
+    console.error('y', v)
+  })
+
+console.error('xxx')
 
 // startServer(path.join(__dirname, './projects/treeShake/index.js'), 3002)
 
