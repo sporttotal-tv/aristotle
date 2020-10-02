@@ -23,7 +23,7 @@ store.noCache = true
 
 console.error('xxx')
 production(path.join(__dirname, './projects/flurp/index.js'), './dist', {
-  minify: false
+  // minify: false
 })
   .then(v => {
     console.error('x', v)

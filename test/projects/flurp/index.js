@@ -1,20 +1,13 @@
-import { hash } from '@saulx/utils'
+// import { hash } from '@saulx/utils'
 
-import differ from '@saulx/selva-diff'
+// const { applyPatch } = require('@saulx/selva-diff')
+// import hub from '@saulx/hub'
+const { applyPatch: applyDiffPatch } = require('@saulx/selva-diff')
 
-import hub from '@saulx/hub'
+// import tslib from 'tslib'
 
 const c = console.log
 
-c(hub)
-
-c(differ, hash)
+c(applyDiffPatch)
 
 c('wooow')
-
-c(
-  '?',
-  hash({
-    x: true
-  })
-)
