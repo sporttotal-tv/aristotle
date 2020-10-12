@@ -9,7 +9,7 @@ const findPort = require('../lib/util/port')
 console.log('aristotle!')
 
 program
-  .option('-p', '--port <port>', 'Port')
+  .option('-p, --port <port>', 'Port')
   .option('--no-treeshake', 'no tree shake')
   .option('--no-minify', 'no minify')
   .parse(process.argv)
