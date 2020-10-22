@@ -6,7 +6,7 @@ const cwd = process.cwd()
 const program = require('commander')
 const findPort = require('../lib/util/port')
 
-console.log('aristotle!')
+console.log('aristotle!?')
 
 program
   .option('-p, --port <port>', 'Port')
