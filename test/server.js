@@ -24,6 +24,9 @@ store.noCache = true
 // startServer(path.join(__dirname, './projects/envVar/index.js'), 3099)
 
 // console.error('xxx')
+
+store.cacheLocation = __dirname
+
 production(path.join(__dirname, './projects/envVar/index.js'), './dist', {
   // minify: false
 })
