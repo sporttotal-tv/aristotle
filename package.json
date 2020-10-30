@@ -1,6 +1,6 @@
 {
   "name": "@saulx/aristotle",
-  "version": "1.7.8",
+  "version": "2.1.7",
   "bin": {
     "aristotle": "bin/cmd.js"
   },
@@ -43,7 +43,7 @@
     "chalk": "^2.4.2",
     "child-process-fork-string": "^1.0.0",
     "chokidar": "^3.2.1",
-    "commander": "^3.0.2",
+    "commander": "^6.1.0",
     "cross-fetch": "^3.0.4",
     "css-tree": "^1.0.0-alpha9",
     "cssnano": "^4.1.10",

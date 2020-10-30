@@ -21,8 +21,13 @@ store.noCache = true
 // )
 // startServer(path.join(__dirname, './projects/reactNativeWeb/y.js'), 3002)
 
-console.error('xxx')
-production(path.join(__dirname, './projects/flurp/index.js'), './dist', {
+// startServer(path.join(__dirname, './projects/envVar/index.js'), 3099)
+
+// console.error('xxx')
+
+store.cacheLocation = __dirname
+
+production(path.join(__dirname, './projects/envVar/index.js'), './dist', {
   // minify: false
 })
   .then(v => {
@@ -32,7 +37,7 @@ production(path.join(__dirname, './projects/flurp/index.js'), './dist', {
     console.error('y', v)
   })
 
-console.error('xxx')
+// console.error('xxx')
 
 // startServer(path.join(__dirname, './projects/treeShake/index.js'), 3002)
 
