@@ -3,7 +3,7 @@ const { startServer, store, production } = require('../lib')
 
 // store.cacheLocation = __dirname
 
-store.noCache = true
+// store.noCache = true
 
 // process.env.NODE_ENV = 'production'
 // production(path.join(__dirname, '../../v2/apps/app/index.js'), './dist')
@@ -27,7 +27,7 @@ store.noCache = true
 
 store.cacheLocation = __dirname
 
-production(path.join(__dirname, './projects/envVar/index.js'), './dist', {
+production(path.join(__dirname, './projects/simpleServer/index.js'), './dist', {
   // minify: false
 })
   .then(v => {
