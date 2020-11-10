@@ -6,7 +6,12 @@ global.fetch('http://google.com').then(val => {
   console.log('yes from google!')
 })
 
-export default async (req, files) => {
+const getCacheKey = () => {
+  console.log('poop time')
+  return 'xxxx'
+}
+
+const render = async (req, files) => {
   return `
     <html>
       <meta charset="UTF-8">
@@ -22,4 +27,9 @@ export default async (req, files) => {
       </body>
     </html>
   `
+}
+
+export default {
+  getCacheKey,
+  render
 }

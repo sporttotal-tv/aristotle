@@ -25,7 +25,7 @@ const { startServer, store, production } = require('../lib')
 
 // console.error('xxx')
 
-store.cacheLocation = __dirname
+store.cacheLocation = path.join(__dirname, '../', '.cache')
 
 production(path.join(__dirname, './projects/simpleServer/index.js'), './dist', {
   // minify: false
