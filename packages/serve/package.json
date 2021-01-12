@@ -1,0 +1,19 @@
+{
+  "name": "@saulx/aristotle-serve",
+  "main": "./dist/index.js",
+  "public": true,
+  "version": "1.0.1",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc",
+    "watch": "tsc --watch"
+  },
+  "repository": "https://github.com/atelier-saulx/aristotle",
+  "devDependencies": {
+    "ava": "2.4.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  },
+  "peerDependencies": {
+    "@saulx/aristotle-build": "*"
+  }
+}

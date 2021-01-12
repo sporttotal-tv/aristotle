@@ -1,7 +1,0 @@
-{
-  "name": "aristotle-test-node-js",
-  "version": "0.0.1",
-  "dependencies": {
-    "aws-sdk": "2.291.0"
-  }
-}
