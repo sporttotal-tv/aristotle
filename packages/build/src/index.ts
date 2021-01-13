@@ -42,7 +42,9 @@ export type BuildOpts = {
   cssReset?: boolean
 }
 
-export default (opts: BuildOpts, watchCb?) =>
+export type WatchCb = (result: BuildResult) => void
+
+export default (opts: BuildOpts, watchCb?: WatchCb) =>
   watchCb ? watch(opts, watchCb) : build(opts)
 /*
 {
