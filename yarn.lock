@@ -364,6 +364,11 @@
     eslint-plugin-react-hooks "2.1.2"
     eslint-plugin-standard "^4.0.1"
 
+"@saulx/get-package@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@saulx/get-package/-/get-package-1.0.7.tgz#87172070016a65ed0a39a9c80a61e1b54a0e8780"
+  integrity sha512-3ZzCj+SyHdvdH8p9/yV/qk03A5SSSqtQmNTp/ti9fYE8aTBvSDL2xet5e2oeQmbGx4ctWyc5ny64pvGAxzMcaw==
+
 "@saulx/prettier-config@https://github.com/atelier-saulx/prettier-config":
   version "1.0.0"
   resolved "https://github.com/atelier-saulx/prettier-config#bfbde3d591b3d9c26f68ffa063e7cb2a4bc5f6de"

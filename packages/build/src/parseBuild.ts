@@ -30,13 +30,14 @@ const reducer = (obj, file) => {
   return obj
 }
 const STYLES_PATH = '/generated-styles.css'
-const parseBuild = async (result, styles) => {
+const parseBuild = async (result, styles, dependencies) => {
   const parsed = {
     // line and file
     errors: result.errors || result instanceof Error ? [result] : [],
     css: [],
     js: [],
-    files: {}
+    files: {},
+    dependencies
   }
 
   if (styles) {
