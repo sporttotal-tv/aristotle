@@ -39,8 +39,9 @@
   },
   "devDependencies": {
     "ava": "2.4.0",
+    "react": "^17.0.1",
+    "redis": "*",
     "ts-node": "^8.5.4",
-    "typescript": "^3.7.3",
-    "redis": "*"
+    "typescript": "^3.7.3"
   }
 }

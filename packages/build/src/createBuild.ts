@@ -13,7 +13,7 @@ const createBuild = async (opts, watch) => {
     ...opts,
     define: {
       global: 'window',
-      'process.env.NODE_ENV': opts.minify ? '"production"' : '"dev"',
+      // 'process.env.NODE_ENV': opts.minify ? '"production"' : '"dev"',
       ...opts.define
     },
     plugins: [plugins(opts, styles, dependencies)],

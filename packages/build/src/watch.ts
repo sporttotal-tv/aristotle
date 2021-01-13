@@ -7,17 +7,16 @@ const bundleStore = new Map()
 const bundleCache = new Map()
 const cwd = process.cwd()
 
-const parseMeta = result => {
-  return JSON.parse(
+const parseMeta = result =>
+  JSON.parse(
     result.outputFiles.find(({ path }) => /\/meta\.json$/.test(path)).text
   )
-}
 
 const watch = async (opts, cb) => {
   let res
   if (bundleStore.has(opts)) {
     const store = bundleStore.get(opts)
-    // rebuild
+    // rebuild it
     const result = await store.result.rebuild()
     const meta = parseMeta(result)
     // unwatch removed files
@@ -35,7 +34,7 @@ const watch = async (opts, cb) => {
     // store new meta
     store.meta = meta
     // result
-    res = await parseBuild(result, store.styles, store.dependencies)
+    res = await parseBuild(opts, result, store.styles, store.dependencies)
   } else {
     // first build
     const { result, styles, dependencies } = await createBuild(opts, true)
@@ -59,7 +58,7 @@ const watch = async (opts, cb) => {
       meta
     })
 
-    res = await parseBuild(result, styles, dependencies)
+    res = await parseBuild(opts, result, styles, dependencies)
   }
 
   cb(res)
