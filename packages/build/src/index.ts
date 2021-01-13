@@ -36,6 +36,7 @@ export type BuildResult = {
 
 export type BuildOpts = {
   entryPoints: string[]
+  external?: string[]
   minify?: boolean
   platform?: 'node' | 'browser'
   sourcemap?: boolean

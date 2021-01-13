@@ -16,10 +16,9 @@ const reducer = (obj, file) => {
 
   if (ext === '.js') {
     obj.js.push(file)
-    console.log(/process\.env\.([a-zA-Z0-9_])+/g.exec(file.text))
-    // file.text
-    //   .match(/process\.env\.([a-zA-Z0-9_])+/g)
-    //   .forEach(obj.env.add, obj.env)
+    file.text
+      .match(/process\.env\.([a-zA-Z0-9_])+/g)
+      .forEach(obj.env.add, obj.env)
   } else if (ext === '.css') {
     obj.css.push(file)
   }
@@ -103,6 +102,9 @@ const parseBuild = async (result, styles, dependencies) => {
     : parsed
 
   r.env = Array.from(r.env)
+  r.env.forEach((env, i) => {
+    r.env[i] = env.substring(12)
+  })
 
   return r
 }
