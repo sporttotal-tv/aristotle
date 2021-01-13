@@ -21,6 +21,8 @@ type Opts = {
 export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   const ip = await v4()
 
+  process.env.NODE_ENV = 'dev'
+
   reloadPort = await getPort({ port: reloadPort })
 
   // check if server
@@ -44,6 +46,8 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   if (serverTarget) {
     console.info('  server ', chalk.grey(serverTarget))
   }
+
+  console.info('')
 
   let buildresult: BuildResult
 
