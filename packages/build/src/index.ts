@@ -1,6 +1,15 @@
 import build from './build'
 import watch from './watch'
 
+/*
+options:
+
+{
+    browser: true, // default true
+
+}
+*/
+
 export default opts => (opts.watch ? watch(opts) : build(opts))
 /*
 {
@@ -13,8 +22,8 @@ export default opts => (opts.watch ? watch(opts) : build(opts))
     }],
     env: ['FLURP', 'NODE_ENV'] // js file! 
     server: { main: key, sourcemaps: [key] },
-    scripts: [key],
-    styles: [key],
+    scripts: [key], // make this not key but reference!
+    styles: [key], // same here
     files: {
         '/gaghsag.js': {
             contents: (gzipped on prod),
@@ -23,7 +32,7 @@ export default opts => (opts.watch ? watch(opts) : build(opts))
             minified: false,
             path: '../', // original file path
             text: '',
-            mime: 'javascript,
+            mime: 'application/javascript,
             url: '/gaghsag.js', // this is nice for mapping
             checksum: (key)
         },
@@ -32,14 +41,33 @@ export default opts => (opts.watch ? watch(opts) : build(opts))
 */
 
 /*
-const render = ({ scripts, styles }, req) => {
-    return <html>
-        <head>{styles.map(({ text }) => <style>{text}</style>)}</head>
-        <body>{scripts.map(({ url }) => <script type='text/javascript' src={url} />}</body>
-    </html>
+const render = ({ scripts, styles, head, body }, req) => {
+    return `<html>
+        <head>
+            ${head}
+            ${styles.map(({ text }) => `<style>${text}</style>`)}
+        </head>
+        <body>
+            ${body}
+            ${scripts.map(({ url }) => `<script type='application/javascript' src="${url}"" />`}
+        </body>
+    </html>`
+}
+
+// OR
+
+const render = ({ head, body }, req) => {
+    return `<html>
+        <head>
+            ${head}
+        </head>
+        <body>
+            ${body}
+        </body>
+    </html>`
 }
 
 // if there are errors the render does not get called, we just render a custom error page
 
-// so why not add livereload to it? => watch could add it to the result
+// so why not add livereload to it? => watcher could add it to the result
 */
