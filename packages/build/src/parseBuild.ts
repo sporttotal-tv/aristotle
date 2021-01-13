@@ -19,7 +19,10 @@ const reducer = (obj, file) => {
 
   if (ext === '.js') {
     obj.js.push(file)
-    t.match(/process\.env\.([a-zA-Z0-9_])+/g).forEach(obj.env.add, obj.env)
+    const m = t.match(/process\.env\.([a-zA-Z0-9_])+/g)
+    if (m) {
+      m.forEach(obj.env.add, obj.env)
+    }
   } else if (ext === '.css') {
     obj.css.push(file)
   }
@@ -90,11 +93,13 @@ const parseBuild = async (result, styles, dependencies) => {
       ).css
     }
 
-    result.outputFiles.push({
-      path: STYLES_PATH,
-      text: styles.cache,
-      contents: styles.cache
-    })
+    if (styles.cache) {
+      result.outputFiles.push({
+        path: STYLES_PATH,
+        text: styles.cache,
+        contents: styles.cache
+      })
+    }
   }
 
   const r = result.outputFiles
