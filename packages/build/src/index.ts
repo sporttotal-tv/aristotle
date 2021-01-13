@@ -34,7 +34,15 @@ export type BuildResult = {
   }
 }
 
-export default (opts, watchCb?) =>
+export type BuildOpts = {
+  entryPoints: string[]
+  minify?: boolean
+  platform?: 'node' | 'browser'
+  sourcemap?: boolean
+  cssReset?: boolean
+}
+
+export default (opts: BuildOpts, watchCb?) =>
   watchCb ? watch(opts, watchCb) : build(opts)
 /*
 {

@@ -5,7 +5,7 @@ import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
 import genRenderOpts from './genRenderOpts'
-import { build } from '@saulx/aristotle-build'
+import build from '@saulx/aristotle-build'
 
 type Opts = {
   port: number
@@ -33,7 +33,7 @@ export default async ({ port = 3001, file, reloadPort, buildOpts }: Opts) => {
 
   const server = http.createServer((req, res) => {
     // do everything here
-
+    // build
     // genRenderOpts()
 
     res.end('flurpdrol')
