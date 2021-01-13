@@ -10,7 +10,8 @@ options:
 }
 */
 
-export default opts => (opts.watch ? watch(opts) : build(opts))
+export default (opts, watchCb?) =>
+  watchCb ? watch(opts, watchCb) : build(opts)
 /*
 {
     errors: [{

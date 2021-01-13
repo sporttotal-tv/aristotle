@@ -1,7 +1,7 @@
 import { build as esbuild } from 'esbuild'
 import plugins from './plugins'
 
-const createBuild = async ({ watch, browser, ...opts }) => {
+const createBuild = async ({ browser, ...opts }, watch) => {
   const styles = { css: {}, fileCache: {} }
   const deps = {}
   const result = await esbuild({

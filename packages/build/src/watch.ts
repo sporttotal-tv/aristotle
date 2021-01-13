@@ -20,7 +20,7 @@ const broadcast = client => {
   }
 }
 
-const watch = async opts => {
+const watch = async (opts, cb) => {
   if (bundleStore.has(opts)) {
     const store = bundleStore.get(opts)
     // rebuild
@@ -46,7 +46,7 @@ const watch = async opts => {
     return parseBuild(result, store.styles)
   }
   // first build
-  const { result, styles } = await createBuild(opts)
+  const { result, styles } = await createBuild(opts, true)
   const meta = parseMeta(result)
   // create new watcher
   const watcher = chokidar.watch(Object.keys(meta.inputs))
@@ -102,7 +102,7 @@ const watch = async opts => {
     // remove file from style cache
     delete styles.fileCache[isAbsolute(file) ? file : join(cwd, file)]
     // update bundleCache
-    bundleCache.set(opts, watch(opts))
+    bundleCache.set(opts, watch(opts, cb))
   })
 
   // store for reuse
@@ -112,9 +112,11 @@ const watch = async opts => {
   return parseBuild(result, styles)
 }
 
-export default opts => {
+export default async (opts, cb) => {
   if (!bundleCache.has(opts)) {
-    bundleCache.set(opts, watch(opts))
+    bundleCache.set(opts, watch(opts, cb))
   }
-  return bundleCache.get(opts).catch(parseBuild)
+  const result = await bundleCache.get(opts).catch(parseBuild)
+  cb(result)
+  return result
 }
