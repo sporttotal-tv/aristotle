@@ -1,5 +1,8 @@
 import http from 'http'
 
+// production server
+console.log('xyz')
+
 const replaceVars = (_str, field) => `"${process.env[field] || ''}"`
 
 export default opts => {
