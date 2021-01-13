@@ -373,12 +373,20 @@
   version "1.0.0"
   resolved "https://github.com/atelier-saulx/prettier-config#bfbde3d591b3d9c26f68ffa063e7cb2a4bc5f6de"
 
-"@saulx/utils@1.5.1", "@saulx/utils@^1.5.1":
+"@saulx/utils@1.5.1":
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@saulx/utils/-/utils-1.5.1.tgz#f63efbfb47a1cb3412e47e29c239c85f79af0f5d"
   integrity sha512-rvWzt+4VH4hutk1m7zE6CjcdBNNLuBP+MkICH7Kx/DxfFW+BNRrAWgLWldPshz2t6cCYOM0eVtlbPiEkP+bxQA==
   dependencies:
     is-plain-obj "^3.0.0"
+
+"@saulx/utils@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@saulx/utils/-/utils-1.6.0.tgz#1760eb6e913a7eafbb1d521eee7672396c48027d"
+  integrity sha512-2wl8esl0oMUEbDKsNMIJ86D1a45onLEPvZt99X4SK2RUQMSsiQ4KgPHoSURrQTd7NBpRW1qcG0hmi2tPIajhKw==
+  dependencies:
+    is-plain-obj "^3.0.0"
+    saulx-murmur "^0.2.0"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -4240,6 +4248,11 @@ safe-buffer@~5.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
+
+saulx-murmur@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/saulx-murmur/-/saulx-murmur-0.2.0.tgz#95d1968213cbc9d26db1c0c298a444267807e346"
+  integrity sha512-o1wndCG3RZPSBsS2wCUKyD7XQ9YiKMPRfCLcdJn2czX8M2m+vsnXIZqpbY4MldA9htkwhPjffRTZuJXHO06oTg==
 
 sax@~1.2.4:
   version "1.2.4"
