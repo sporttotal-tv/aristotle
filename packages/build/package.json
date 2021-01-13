@@ -35,13 +35,12 @@
     "mime-types": "^2.1.27",
     "postcss": "^8.2.2",
     "postcss-default-unit": "^1.0.0",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "redis": "*",
-    "ws": "^7.4.2"
+    "postcss-flexbugs-fixes": "^5.0.2"
   },
   "devDependencies": {
     "ava": "2.4.0",
     "ts-node": "^8.5.4",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.3",
+    "redis": "*"
   }
 }
