@@ -6,7 +6,10 @@ import cssnano from 'cssnano'
 import fbFixes from 'postcss-flexbugs-fixes'
 import unit from 'postcss-default-unit'
 import { hash } from '@saulx/utils'
+import zlib from 'zlib'
+import { promisify } from 'util'
 
+const gzip = promisify(zlib.gzip)
 const replacer = g => `-${g[0].toLowerCase()}`
 const toKebabCase = str => str.replace(/([A-Z])/g, replacer)
 
@@ -110,6 +113,15 @@ const parseBuild = async (opts, result, styles, dependencies) => {
   r.env.forEach((env, i) => {
     r.env[i] = env.substring(12)
   })
+
+  if (opts.gzip) {
+    await Promise.all(
+      Object.values(r.files).map(async file => {
+        // @ts-ignore
+        file.contents = await gzip(file.contents)
+      })
+    )
+  }
 
   return r
 }

@@ -6,7 +6,8 @@ test('build', async t => {
   const r = await build({
     entryPoints: [join(__dirname, 'app.tsx')],
     platform: 'node',
-    external: ['redis']
+    external: ['redis'],
+    gzip: true
   })
   console.log('------>', r)
 })
