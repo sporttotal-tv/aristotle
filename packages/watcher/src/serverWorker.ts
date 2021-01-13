@@ -11,17 +11,37 @@ export class RenderWorker {
     })
 
     worker.on('message', msg => {
-      console.log('yesh from worker', msg)
+      const { type, reqId, payload } = msg
+      if (type === 'ready') {
+        console.log('its ready!', type, reqId, payload)
+
+        if (this.requests[reqId]) {
+          this.requests[reqId].ready(payload)
+        }
+      } else if (type === 'method') {
+        // has to attach to req and res
+      }
     })
+
     worker.on('error', err => {
       console.log('yeshcrash in worker', err)
     })
+
     worker.on('exit', code => {
       console.log('worker exit times', code)
     })
 
-    worker.postMessage('flapperpants')
+    this.worker = worker
+    // worker.postMessage('flapperpants')
   }
+
+  public requests: {
+    [reqId: string]: {
+      req: http.IncomingMessage
+      res: http.OutgoingMessage
+      ready: (x: any) => void
+    }
+  } = {}
 
   public worker: Worker
 
@@ -32,7 +52,22 @@ export class RenderWorker {
     res: http.OutgoingMessage
   ): Promise<RenderResult> {
     return new Promise((resolve, reject) => {
-      resolve(undefined)
+      const reqId = Math.round(Math.random() * 99999999)
+
+      // default time out?
+      this.requests[reqId] = {
+        ready: x => {
+          delete this.requests[reqId]
+          resolve(x)
+        },
+        res,
+        req
+      }
+
+      this.worker.postMessage({
+        type: 'render',
+        reqId
+      })
     })
   }
 
