@@ -7,6 +7,8 @@ import startLiveReload from './livereload'
 import genRenderOpts from './genRenderOpts'
 import build, { BuildOpts, BuildResult } from '@saulx/aristotle-build'
 import defaultRender from './defaultRender'
+import genServeResult from './genServeResult'
+import serve from './serve'
 
 type Opts = {
   port: number
@@ -41,7 +43,7 @@ export default async ({ target, port = 3001, reloadPort }: Opts) => {
   let buildresult: BuildResult
 
   build(buildOpts, result => {
-    console.log('yesh update it!', result)
+    console.log('yesh update it!')
     buildresult = result
   })
 
@@ -55,11 +57,8 @@ export default async ({ target, port = 3001, reloadPort }: Opts) => {
     const r = await defaultRender(renderRes, req, res)
 
     if (r !== undefined) {
-      if (typeof r === 'object') {
-        res.end(r.contents)
-      } else {
-        res.end(r)
-      }
+      const serveResult = genServeResult(r)
+      serve(res, serveResult)
     }
   })
 

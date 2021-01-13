@@ -24,8 +24,8 @@ export type RenderOpts = {
 }
 
 export type RenderResult =
-  | string
   | undefined
+  | string
   | {
       cache: number
       checksum: string
@@ -35,6 +35,16 @@ export type RenderResult =
       mime?: string
       statusCode?: number
     }
+
+export type ServeResult = {
+  cache: number
+  checksum: string
+  contents: Buffer
+  contentLength: number
+  mime: string
+  gzip: boolean
+  statusCode: number
+}
 
 export type RenderFunction = (
   renderOpts: RenderOpts,
