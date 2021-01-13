@@ -1,0 +1,7 @@
+body {
+  background: red;
+}
+
+.donald {
+  background-image: url(./donald.jpeg);
+}

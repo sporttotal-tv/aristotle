@@ -7,7 +7,7 @@ test('build', async t => {
     entryPoints: [join(__dirname, 'app.tsx')],
     platform: 'node',
     external: ['redis'],
-    gzip: true
+    gzip: true,
+    minify: true
   })
-  console.log('------>', r)
 })

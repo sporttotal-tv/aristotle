@@ -87,11 +87,11 @@ const getCssReset = async () => {
   return cssReset
 }
 
-const parseStyles = async styles => {
+const parseStyles = async files => {
   let str = ''
-  for (const prop in styles.css) {
-    for (const val in styles.css[prop]) {
-      const className = styles.css[prop][val]
+  for (const prop in files.css) {
+    for (const val in files.css[prop]) {
+      const className = files.css[prop][val]
       if (typeof className === 'object') {
         if (prop[0] === '@') {
           // it's a media query or something funky
@@ -114,7 +114,7 @@ const parseStyles = async styles => {
   return parseCss(str)
 }
 
-const parseBuild = async (opts, result, styles, dependencies) => {
+const parseBuild = async (opts, result, files, dependencies) => {
   const parsed = {
     // line and file
     errors: result.errors || result instanceof Error ? [result] : [],
@@ -125,15 +125,15 @@ const parseBuild = async (opts, result, styles, dependencies) => {
     dependencies
   }
 
-  if (styles) {
-    if (!styles.cache) {
-      styles.cache = await parseStyles(styles)
+  if (files) {
+    if (!files.cssCache) {
+      files.cssCache = await parseStyles(files)
     }
-    if (styles.cache) {
+    if (files.cssCache) {
       result.outputFiles.push({
         path: STYLES_PATH,
-        text: styles.cache,
-        contents: Buffer.from(styles.cache)
+        text: files.cssCache,
+        contents: Buffer.from(files.cssCache)
       })
     }
   }

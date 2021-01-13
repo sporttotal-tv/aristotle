@@ -34,17 +34,17 @@ const watch = async (opts, cb) => {
     // store new meta
     store.meta = meta
     // result
-    res = await parseBuild(opts, result, store.styles, store.dependencies)
+    res = await parseBuild(opts, result, store.files, store.dependencies)
   } else {
     // first build
-    const { result, styles, dependencies } = await createBuild(opts, true)
+    const { result, files, dependencies } = await createBuild(opts, true)
     const meta = parseMeta(result)
     // create new watcher
     const watcher = chokidar.watch(Object.keys(meta.inputs))
 
     watcher.on('change', file => {
       // remove file from style cache
-      delete styles.fileCache[isAbsolute(file) ? file : join(cwd, file)]
+      delete files.fileCache[isAbsolute(file) ? file : join(cwd, file)]
       // update bundleCache
       bundleCache.set(opts, watch(opts, cb))
     })
@@ -53,12 +53,12 @@ const watch = async (opts, cb) => {
     bundleStore.set(opts, {
       dependencies,
       watcher,
-      styles,
+      files,
       result,
       meta
     })
 
-    res = await parseBuild(opts, result, styles, dependencies)
+    res = await parseBuild(opts, result, files, dependencies)
   }
 
   cb(res)
