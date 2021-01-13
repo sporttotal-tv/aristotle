@@ -35,5 +35,6 @@ try {
 */
 
 parentPort.on('message', message => {
+  const { type } = JSON.parse(message)
   parentPort.postMessage('yesh from boy ' + message)
 })
