@@ -5,6 +5,7 @@ export type File = {
   checksum: string
   path: string
   contents: Buffer
+  unint8: Uint8Array
   compressed: boolean
   gzip: boolean
   text: string
@@ -34,6 +35,8 @@ export type BuildOpts = {
   sourcemap?: boolean
   cssReset?: boolean
   gzip?: boolean
+  splitting?: boolean
+  format?: string
 }
 
 export type WatchCb = (result: BuildResult) => void

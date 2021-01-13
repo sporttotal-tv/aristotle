@@ -2,6 +2,10 @@ import fs from 'fs'
 import { Parser } from 'acorn'
 import jsx from 'acorn-jsx'
 import getPkg from '@saulx/get-package'
+import imagemin from 'imagemin'
+import imageminMozjpeg from 'imagemin-mozjpeg'
+import imageminPngquant from 'imagemin-pngquant'
+import imageminSvgo from 'imagemin-svgo'
 
 const jsxParser = Parser.extend(jsx())
 
@@ -12,7 +16,7 @@ const comment = (text, start, end) => {
   )}*/${text.substring(end, text.length)}`
 }
 
-export default (opts, styles, deps) => {
+export default (opts, files, deps) => {
   let styleCnt = 0
   const plugin = {
     name: 'aristotle',
@@ -41,10 +45,36 @@ export default (opts, styles, deps) => {
         )
       }
 
+      if (opts.minify) {
+        build.onLoad(
+          { filter: /(\.jpg|\.png|\.jpeg|\.svg|\.gif)$/, namespace: 'file' },
+          async ({ path }) => {
+            if (!(path in files.fileCache)) {
+              try {
+                const { data } = await imagemin([path], {
+                  use: [
+                    imageminMozjpeg(),
+                    imageminPngquant({ quality: [65, 80] }),
+                    imageminSvgo({
+                      plugins: [{ removeViewBox: false }]
+                    })
+                  ]
+                })
+                console.log('COMPRESSED!!!', path)
+                files.fileCache[path] = { contents: data, loader: 'file' }
+              } catch (e) {
+                return
+              }
+            }
+            return files.fileCache[path]
+          }
+        )
+      }
+
       build.onLoad(
         { filter: /\.tsx$|\.jsx$/, namespace: 'file' },
         async ({ path }) => {
-          if (!(path in styles.fileCache)) {
+          if (!(path in files.fileCache)) {
             const text = await fs.promises.readFile(path, 'utf8')
             try {
               const ast = jsxParser.parse(text, {
@@ -77,7 +107,7 @@ export default (opts, styles, deps) => {
                       }
                       const key = node.key.name
                       const val = node.value.value
-                      let target = styles.css
+                      let target = files.css
                       if (parentStyleKey) {
                         if (!(parentStyleKey in target)) {
                           target[parentStyleKey] = {}
@@ -93,7 +123,7 @@ export default (opts, styles, deps) => {
                           className = `${Number(styleCnt++).toString(16)}`
                         }
                         target[key][val] = className
-                        styles.cache = null
+                        files.cssCache = null
                       }
                       styleOwnerNode._classNames = styleOwnerNode._classNames
                         ? `${styleOwnerNode._classNames} ${target[key][val]}`
@@ -161,7 +191,7 @@ export default (opts, styles, deps) => {
 
               const store = { offset: 0, text }
               walk(ast, store)
-              styles.fileCache[path] = {
+              files.fileCache[path] = {
                 contents: store.text,
                 loader: 'jsx'
               }
@@ -173,7 +203,7 @@ export default (opts, styles, deps) => {
           } else {
             // console.log('cached:', { path })
           }
-          return styles.fileCache[path]
+          return files.fileCache[path]
         }
       )
     }
