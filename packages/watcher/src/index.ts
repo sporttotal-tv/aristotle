@@ -27,8 +27,8 @@ type RenderOpts = {
   head: string
   env: string[]
   envFile: string
-  scripts: File[]
-  styles: File[]
+  js: File[]
+  css: File[]
   files: {
     [filename: string]: File
   }
