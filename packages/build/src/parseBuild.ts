@@ -7,11 +7,21 @@ import fbFixes from 'postcss-flexbugs-fixes'
 import unit from 'postcss-default-unit'
 import { hash } from '@saulx/utils'
 import zlib from 'zlib'
+import { join } from 'path'
 import { promisify } from 'util'
+import fs from 'fs'
 
+const STYLES_PATH = '/generated-styles.css'
+const RESET_PATH = '/reset-styles.css'
 const gzip = promisify(zlib.gzip)
-const replacer = g => `-${g[0].toLowerCase()}`
-const toKebabCase = str => str.replace(/([A-Z])/g, replacer)
+
+const replacer = g => {
+  return `-${g[0].toLowerCase()}`
+}
+
+const toKebabCase = str => {
+  return str.replace(/([A-Z])/g, replacer)
+}
 
 const reducer = (obj, file) => {
   const path = basename(file.path)
@@ -40,7 +50,70 @@ const reducer = (obj, file) => {
   return obj
 }
 
-const STYLES_PATH = '/generated-styles.css'
+let cssReset
+
+const parseCss = async str => {
+  return (
+    await postcss([
+      unit({
+        ignore: {
+          'stop-opacity': true,
+          'animation-name': true
+        }
+      }),
+      fbFixes,
+      autoprefixer({
+        overrideBrowserslist: ['last 1 version', 'cover 95%', 'IE 10']
+      }),
+      cssnano
+    ]).process(str, {
+      from: STYLES_PATH,
+      to: STYLES_PATH
+    })
+  ).css
+}
+
+const getCssReset = async () => {
+  if (!cssReset) {
+    const text = await parseCss(
+      await fs.promises.readFile(join(__dirname, '../static/reset.css'))
+    )
+    cssReset = {
+      path: RESET_PATH,
+      text,
+      contents: Buffer.from(text)
+    }
+  }
+  return cssReset
+}
+
+const parseStyles = async styles => {
+  let str = ''
+  for (const prop in styles.css) {
+    for (const val in styles.css[prop]) {
+      const className = styles.css[prop][val]
+      if (typeof className === 'object') {
+        if (prop[0] === '@') {
+          // it's a media query or something funky
+          str += `${prop}{`
+          for (const i in className) {
+            str += `.${className[i]}{${toKebabCase(val)}:${i}}`
+          }
+          str += '}'
+        } else {
+          for (const i in className) {
+            str += `.${className[i]}${prop}{${toKebabCase(val)}:${i}}`
+          }
+        }
+      } else {
+        str += `.${className}{${toKebabCase(prop)}:${val}}`
+      }
+    }
+  }
+
+  return parseCss(str)
+}
+
 const parseBuild = async (opts, result, styles, dependencies) => {
   const parsed = {
     // line and file
@@ -54,57 +127,19 @@ const parseBuild = async (opts, result, styles, dependencies) => {
 
   if (styles) {
     if (!styles.cache) {
-      let str = ''
-      for (const prop in styles.css) {
-        for (const val in styles.css[prop]) {
-          const className = styles.css[prop][val]
-          if (typeof className === 'object') {
-            if (prop[0] === '@') {
-              // it's a media query or something funky
-              str += `${prop}{`
-              for (const i in className) {
-                str += `.${className[i]}{${toKebabCase(val)}:${i}}`
-              }
-              str += '}'
-            } else {
-              for (const i in className) {
-                str += `.${className[i]}${prop}{${toKebabCase(val)}:${i}}`
-              }
-            }
-          } else {
-            str += `.${className}{${toKebabCase(prop)}:${val}}`
-          }
-        }
-      }
-
-      // styles.cache = str
-      styles.cache = (
-        await postcss([
-          unit({
-            ignore: {
-              'stop-opacity': true,
-              'animation-name': true
-            }
-          }),
-          fbFixes,
-          autoprefixer({
-            overrideBrowserslist: ['last 1 version', 'cover 95%', 'IE 10']
-          }),
-          cssnano
-        ]).process(str, {
-          from: STYLES_PATH,
-          to: STYLES_PATH
-        })
-      ).css
+      styles.cache = await parseStyles(styles)
     }
-
     if (styles.cache) {
       result.outputFiles.push({
         path: STYLES_PATH,
         text: styles.cache,
-        contents: styles.cache
+        contents: Buffer.from(styles.cache)
       })
     }
+  }
+
+  if (opts.cssReset !== false) {
+    result.outputFiles.push(await getCssReset())
   }
 
   const r = result.outputFiles
