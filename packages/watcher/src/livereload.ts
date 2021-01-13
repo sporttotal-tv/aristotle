@@ -31,6 +31,7 @@ const startWs = (port: number): LiveReload => {
   const update = () => {
     clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
+        console.log('send!')
         client.send('')
       }
     })

@@ -43,7 +43,7 @@ export default async ({ target, port = 3001, reloadPort }: Opts) => {
   let buildresult: BuildResult
 
   build(buildOpts, result => {
-    console.log('yesh update it!')
+    console.log('HELLO UPDATE')
     buildresult = result
     buildresult.files[browser.url] = browser
     buildresult.js.push(browser)
