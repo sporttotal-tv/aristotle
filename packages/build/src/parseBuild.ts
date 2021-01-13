@@ -1,4 +1,4 @@
-import { basename, extname } from 'path'
+import { basename } from 'path'
 import mime from 'mime-types'
 import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
@@ -24,23 +24,25 @@ const toKebabCase = str => {
 }
 
 const reducer = (obj, file) => {
-  const path = basename(file.path)
-  const ext = extname(file.path)
+  file.contents = Buffer.from(file.contents)
 
-  if (ext === '.js') {
+  const path = basename(file.path)
+  const [name, ext] = path.split('.')
+  const h = hash(file.contents)
+  let url
+  if (ext === 'js') {
     obj.js.push(file)
     const m = file.text.match(/process\.env\.([a-zA-Z0-9_])+/g)
     if (m) {
       m.forEach(obj.env.add, obj.env)
     }
-  } else if (ext === '.css') {
+    url = `/${name}.${h}.${ext}`
+  } else if (ext === 'css') {
     obj.css.push(file)
+    url = `/${name}.${h}.${ext}`
+  } else {
+    url = `/${path}`
   }
-
-  file.contents = Buffer.from(file.contents)
-
-  const h = hash(file.contents)
-  const url = `/${h}${ext}`
 
   obj.files[url] = file
   file.url = url

@@ -43,7 +43,7 @@ const watch = async (opts, cb) => {
     const watcher = chokidar.watch(Object.keys(meta.inputs))
 
     watcher.on('change', file => {
-      // remove file from style cache
+      // remove file from file cache
       delete files.fileCache[isAbsolute(file) ? file : join(cwd, file)]
       // update bundleCache
       bundleCache.set(opts, watch(opts, cb))

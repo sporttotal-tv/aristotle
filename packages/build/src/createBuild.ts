@@ -9,6 +9,7 @@ const createBuild = async ({ gzip, production, cssReset, ...opts }, watch) => {
     outdir: 'out',
     incremental: watch,
     metafile: watch ? 'meta.json' : undefined,
+    publicPath: '/',
     ...opts,
     loader: {
       '.woff': 'file',

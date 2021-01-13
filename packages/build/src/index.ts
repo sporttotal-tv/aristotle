@@ -34,6 +34,8 @@ export type BuildOpts = {
   sourcemap?: boolean
   cssReset?: boolean
   gzip?: boolean
+  splitting?: boolean
+  format?: string
 }
 
 export type WatchCb = (result: BuildResult) => void

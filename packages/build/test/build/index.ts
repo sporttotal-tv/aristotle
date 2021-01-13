@@ -7,7 +7,10 @@ test('build', async t => {
     entryPoints: [join(__dirname, 'app.tsx')],
     platform: 'node',
     external: ['redis'],
-    gzip: true,
-    minify: true
+    gzip: true
+    // minify: true,
+    // splitting: true,
+    // format: 'esm'
   })
+  console.log(Object.keys(r.files))
 })
