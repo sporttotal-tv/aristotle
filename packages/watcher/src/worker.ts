@@ -1,8 +1,9 @@
 import { parentPort, workerData } from 'worker_threads'
 import evalServer from 'eval'
+import { BuildResult } from '@saulx/aristotle-build'
 
 try {
-  const server = evalServer(workerData)
+  const server = evalServer(workerData, 'app-server', {}, true)
   let serverFunction: (...args: any[]) => any
   if (server.default) {
     serverFunction = server.default
@@ -13,16 +14,44 @@ try {
   }
 
   if (serverFunction) {
-    console.log('got nice server in worker!')
+    const buildresult: BuildResult = {
+      js: [],
+      css: [],
+      env: [],
+      errors: [],
+      files: {},
+      dependencies: {}
+    }
+
+    parentPort.postMessage({
+      type: 'initialized'
+    })
+
     parentPort.on('message', async message => {
       const { type, reqId } = message
 
-      if (type === 'render') {
-        console.log('go render time!', message)
+      if (type === 'buildresult') {
+        const { operation, data, file, key } = message
+        if (operation === 'new') {
+          buildresult.files[key] = {
+            ...file,
+            contents: Buffer.from(data)
+          }
+        } else if (operation === 'delete') {
+          delete buildresult.files[key]
+        }
+        // parentPort.postMessage({
+        //     type: 'buildresult-added',
+        //     reqId,
+        //     payload: result
+        //   })
+      } else if (type === 'render') {
+        // console.log('go render time!', message)
 
         const result = await serverFunction({
           head: '',
-          body: ''
+          body: '',
+          ...buildresult
         })
 
         parentPort.postMessage({

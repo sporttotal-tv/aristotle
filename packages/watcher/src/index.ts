@@ -43,9 +43,10 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
 
   let buildresult: BuildResult
   let ssr: RenderWorker
+  let ssrInProgress: string
 
   build(buildOpts, async result => {
-    console.log('HELLO UPDATE')
+    // compare all checksums and lengths
     buildresult = result
     buildresult.files[browser.url] = browser
     buildresult.js.push(browser)
@@ -62,15 +63,23 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       platform: 'node'
     }
     if (serverTarget) {
-      build(buildOptsServer, result => {
-        if (!ssr || result.js[0].checksum !== ssr.checksum) {
-          if (ssr) {
-            // can actualy not make new one all the time - just use one until it crashes
-            ssr.stop()
+      build(buildOptsServer, async result => {
+        const checksum = result.js[0].checksum
+        if (ssrInProgress === checksum) {
+          // console.log('change with no update - ignore', checksum)
+        } else {
+          ssrInProgress = checksum
+          if (!ssr || checksum !== ssr.checksum) {
+            if (ssr) {
+              // can actualy not make new one all the time - just use one until it crashes
+              ssr.stop()
+            }
+            ssr = await genWorker(result.js[0])
+            ssr.updateBuildResult(buildresult)
+            console.info(chalk.grey('Server initialized'))
+            ssrInProgress = undefined
+            update()
           }
-          console.log('HELLO UPDATE SERVER')
-          ssr = genWorker(result.js[0])
-          update()
         }
       })
     }
