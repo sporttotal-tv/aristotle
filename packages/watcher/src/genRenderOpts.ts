@@ -6,8 +6,6 @@ import genEnvfile from './genEnvfile'
 export default (req: http.IncomingMessage, build: BuildResult): RenderOpts => {
   const envFile = genEnvfile(build.env || [])
 
-  console.log(build.env)
-
   const renderOpts: RenderOpts = {
     body: `${build.js
       .map(file => {
