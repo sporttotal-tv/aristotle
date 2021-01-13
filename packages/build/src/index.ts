@@ -10,6 +10,30 @@ options:
 }
 */
 
+export type File = {
+  checksum: string
+  path: string
+  contents: Buffer
+  compressed: boolean
+  gzip: boolean
+  text: string
+  mime: string
+  url: string
+}
+
+export type BuildResult = {
+  env: string[]
+  js: File[]
+  css: File[]
+  files: {
+    [filename: string]: File
+  }
+  errors: string[]
+  dependencies: {
+    [pkg: string]: string
+  }
+}
+
 export default (opts, watchCb?) =>
   watchCb ? watch(opts, watchCb) : build(opts)
 /*

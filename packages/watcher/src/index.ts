@@ -2,68 +2,25 @@ import { Worker, isMainThread, parentPort, workerData } from 'worker_threads'
 import chalk from 'chalk'
 import { v4 } from 'internal-ip'
 import http from 'http'
+import getPort from 'get-port'
+import startLiveReload from './livereload'
 
 type Opts = {
   port: number
   file: string
+  reloadPort?: number
 }
-
-type File = {
-  checksum: string
-  path: string
-  contents: Buffer
-  compressed: boolean
-  gzip: boolean
-  text: string
-  mime: string
-  url: string
-}
-
-//   server: string
-
-// also send req ofc
-type RenderOpts = {
-  body: string
-  head: string
-  env: string[]
-  envFile: string
-  js: File[]
-  css: File[]
-  files: {
-    [filename: string]: File
-  }
-  url: string
-  queryString: string
-  language: string
-  userAgent: {
-    device: string
-    browser: string
-    version: number
-  }
-}
-
-type RenderResult =
-  | string
-  | undefined
-  | {
-      cache: number
-      checksum: string
-      contents: Buffer | string
-      contentLength?: number
-      gzip?: boolean
-      mime?: string
-      statusCode?: number
-    }
-
-type RenderFunction = (
-  renderOpts: RenderOpts,
-  req: http.IncomingMessage,
-  res: http.OutgoingMessage
-) => Promise<RenderResult>
 
 // shared types
-export default async ({ port = 3001, file }: Opts) => {
+export default async ({ port = 3001, file, reloadPort }: Opts) => {
   const ip = await v4()
+
+  if (!reloadPort) {
+    reloadPort = await getPort()
+  }
+
+  // want browser as a file prob
+  const { update, browser } = startLiveReload(reloadPort)
 
   console.info(
     chalk.blue('Aristotle development server'),
@@ -72,6 +29,7 @@ export default async ({ port = 3001, file }: Opts) => {
   console.info(chalk.grey(file))
 
   const server = http.createServer((req, res) => {
+    // do everything here
     res.end('flurpdrol')
   })
 
