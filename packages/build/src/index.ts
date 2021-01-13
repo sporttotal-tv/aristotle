@@ -5,6 +5,7 @@ export type File = {
   checksum: string
   path: string
   contents: Buffer
+  unint8: Uint8Array
   compressed: boolean
   gzip: boolean
   text: string
