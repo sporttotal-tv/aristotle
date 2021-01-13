@@ -5,21 +5,27 @@ import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
 import genRenderOpts from './genRenderOpts'
-import build from '@saulx/aristotle-build'
+import build, { BuildOpts, BuildResult } from '@saulx/aristotle-build'
+import defaultRender from './defaultRender'
 
 type Opts = {
   port: number
-  file: string
   reloadPort?: number
-  buildOpts: any
+  target: string
 }
 
 // shared types
-export default async ({ port = 3001, file, reloadPort, buildOpts }: Opts) => {
+export default async ({ target, port = 3001, reloadPort }: Opts) => {
   const ip = await v4()
 
   if (!reloadPort) {
     reloadPort = await getPort()
+  }
+
+  // check if server
+  const buildOpts: BuildOpts = {
+    entryPoints: [target],
+    platform: 'browser'
   }
 
   // want browser as a file prob
@@ -29,14 +35,32 @@ export default async ({ port = 3001, file, reloadPort, buildOpts }: Opts) => {
     chalk.blue('Aristotle development server'),
     'http://' + ip + ':' + port
   )
-  console.info(chalk.grey(file))
 
-  const server = http.createServer((req, res) => {
+  console.info(chalk.grey(target))
+
+  let buildresult: BuildResult
+
+  build(buildOpts, result => {
+    console.log('yesh update it!', result)
+    buildresult = result
+  })
+
+  const server = http.createServer(async (req, res) => {
     // do everything here
     // build
     // genRenderOpts()
 
-    res.end('flurpdrol')
+    const renderRes = genRenderOpts(req, buildresult)
+
+    const r = await defaultRender(renderRes, req, res)
+
+    if (r !== undefined) {
+      if (typeof r === 'object') {
+        res.end(r.contents)
+      } else {
+        res.end(r)
+      }
+    }
   })
 
   server.listen(port)
