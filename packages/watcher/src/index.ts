@@ -4,6 +4,7 @@ import { v4 } from 'internal-ip'
 import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
+import genRenderOpts from './genRenderOpts'
 
 type Opts = {
   port: number

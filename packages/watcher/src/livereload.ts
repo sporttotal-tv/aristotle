@@ -1,5 +1,5 @@
 import WebSocket from 'ws'
-import { File } from './types'
+import { File } from '@saulx/aristotle-build'
 import { hash } from '@saulx/utils'
 
 const genBrowser = (port: number): string => `(function connect (timeout) {
