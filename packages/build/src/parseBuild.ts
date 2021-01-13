@@ -16,9 +16,9 @@ const reducer = (obj, file) => {
 
   if (ext === '.js') {
     obj.js.push(file)
-    file.text
-      .match(/process\.env\.[a-zA-Z0-9_]+/g)
-      .forEach(obj.env.add, obj.env)
+    // file.text
+    //   .match(/process\.env\.([a-zA-Z0-9_])+/g)
+    //   .forEach(obj.env.add, obj.env)
   } else if (ext === '.css') {
     obj.css.push(file)
   }
