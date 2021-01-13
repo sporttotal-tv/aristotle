@@ -1,4 +1,3 @@
-import { Worker, isMainThread, parentPort, workerData } from 'worker_threads'
 import chalk from 'chalk'
 import { v4 } from 'internal-ip'
 import http from 'http'
@@ -10,6 +9,7 @@ import defaultRender from './defaultRender'
 import { genServeFromFile, genServeFromRender } from './genServeResult'
 import serve from './serve'
 import hasServer from './hasServer'
+import { genWorker, RenderWorker } from './serverWorker'
 
 type Opts = {
   port: number
@@ -41,13 +41,8 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
 
   console.info('  browser', chalk.grey(target))
 
-  if (serverTarget) {
-    console.info('  server ', chalk.grey(serverTarget))
-  }
-
-  console.info('')
-
   let buildresult: BuildResult
+  let ssr: RenderWorker
 
   build(buildOpts, result => {
     console.log('HELLO UPDATE')
@@ -56,6 +51,25 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     buildresult.js.push(browser)
     update()
   })
+
+  if (serverTarget) {
+    console.info('  server ', chalk.grey(serverTarget))
+    const buildOptsServer: BuildOpts = {
+      entryPoints: [serverTarget],
+      platform: 'node'
+    }
+    if (serverTarget) {
+      build(buildOptsServer, result => {
+        if (!ssr || result.js[0].checksum !== ssr.checksum) {
+          console.log('HELLO UPDATE SERVER')
+          ssr = genWorker(result.js[0])
+          update()
+        }
+      })
+    }
+  }
+
+  console.info('')
 
   const server = http.createServer(async (req, res) => {
     if (!buildresult) {
@@ -68,10 +82,14 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     if (file) {
       serve(res, genServeFromFile(file))
     } else {
-      const renderRes = genRenderOpts(req, buildresult)
-      const r = await defaultRender(renderRes, req, res)
-      if (r !== undefined) {
-        serve(res, genServeFromRender(r))
+      if (ssr) {
+        serve(res, genServeFromRender(await ssr.render(req, res)))
+      } else {
+        const renderRes = genRenderOpts(req, buildresult)
+        const r = await defaultRender(renderRes, req, res)
+        if (r !== undefined) {
+          serve(res, genServeFromRender(r))
+        }
       }
     }
   })
