@@ -1,5 +1,4 @@
 import chokidar from 'chokidar'
-import WebSocket from 'ws'
 import createBuild from './createBuild'
 import parseBuild from './parseBuild'
 import { join, isAbsolute } from 'path'
@@ -14,13 +13,8 @@ const parseMeta = result => {
   )
 }
 
-// const broadcast = client => {
-//   if (client.readyState === WebSocket.OPEN) {
-//     client.send('')
-//   }
-// }
-
 const watch = async (opts, cb) => {
+  let res
   if (bundleStore.has(opts)) {
     const store = bundleStore.get(opts)
     // rebuild
@@ -41,80 +35,40 @@ const watch = async (opts, cb) => {
     // store new meta
     store.meta = meta
     // result
-    return parseBuild(result, store.styles, store.dependencies)
+    res = await parseBuild(result, store.styles, store.dependencies)
+  } else {
+    // first build
+    const { result, styles, dependencies } = await createBuild(opts, true)
+    const meta = parseMeta(result)
+    // create new watcher
+    const watcher = chokidar.watch(Object.keys(meta.inputs))
+
+    watcher.on('change', file => {
+      // remove file from style cache
+      delete styles.fileCache[isAbsolute(file) ? file : join(cwd, file)]
+      // update bundleCache
+      bundleCache.set(opts, watch(opts, cb))
+    })
+
+    // store for reuse
+    bundleStore.set(opts, {
+      dependencies,
+      watcher,
+      styles,
+      result,
+      meta
+    })
+
+    res = await parseBuild(result, styles, dependencies)
   }
-  // first build
-  const { result, styles, dependencies } = await createBuild(opts, true)
-  const meta = parseMeta(result)
-  // create new watcher
-  const watcher = chokidar.watch(Object.keys(meta.inputs))
 
-  watcher.on('change', file => {
-    // remove file from style cache
-    delete styles.fileCache[isAbsolute(file) ? file : join(cwd, file)]
-    // update bundleCache
-    bundleCache.set(opts, watch(opts, cb))
-  })
-
-  // store for reuse
-  bundleStore.set(opts, {
-    dependencies,
-    watcher,
-    styles,
-    result,
-    meta
-  })
-
-  // // if its browser it adds livereload things
-  // if (opts.platform !== 'node') {
-  //   // create livereload server
-  //   const port = 2222 // use find port
-  //   const { clients } = new WebSocket.Server({ port })
-  //   const script = `(function connect (timeout) {
-  //   var host = window.location.hostname
-  //   if (!timeout) timeout = 0
-  //   setTimeout(function () {
-  //       var socket = new WebSocket('ws://' + host + ':${port}')
-  //       socket.addEventListener('message', function () {
-  //       location.reload()
-  //       })
-  //       socket.addEventListener('open', function () {
-  //       if (timeout > 0) location.reload()
-  //       console.log('🛸 dev server connected')
-  //       })
-  //       socket.addEventListener('close', function () {
-  //       console.log('🛸 dev server reconnecting...')
-  //       connect(Math.min(timeout + 1000), 3000)
-  //       })
-  //   }, timeout)
-  //   })();`
-
-  //   // add watcher
-  //   watcher.on('change', file => {
-  //     // broadcast reload
-  //     clients.forEach(broadcast)
-  //   })
-
-  //   // @ts-ignore
-  //   newStore.livereload = {
-  //     path: '/livereload.js',
-  //     text: script,
-  //     contents: script
-  //   }
-  //   // add livereload
-  //   // @ts-ignore
-  //   result.outputFiles.push(newStore.livereload)
-  // }
-
-  // result
-  return parseBuild(result, styles, dependencies)
+  cb(res)
+  return res
 }
 
-export default async (opts, cb) => {
+export default (opts, cb) => {
   if (!bundleCache.has(opts)) {
     bundleCache.set(opts, watch(opts, cb))
   }
-  const result = await bundleCache.get(opts).catch(parseBuild)
-  cb(result)
-  return result
+  return bundleCache.get(opts).catch(parseBuild)
 }
