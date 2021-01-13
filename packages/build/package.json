@@ -5,7 +5,22 @@
   "version": "1.0.1",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "test": "ava --verbose"
+  },
+  "ava": {
+    "files": [
+      "test/**/index.ts",
+      "test/*.ts"
+    ],
+    "concurrency": 1,
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
   },
   "repository": "https://github.com/atelier-saulx/aristotle",
   "dependencies": {

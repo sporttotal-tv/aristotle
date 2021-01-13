@@ -11,11 +11,21 @@ const comment = (text, start, end) => {
   )}*/${text.substring(end, text.length)}`
 }
 
-export default styles => {
+export default (opts, styles, deps) => {
   let styleCnt = 0
   const plugin = {
-    name: 'css',
+    name: 'aristotle',
     setup(build) {
+      if (opts.external) {
+        build.onResolve(
+          { filter: new RegExp(opts.external.join('|')) },
+          args => {
+            deps[args.path] = 'ok'
+            console.log('-->', args)
+          }
+        )
+      }
+
       build.onLoad(
         { filter: /\.tsx$|\.jsx$/, namespace: 'file' },
         async ({ path }) => {

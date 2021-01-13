@@ -15,14 +15,17 @@ const reducer = (obj, file) => {
   const url = `/${path}`
 
   if (ext === '.js') {
-    obj.scripts.push(file)
+    obj.js.push(file)
   } else if (ext === '.css') {
-    obj.styles.push(file)
+    obj.css.push(file)
   }
 
-  obj.files[url] = file
-  file.url = url
-  file.type = mime.lookup(path) || 'application/octet-stream'
+  const hashUrl = url
+
+  obj.files[hashUrl] = file
+  file.url = hashUrl
+  file.checksum = 123
+  file.mime = mime.lookup(path) || 'application/octet-stream'
 
   return obj
 }
@@ -31,8 +34,8 @@ const parseBuild = async (result, styles) => {
   const parsed = {
     // line and file
     errors: result.errors || result instanceof Error ? [result] : [],
-    styles: [],
-    scripts: [],
+    css: [],
+    js: [],
     files: {}
   }
 
