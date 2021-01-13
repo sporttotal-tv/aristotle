@@ -16,13 +16,11 @@ const toKebabCase = str => str.replace(/([A-Z])/g, replacer)
 const reducer = (obj, file) => {
   const path = basename(file.path)
   const ext = extname(file.path)
-  const t = file.text
-  const h = hash(t)
-  const url = `/${h}${ext}`
+  // const h = hash(t)
 
   if (ext === '.js') {
     obj.js.push(file)
-    const m = t.match(/process\.env\.([a-zA-Z0-9_])+/g)
+    const m = file.text.match(/process\.env\.([a-zA-Z0-9_])+/g)
     if (m) {
       m.forEach(obj.env.add, obj.env)
     }
@@ -30,10 +28,17 @@ const reducer = (obj, file) => {
     obj.css.push(file)
   }
 
+  file.contents = Buffer.from(file.contents)
+
+  console.log('---->', typeof window, hash)
+
+  const h = hash(file.contents)
+  const url = `/${h}${ext}`
+
   obj.files[url] = file
   file.url = url
   file.checksum = h
-  file.contents = Buffer.from(file.contents)
+
   file.mime = mime.lookup(path) || 'application/octet-stream'
 
   return obj
