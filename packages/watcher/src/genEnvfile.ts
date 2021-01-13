@@ -8,6 +8,8 @@ export default (env: string[]): string => {
     return ''
   }
 
+  console.log('????????????????', env)
+
   return `
 if (! window.process = {}) { window.process = {} };
 window.process.env = ${JSON.stringify(envObj)};

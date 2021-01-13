@@ -9,6 +9,7 @@ import build, { BuildOpts, BuildResult } from '@saulx/aristotle-build'
 import defaultRender from './defaultRender'
 import { genServeFromFile, genServeFromRender } from './genServeResult'
 import serve from './serve'
+import hasServer from './hasServer'
 
 type Opts = {
   port: number
@@ -17,12 +18,10 @@ type Opts = {
 }
 
 // shared types
-export default async ({ target, port = 3001, reloadPort }: Opts) => {
+export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   const ip = await v4()
 
-  if (!reloadPort) {
-    reloadPort = await getPort()
-  }
+  reloadPort = await getPort({ port: reloadPort })
 
   // check if server
   const buildOpts: BuildOpts = {
@@ -33,12 +32,18 @@ export default async ({ target, port = 3001, reloadPort }: Opts) => {
   // want browser as a file prob
   const { update, browser } = startLiveReload(reloadPort)
 
-  console.info(
+  await console.info(
     chalk.blue('Aristotle development server'),
     'http://' + ip + ':' + port
   )
 
-  console.info(chalk.grey(target))
+  const serverTarget = await hasServer(target)
+
+  console.info('  browser', chalk.grey(target))
+
+  if (serverTarget) {
+    console.info('  server ', chalk.grey(serverTarget))
+  }
 
   let buildresult: BuildResult
 
