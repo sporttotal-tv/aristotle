@@ -20,7 +20,7 @@ const broadcast = client => {
   }
 }
 
-const watch = async opts => {
+const watch = async (opts, cb) => {
   if (bundleStore.has(opts)) {
     const store = bundleStore.get(opts)
     // rebuild
@@ -46,12 +46,23 @@ const watch = async opts => {
     return parseBuild(result, store.styles)
   }
   // first build
-  const { result, styles } = await createBuild(opts)
+  const { result, styles } = await createBuild(opts, true)
   const meta = parseMeta(result)
-  // create livereload server
-  const port = 2222 // use find port
-  const { clients } = new WebSocket.Server({ port })
-  const script = `(function connect (timeout) {
+  // create new watcher
+  const watcher = chokidar.watch(Object.keys(meta.inputs))
+  const newStore = {
+    watcher,
+    styles,
+    result,
+    meta
+  }
+
+  // if its browser it adds livereload things
+  if (opts.browser !== false) {
+    // create livereload server
+    const port = 2222 // use find port
+    const { clients } = new WebSocket.Server({ port })
+    const script = `(function connect (timeout) {
     var host = window.location.hostname
     if (!timeout) timeout = 0
     setTimeout(function () {
@@ -70,40 +81,42 @@ const watch = async opts => {
     }, timeout)
     })();`
 
-  const livereload = {
-    path: '/livereload.js',
-    text: script,
-    contents: script
+    // add watcher
+    watcher.on('change', file => {
+      // broadcast reload
+      clients.forEach(broadcast)
+    })
+
+    // @ts-ignore
+    newStore.livereload = {
+      path: '/livereload.js',
+      text: script,
+      contents: script
+    }
+    // add livereload
+    // @ts-ignore
+    result.outputFiles.push(newStore.livereload)
   }
 
-  // create new watcher
-  const watcher = chokidar.watch(Object.keys(meta.inputs))
   watcher.on('change', file => {
     // remove file from style cache
     delete styles.fileCache[isAbsolute(file) ? file : join(cwd, file)]
     // update bundleCache
-    bundleCache.set(opts, watch(opts))
-    // broadcast reload
-    clients.forEach(broadcast)
+    bundleCache.set(opts, watch(opts, cb))
   })
+
   // store for reuse
-  bundleStore.set(opts, {
-    livereload,
-    watcher,
-    styles,
-    result,
-    meta
-  })
-  // add livereload
-  // @ts-ignore
-  result.outputFiles.push(livereload)
+  bundleStore.set(opts, newStore)
+
   // result
   return parseBuild(result, styles)
 }
 
-export default opts => {
+export default async (opts, cb) => {
   if (!bundleCache.has(opts)) {
-    bundleCache.set(opts, watch(opts))
+    bundleCache.set(opts, watch(opts, cb))
   }
-  return bundleCache.get(opts).catch(parseBuild)
+  const result = await bundleCache.get(opts).catch(parseBuild)
+  cb(result)
+  return result
 }

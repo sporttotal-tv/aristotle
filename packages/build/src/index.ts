@@ -34,7 +34,8 @@ export type BuildResult = {
   }
 }
 
-export default opts => (opts.watch ? watch(opts) : build(opts))
+export default (opts, watchCb?) =>
+  watchCb ? watch(opts, watchCb) : build(opts)
 /*
 {
     errors: [{
@@ -82,12 +83,8 @@ const render = ({ scripts, styles, head, body }, req) => {
 
 const render = ({ head, body, files, scripts, styles, env, envFile }, req) => {
     return `<html>
-        <head>
-            ${head}
-        </head>
-        <body>
-            ${body}
-        </body>
+        <head>${head}</head>
+        <body>${body}</body>
     </html>`
 }
 
