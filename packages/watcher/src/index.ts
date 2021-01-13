@@ -5,15 +5,17 @@ import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
 import genRenderOpts from './genRenderOpts'
+import { build } from '@saulx/aristotle-build'
 
 type Opts = {
   port: number
   file: string
   reloadPort?: number
+  buildOpts: any
 }
 
 // shared types
-export default async ({ port = 3001, file, reloadPort }: Opts) => {
+export default async ({ port = 3001, file, reloadPort, buildOpts }: Opts) => {
   const ip = await v4()
 
   if (!reloadPort) {
@@ -31,6 +33,9 @@ export default async ({ port = 3001, file, reloadPort }: Opts) => {
 
   const server = http.createServer((req, res) => {
     // do everything here
+
+    // genRenderOpts()
+
     res.end('flurpdrol')
   })
 
