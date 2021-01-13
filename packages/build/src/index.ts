@@ -10,6 +10,34 @@ options:
 }
 */
 
+export type File = {
+  checksum: string
+  path: string
+  contents: Buffer
+  compressed: boolean
+  gzip: boolean
+  text: string
+  mime: string
+  url: string
+}
+
+export type BuildResult = {
+  env: string[]
+  js: File[]
+  css: File[]
+  files: {
+    [filename: string]: File
+  }
+  url: string
+  queryString: string
+  language: string
+  userAgent: {
+    device: string
+    browser: string
+    version: number
+  }
+}
+
 export default opts => (opts.watch ? watch(opts) : build(opts))
 /*
 {
