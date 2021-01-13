@@ -6,7 +6,6 @@ const createBuild = async ({ gzip, production, cssReset, ...opts }, watch) => {
   const dependencies = {}
   const result = await esbuild({
     bundle: true,
-    minify: !!production,
     outdir: 'out',
     incremental: watch,
     metafile: watch ? 'meta.json' : undefined,

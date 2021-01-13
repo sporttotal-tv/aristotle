@@ -38,5 +38,14 @@ export type BuildOpts = {
 
 export type WatchCb = (result: BuildResult) => void
 
-export default (opts: BuildOpts, watchCb?: WatchCb) =>
-  watchCb ? watch(opts, watchCb) : build(opts)
+export default (opts: BuildOpts, watchCb?: WatchCb) => {
+  if (opts.production) {
+    if (!('minify' in opts)) {
+      opts.minify = true
+    }
+    if (!('gzip' in opts)) {
+      opts.gzip = true
+    }
+  }
+  return watchCb ? watch(opts, watchCb) : build(opts)
+}
