@@ -6,20 +6,20 @@ import cssnano from 'cssnano'
 import fbFixes from 'postcss-flexbugs-fixes'
 import unit from 'postcss-default-unit'
 import { hash } from '@saulx/utils'
+import zlib from 'zlib'
+import { promisify } from 'util'
 
+const gzip = promisify(zlib.gzip)
 const replacer = g => `-${g[0].toLowerCase()}`
 const toKebabCase = str => str.replace(/([A-Z])/g, replacer)
 
 const reducer = (obj, file) => {
   const path = basename(file.path)
   const ext = extname(file.path)
-  const t = file.text
-  const h = hash(t)
-  const url = `/${h}${ext}`
 
   if (ext === '.js') {
     obj.js.push(file)
-    const m = t.match(/process\.env\.([a-zA-Z0-9_])+/g)
+    const m = file.text.match(/process\.env\.([a-zA-Z0-9_])+/g)
     if (m) {
       m.forEach(obj.env.add, obj.env)
     }
@@ -27,14 +27,19 @@ const reducer = (obj, file) => {
     obj.css.push(file)
   }
 
+  file.contents = Buffer.from(file.contents)
+
+  const h = hash(file.contents)
+  const url = `/${h}${ext}`
+
   obj.files[url] = file
   file.url = url
   file.checksum = h
-  file.contents = Buffer.from(file.contents)
   file.mime = mime.lookup(path) || 'application/octet-stream'
 
   return obj
 }
+
 const STYLES_PATH = '/generated-styles.css'
 const parseBuild = async (opts, result, styles, dependencies) => {
   const parsed = {
@@ -110,6 +115,15 @@ const parseBuild = async (opts, result, styles, dependencies) => {
   r.env.forEach((env, i) => {
     r.env[i] = env.substring(12)
   })
+
+  if (opts.gzip) {
+    await Promise.all(
+      Object.values(r.files).map(async file => {
+        // @ts-ignore
+        file.contents = await gzip(file.contents)
+      })
+    )
+  }
 
   return r
 }
