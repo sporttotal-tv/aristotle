@@ -16,7 +16,6 @@ const toKebabCase = str => str.replace(/([A-Z])/g, replacer)
 const reducer = (obj, file) => {
   const path = basename(file.path)
   const ext = extname(file.path)
-  // const h = hash(t)
 
   if (ext === '.js') {
     obj.js.push(file)
@@ -30,19 +29,17 @@ const reducer = (obj, file) => {
 
   file.contents = Buffer.from(file.contents)
 
-  console.log('---->', typeof window, hash)
-
   const h = hash(file.contents)
   const url = `/${h}${ext}`
 
   obj.files[url] = file
   file.url = url
   file.checksum = h
-
   file.mime = mime.lookup(path) || 'application/octet-stream'
 
   return obj
 }
+
 const STYLES_PATH = '/generated-styles.css'
 const parseBuild = async (opts, result, styles, dependencies) => {
   const parsed = {
