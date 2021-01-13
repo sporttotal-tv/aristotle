@@ -1,3 +1,6 @@
 import redis from 'redis'
 
-console.log(redis)
+console.log(process.env.SMURK)
+console.log(process.env.SMURK)
+console.log(process.env.SMURK)
+console.log(process.env.FOO)
