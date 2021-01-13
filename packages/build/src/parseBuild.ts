@@ -24,6 +24,7 @@ const toKebabCase = str => {
 }
 
 const reducer = (obj, file) => {
+  file.unint8 = file.contents
   file.contents = Buffer.from(file.contents)
 
   const path = basename(file.path)
@@ -158,6 +159,8 @@ const parseBuild = async (opts, result, files, dependencies) => {
       Object.values(r.files).map(async file => {
         // @ts-ignore
         file.contents = await gzip(file.contents)
+        // @ts-ignore
+        file.gzip = true
       })
     )
   }
