@@ -7,13 +7,13 @@ import startLiveReload from './livereload'
 import genRenderOpts from './genRenderOpts'
 import build, { BuildOpts, BuildResult } from '@saulx/aristotle-build'
 import defaultRender from './defaultRender'
-import genServeResult from './genServeResult'
+import { genServeFromFile, genServeFromRender } from './genServeResult'
 import serve from './serve'
 
 type Opts = {
   port: number
-  reloadPort?: number
   target: string
+  reloadPort?: number
 }
 
 // shared types
@@ -45,20 +45,27 @@ export default async ({ target, port = 3001, reloadPort }: Opts) => {
   build(buildOpts, result => {
     console.log('yesh update it!')
     buildresult = result
+    buildresult.files[browser.url] = browser
+    buildresult.js.push(browser)
+    update()
   })
 
   const server = http.createServer(async (req, res) => {
-    // do everything here
-    // build
-    // genRenderOpts()
+    if (!buildresult) {
+      res.end('WAIT FOR RESULT!')
+      return
+    }
 
-    const renderRes = genRenderOpts(req, buildresult)
-
-    const r = await defaultRender(renderRes, req, res)
-
-    if (r !== undefined) {
-      const serveResult = genServeResult(r)
-      serve(res, serveResult)
+    const url = req.url
+    const file = buildresult.files[url]
+    if (file) {
+      serve(res, genServeFromFile(file))
+    } else {
+      const renderRes = genRenderOpts(req, buildresult)
+      const r = await defaultRender(renderRes, req, res)
+      if (r !== undefined) {
+        serve(res, genServeFromRender(r))
+      }
     }
   })
 

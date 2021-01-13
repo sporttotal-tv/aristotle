@@ -1,7 +1,10 @@
 import { RenderResult, ServeResult } from './types'
 import { hash } from '@saulx/utils'
+import { File } from '@saulx/aristotle-build'
 
-export default (renderResult: string | RenderResult): ServeResult => {
+export const genServeFromRender = (
+  renderResult: string | RenderResult
+): ServeResult => {
   let contents: Buffer
 
   if (typeof renderResult === 'string') {
@@ -41,4 +44,17 @@ export default (renderResult: string | RenderResult): ServeResult => {
     }
     return serveResult
   }
+}
+
+export const genServeFromFile = (file: File): ServeResult => {
+  const serveResult: ServeResult = {
+    cache: 'immutable',
+    checksum: file.checksum,
+    contents: file.contents,
+    contentLength: file.contents.byteLength,
+    gzip: !!file.gzip,
+    mime: file.mime,
+    statusCode: 200
+  }
+  return serveResult
 }
