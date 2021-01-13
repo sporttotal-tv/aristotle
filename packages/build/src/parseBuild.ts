@@ -5,6 +5,7 @@ import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
 import fbFixes from 'postcss-flexbugs-fixes'
 import unit from 'postcss-default-unit'
+import { hash } from '@saulx/utils'
 
 const replacer = g => `-${g[0].toLowerCase()}`
 const toKebabCase = str => str.replace(/([A-Z])/g, replacer)
@@ -12,7 +13,8 @@ const toKebabCase = str => str.replace(/([A-Z])/g, replacer)
 const reducer = (obj, file) => {
   const path = basename(file.path)
   const ext = extname(file.path)
-  const url = `/${path}`
+  const h = hash(file.text)
+  const url = `/${h}${ext}`
 
   if (ext === '.js') {
     obj.js.push(file)
@@ -23,11 +25,9 @@ const reducer = (obj, file) => {
     obj.css.push(file)
   }
 
-  const hashUrl = url
-
-  obj.files[hashUrl] = file
-  file.url = hashUrl
-  file.checksum = 123
+  obj.files[url] = file
+  file.url = url
+  file.checksum = h
   file.mime = mime.lookup(path) || 'application/octet-stream'
 
   return obj
