@@ -56,7 +56,7 @@ type RenderResult =
     }
 
 type RenderFunction = (
-  RenderOpts: RenderOpts,
+  renderOpts: RenderOpts,
   req: http.IncomingMessage,
   res: http.OutgoingMessage
 ) => Promise<RenderResult>
