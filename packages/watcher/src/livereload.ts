@@ -12,10 +12,10 @@ const genBrowser = (port: number): string => `(function connect (timeout) {
         })
         socket.addEventListener('open', function () {
         if (timeout > 0) location.reload()
-        console.log('🛸 aristotle live reload server connected')
+        console.log('%cAristotle live reload server connected', 'color: #bbb');
         })
         socket.addEventListener('close', function () {
-        console.log('🛸 aristotle live reload server reconnecting...')
+        console.log('%cAristotle live reload server reconnecting...', 'color: #bbb');
         connect(Math.min(timeout + 1000), 3000)
         })
     }, timeout)

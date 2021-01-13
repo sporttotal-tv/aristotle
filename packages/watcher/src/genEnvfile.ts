@@ -7,10 +7,8 @@ export default (env: string[]): string => {
     envObj[e] = process.env[e]
   })
 
-  console.log(env)
-
   return `
-if (! window.process = {}) { window.process = {} };
+if (!window.process) { window.process = {} };
 window.process.env = ${JSON.stringify(envObj)};
 `
 }
