@@ -28,13 +28,9 @@ export type BuildResult = {
   files: {
     [filename: string]: File
   }
-  url: string
-  queryString: string
-  language: string
-  userAgent: {
-    device: string
-    browser: string
-    version: number
+  errors: string[]
+  dependencies: {
+    [pkg: string]: string
   }
 }
 
