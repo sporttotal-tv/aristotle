@@ -45,16 +45,16 @@ const render = ({ scripts, styles, head, body }, req) => {
     return `<html>
         <head>
             ${head}
-            ${styles.map(({ text }) => `<style>${text}</style>`)}
+            ${styles.map(({ text }) => `<style>${text}</style>`).join('')}
         </head>
         <body>
             ${body}
-            ${scripts.map(({ url }) => `<script type='application/javascript' src="${url}"" />`}
+            ${scripts.map(({ url }) => `<script type='application/javascript' src="${url}"" />`).join('')}
         </body>
     </html>`
 }
 
-// OR
+// OR (which I like)
 
 const render = ({ head, body }, req) => {
     return `<html>
