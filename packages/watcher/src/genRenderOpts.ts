@@ -6,10 +6,14 @@ import genEnvfile from './genEnvfile'
 export default (req: http.IncomingMessage, build: BuildResult): RenderOpts => {
   const envFile = genEnvfile(build.env || [])
 
+  console.log(build.env)
+
   const renderOpts: RenderOpts = {
-    body: `${build.js.map(file => {
-      return `<script src="${file.url}"></script>`
-    })}`,
+    body: `${build.js
+      .map(file => {
+        return `<script src="${file.url}"></script>`
+      })
+      .join('')}`,
     envFile,
     head: envFile ? `<script>${envFile}</script>` : '',
     env: build.env,
@@ -24,6 +28,14 @@ export default (req: http.IncomingMessage, build: BuildResult): RenderOpts => {
       browser: '',
       version: 0
     }
+  }
+
+  if (build.css.length) {
+    renderOpts.head += `<style>${build.css
+      .map(file => {
+        return file.text
+      })
+      .join('')}</style>`
   }
 
   return renderOpts
