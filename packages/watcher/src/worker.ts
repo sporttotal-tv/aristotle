@@ -19,9 +19,19 @@ try {
   console.error(err)
 }
 
+// need to completely polyfill req and res
+
 /*
     have all files available (LAME)
     maybe exclude files for dev... :(
+*/
+
+/*
+        GET NEW REQ
+
+        // ten add a getter for text (buffers are fastest)
+
+
 */
 
 parentPort.on('message', message => {

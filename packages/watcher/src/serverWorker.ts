@@ -1,47 +1,51 @@
 import { Worker, workerData } from 'worker_threads'
-import { File } from '@saulx/aristotle-build'
+import { File, BuildResult } from '@saulx/aristotle-build'
 import { join } from 'path'
 import http from 'http'
 import { RenderResult } from './types'
 
-export type RenderWorker = {
-  worker: Worker
-  checksum: string
-  render: (
+export class RenderWorker {
+  constructor(server: File) {
+    const worker = new Worker(join(__dirname, './worker.js'), {
+      workerData: server.text
+    })
+
+    worker.on('message', msg => {
+      console.log('yesh from worker', msg)
+    })
+    worker.on('error', err => {
+      console.log('yeshcrash in worker', err)
+    })
+    worker.on('exit', code => {
+      console.log('worker exit times', code)
+    })
+
+    worker.postMessage('flapperpants')
+  }
+
+  public worker: Worker
+
+  public checksum: string
+
+  public render(
     req: http.IncomingMessage,
     res: http.OutgoingMessage
-  ) => Promise<RenderResult>
+  ): Promise<RenderResult> {
+    return new Promise((resolve, reject) => {
+      resolve(undefined)
+    })
+  }
+
+  public updateBuildResult(buildresult: BuildResult): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // updated shared mem
+      resolve(undefined)
+    })
+  }
+
+  public stop() {}
 }
 
 export const genWorker = (server: File): RenderWorker => {
-  // add all in here...
-  const worker = new Worker(join(__dirname, './worker.js'), {
-    workerData: server.text
-  })
-
-  worker.on('message', msg => {
-    console.log('yesh from worker', msg)
-  })
-  worker.on('error', err => {
-    console.log('yeshcrash in worker', err)
-  })
-  worker.on('exit', code => {
-    console.log('worker exit times', code)
-  })
-
-  worker.postMessage('flapperpants')
-
-  const render = (
-    req: http.IncomingMessage,
-    res: http.OutgoingMessage
-  ): Promise<RenderResult> =>
-    new Promise((resolve, reject) => {
-      console.log('go time')
-    })
-
-  return {
-    worker,
-    checksum: server.checksum,
-    render
-  }
+  return new RenderWorker(server)
 }

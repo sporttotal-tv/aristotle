@@ -44,11 +44,14 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   let buildresult: BuildResult
   let ssr: RenderWorker
 
-  build(buildOpts, result => {
+  build(buildOpts, async result => {
     console.log('HELLO UPDATE')
     buildresult = result
     buildresult.files[browser.url] = browser
     buildresult.js.push(browser)
+    if (ssr) {
+      await ssr.updateBuildResult(buildresult)
+    }
     update()
   })
 
@@ -61,6 +64,10 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     if (serverTarget) {
       build(buildOptsServer, result => {
         if (!ssr || result.js[0].checksum !== ssr.checksum) {
+          if (ssr) {
+            // can actualy not make new one all the time - just use one until it crashes
+            ssr.stop()
+          }
           console.log('HELLO UPDATE SERVER')
           ssr = genWorker(result.js[0])
           update()
