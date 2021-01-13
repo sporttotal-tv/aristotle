@@ -97,9 +97,13 @@ const parseBuild = async (result, styles, dependencies) => {
     })
   }
 
-  return result.outputFiles
+  const r = result.outputFiles
     ? result.outputFiles.reduce(reducer, parsed)
     : parsed
+
+  r.env = Array.from(r.env)
+
+  return r
 }
 
 export default parseBuild
