@@ -3,7 +3,7 @@ import evalServer from 'eval'
 
 try {
   const server = evalServer(workerData)
-  let serverFunction: (a: any, b: any, c: any) => any
+  let serverFunction: (...args: any[]) => any
   if (server.default) {
     serverFunction = server.default
   } else if (typeof server === 'function') {
@@ -14,26 +14,42 @@ try {
 
   if (serverFunction) {
     console.log('got nice server in worker!')
+    parentPort.on('message', async message => {
+      const { type, reqId } = message
+
+      if (type === 'render') {
+        console.log('go render time!', message)
+
+        const result = await serverFunction({
+          head: '',
+          body: ''
+        })
+
+        parentPort.postMessage({
+          type: 'ready',
+          reqId,
+          payload: result
+        })
+      }
+    })
+  } else {
+    throw new Error('No server function defined, export function from file!')
   }
+  //   parentPort.postMessage('yesh from boy ' + message)
 } catch (err) {
-  console.error(err)
+  console.error('CANNOT INITIALIZE DISCARD', err)
+  /*    
+    1: cannot init
+  */
+  parentPort.postMessage({
+    type: 'error',
+    code: 1,
+    message: err.message
+  })
 }
 
 // need to completely polyfill req and res
-
 /*
     have all files available (LAME)
     maybe exclude files for dev... :(
 */
-
-/*
-        GET NEW REQ
-
-        // ten add a getter for text (buffers are fastest)
-
-
-*/
-
-parentPort.on('message', message => {
-  parentPort.postMessage('yesh from boy ' + message)
-})
