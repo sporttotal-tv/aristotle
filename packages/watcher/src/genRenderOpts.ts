@@ -1,13 +1,18 @@
 import { RenderOpts } from './types'
 import { BuildResult } from '@saulx/aristotle-build'
 import http from 'http'
+import genEnvfile from './genEnvfile'
 
 export default (req: http.IncomingMessage, build: BuildResult): RenderOpts => {
+  const envFile = genEnvfile(build.env || [])
+
   const renderOpts: RenderOpts = {
-    body: '',
-    head: '',
+    body: `${build.js.map(file => {
+      return `<script src="${file.url}"></script>`
+    })}`,
+    envFile,
+    head: envFile ? `<script>${envFile}</script>` : '',
     env: build.env,
-    envFile: '',
     js: build.js,
     css: build.css,
     files: build.files,

@@ -37,7 +37,7 @@ export type RenderResult =
     }
 
 export type ServeResult = {
-  cache: number
+  cache: number | string
   checksum: string
   contents: Buffer
   contentLength: number
