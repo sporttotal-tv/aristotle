@@ -40,8 +40,6 @@ const watch = async (opts, cb) => {
     }
     // store new meta
     store.meta = meta
-    // add livereload
-    result.outputFiles.push(store.livereload)
     // result
     return parseBuild(result, store.styles, store.dependencies)
   }
