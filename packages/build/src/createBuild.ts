@@ -9,7 +9,7 @@ const createBuild = async ({ browser, ...opts }, watch) => {
     minify: true,
     outdir: 'out',
     incremental: watch,
-    metafile: watch && 'meta.json',
+    metafile: watch ? 'meta.json' : undefined,
     ...opts,
     define: {
       global: 'window',
