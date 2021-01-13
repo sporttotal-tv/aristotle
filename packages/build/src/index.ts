@@ -58,12 +58,8 @@ const render = ({ scripts, styles, head, body }, req) => {
 
 const render = ({ head, body }, req) => {
     return `<html>
-        <head>
-            ${head}
-        </head>
-        <body>
-            ${body}
-        </body>
+        <head>${head}</head>
+        <body>${body}</body>
     </html>`
 }
 

@@ -1,7 +1,7 @@
 import { build as esbuild } from 'esbuild'
 import stylePlugin from './stylePlugin'
 
-const createBuild = async ({ watch, ...opts }) => {
+const createBuild = async ({ watch, browser, ...opts }) => {
   const styles = { css: {}, fileCache: {} }
   const result = await esbuild({
     bundle: true,
