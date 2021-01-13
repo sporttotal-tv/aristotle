@@ -7,9 +7,11 @@ export default (req: http.IncomingMessage, build: BuildResult): RenderOpts => {
   const envFile = genEnvfile(build.env || [])
 
   const renderOpts: RenderOpts = {
-    body: `${build.js.map(file => {
-      return `<script src="${file.url}"></script>`
-    })}`,
+    body: `${build.js
+      .map(file => {
+        return `<script src="${file.url}"></script>`
+      })
+      .join('')}`,
     envFile,
     head: envFile ? `<script>${envFile}</script>` : '',
     env: build.env,
