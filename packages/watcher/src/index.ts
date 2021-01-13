@@ -9,15 +9,14 @@ type Opts = {
 }
 
 // shared types
-export default async ({ port = 3001 }: Opts) => {
-  console.log('yesh for you')
-
+export default async ({ port = 3001, file }: Opts) => {
   const ip = await v4()
 
   console.info(
     chalk.blue('Aristotle development server'),
     'http://' + ip + ':' + port
   )
+  console.info(chalk.grey(file))
 
   const server = http.createServer((req, res) => {
     res.end('flurpdrol')
