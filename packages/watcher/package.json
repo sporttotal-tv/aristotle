@@ -1,0 +1,16 @@
+{
+  "name": "@saulx/aristotle-watcher",
+  "version": "0.0.1",
+  "dependencies": {
+    "@saulx/aristotle-build": "*",
+    "chalk": "^4.0.0"
+  },
+  "scripts": {
+    "watch": "tsc --watch",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  }
+}

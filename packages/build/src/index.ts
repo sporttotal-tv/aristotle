@@ -56,7 +56,7 @@ const render = ({ scripts, styles, head, body }, req) => {
 
 // OR (which I like)
 
-const render = ({ head, body }, req) => {
+const render = ({ head, body, files, scripts, styles, env, envFile }, req) => {
     return `<html>
         <head>
             ${head}
@@ -65,6 +65,18 @@ const render = ({ head, body }, req) => {
             ${body}
         </body>
     </html>`
+}
+
+// errors only get handled by the dev server
+const render = ({ head, body, files, scripts, styles, env, envFile }, req) => {
+    return {
+        cache: 1e3,
+        code?: 503, 400 easy
+        mime?: 'html/text',
+        contents: Buffer || string
+        contentLength?: 500,
+        gzip?: false
+    }
 }
 
 // if there are errors the render does not get called, we just render a custom error page
