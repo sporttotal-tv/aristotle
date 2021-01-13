@@ -373,7 +373,7 @@
   version "1.0.0"
   resolved "https://github.com/atelier-saulx/prettier-config#bfbde3d591b3d9c26f68ffa063e7cb2a4bc5f6de"
 
-"@saulx/utils@1.5.1":
+"@saulx/utils@1.5.1", "@saulx/utils@^1.5.1":
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@saulx/utils/-/utils-1.5.1.tgz#f63efbfb47a1cb3412e47e29c239c85f79af0f5d"
   integrity sha512-rvWzt+4VH4hutk1m7zE6CjcdBNNLuBP+MkICH7Kx/DxfFW+BNRrAWgLWldPshz2t6cCYOM0eVtlbPiEkP+bxQA==
