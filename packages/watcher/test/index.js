@@ -1,6 +1,7 @@
 const createServer = require('../dist').default
+const { join } = require('path')
 
 createServer({
   port: 9999,
-  file: 'x/flap'
+  file: join(__dirname, 'myapp.ts')
 })
