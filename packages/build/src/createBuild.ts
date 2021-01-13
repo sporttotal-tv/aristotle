@@ -1,9 +1,9 @@
 import { build as esbuild } from 'esbuild'
 import plugins from './plugins'
 
-const createBuild = async ({ browser, ...opts }, watch) => {
+const createBuild = async (opts, watch) => {
   const styles = { css: {}, fileCache: {} }
-  const deps = {}
+  const dependencies = {}
   const result = await esbuild({
     bundle: true,
     minify: true,
@@ -16,11 +16,11 @@ const createBuild = async ({ browser, ...opts }, watch) => {
       'process.env.NODE_ENV': opts.minify ? '"production"' : '"dev"',
       ...opts.define
     },
-    plugins: [plugins(opts, styles, deps)],
+    plugins: [plugins(opts, styles, dependencies)],
     write: false
   })
 
-  return { result, styles }
+  return { result, styles, dependencies }
 }
 
 export default createBuild

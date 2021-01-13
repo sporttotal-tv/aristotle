@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { Parser } from 'acorn'
 import jsx from 'acorn-jsx'
+import getPkg from '@saulx/get-package'
 
 const jsxParser = Parser.extend(jsx())
 
@@ -19,9 +20,23 @@ export default (opts, styles, deps) => {
       if (opts.external) {
         build.onResolve(
           { filter: new RegExp(opts.external.join('|')) },
-          args => {
-            deps[args.path] = 'ok'
-            console.log('-->', args)
+          async args => {
+            if (!(args.path in deps)) {
+              try {
+                // try to get the installed version
+                const contents = await fs.promises.readFile(
+                  require.resolve(`${args.path}/package.json`, {
+                    paths: [args.resolveDir]
+                  }),
+                  'utf-8'
+                )
+                deps[args.path] = JSON.parse(contents).version
+              } catch (e) {
+                // get the version from the dependencies
+                const pkg = await getPkg(args.resolveDir)
+                deps[args.path] = pkg.dependencies[args.path] || '*'
+              }
+            }
           }
         )
       }
