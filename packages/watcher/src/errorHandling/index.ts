@@ -3,6 +3,8 @@ import { ParsedReq } from '../types'
 
 import { SourceMapConsumer } from 'source-map'
 
+import { join } from 'path'
+
 export type AristotleError = {
   type: 'render' | 'runtime' | 'build'
   error: Error
@@ -22,14 +24,18 @@ const parseError = async (error: AristotleError): string => {
 
   if (isServer) {
     const map = error.build.files['/server.js.map'].contents.toString()
-    console.log(map)
+    // console.log(map)
 
     const x = JSON.parse(map)
+
+    x.sourceRoot = join(__dirname, '../../')
+
+    console.log(x)
 
     const consumer = await new SourceMapConsumer(x)
 
     consumer.eachMapping(function(m) {
-      console.log(m)
+      // console.log(m)
     })
 
     console.log(
