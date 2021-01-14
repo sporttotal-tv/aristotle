@@ -9,7 +9,7 @@ const evalServer = (
   code: string
 ): { serverFunction?: ServerFunction; error?: Error } => {
   try {
-    let server = evalCode(code, 'app-server', {}, true)
+    const server = evalCode(code, 'app-server', {}, true)
     let serverFunction: ServerFunction
 
     if (server.default) {
@@ -38,6 +38,7 @@ server = serverFunction
 const buildresult: BuildResult = {
   js: [],
   css: [],
+  entryPoints: [],
   env: [],
   errors: [],
   files: {},
@@ -80,6 +81,7 @@ parentPort.on('message', async message => {
     } else if (operation === 'delete') {
       delete buildresult.files[key]
     } else if (operation === 'meta') {
+      buildresult.entryPoints = meta.entryPoints
       buildresult.js = meta.js.map(v => buildresult.files[v])
       buildresult.css = meta.css.map(v => buildresult.files[v])
       buildresult.env = meta.env

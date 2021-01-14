@@ -4,7 +4,12 @@ import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
 import genRenderOpts from './genRenderOpts'
-import build, { BuildOpts, BuildResult, File } from '@saulx/aristotle-build'
+import build, {
+  BuildError,
+  BuildOpts,
+  BuildResult,
+  File
+} from '@saulx/aristotle-build'
 import defaultRender from './defaultRender'
 import { genServeFromFile, genServeFromRender } from './genServeResult'
 import serve from './serve'
@@ -54,22 +59,42 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   let rendererBeingBuild: string
   let rendererFiles: { [key: string]: File } = {}
   let rendererError: AristotleError
+  let buildErrors: AristotleError[] | undefined
+  let serverBuildErrors: AristotleError[] | undefined
+
+  const setBuildErrors = (build: BuildResult): AristotleError[] => {
+    return build.errors.map(
+      (err: BuildError): AristotleError => {
+        return {
+          type: 'build',
+          build,
+          buildError: err
+        }
+      }
+    )
+  }
 
   build(buildOpts, async result => {
-    // compare all checksums and lengths
-    buildresult = result
-    if (rendererBeingBuild) {
-      console.info(chalk.grey('Server rebuild in progress...'))
-    } else {
-      if (renderer) {
-        for (let key in rendererFiles) {
-          if (!result.files[key]) {
-            result.files[key] = rendererFiles[key]
-          }
-        }
-        await renderer.updateBuildResult(buildresult)
-      }
+    if (result.errors.length) {
+      buildErrors = setBuildErrors(result)
       update()
+    } else {
+      buildErrors = undefined
+      // compare all checksums and lengths
+      buildresult = result
+      if (rendererBeingBuild) {
+        console.info(chalk.grey('Server rebuild in progress...'))
+      } else {
+        if (renderer) {
+          for (let key in rendererFiles) {
+            if (!result.files[key]) {
+              result.files[key] = rendererFiles[key]
+            }
+          }
+          await renderer.updateBuildResult(buildresult)
+        }
+        update()
+      }
     }
   })
 
@@ -83,66 +108,72 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     if (serverTarget) {
       // make this into a fucntion
       build(buildOptsServer, async result => {
-        rendererFiles = {}
-        for (let key in result.files) {
-          const file = result.files[key]
-          if (
-            file.mime.split('/')[0] !== 'application' &&
-            file.mime !== 'text/css'
-          ) {
-            rendererFiles[key] = file
-            if (buildresult) {
-              buildresult.files[key] = file
+        if (result.errors.length) {
+          serverBuildErrors = setBuildErrors(result)
+          update()
+        } else {
+          serverBuildErrors = undefined
+          rendererFiles = {}
+          for (let key in result.files) {
+            const file = result.files[key]
+            if (
+              file.mime.split('/')[0] !== 'application' &&
+              file.mime !== 'text/css'
+            ) {
+              rendererFiles[key] = file
+              if (buildresult) {
+                buildresult.files[key] = file
+              }
             }
           }
-        }
 
-        const checksum = result.js[0].checksum
-        rendererError = undefined
-        if (rendererBeingBuild === checksum) {
-          // console.log('change with no update - ignore', checksum)
-        } else {
-          rendererBeingBuild = checksum
-          const d = Date.now()
+          const checksum = result.js[0].checksum
+          rendererError = undefined
+          if (rendererBeingBuild === checksum) {
+            // console.log('change with no update - ignore', checksum)
+          } else {
+            rendererBeingBuild = checksum
+            const d = Date.now()
 
-          const makeSsr = async () => {
-            renderer = await genWorker(result)
-            renderer.once('error', async err => {
-              console.log(chalk.red('Server crashed'), err.message)
-              renderer.stop()
-              rendererError = {
-                type: 'runtime',
-                error: err,
-                build: renderer.build
-              }
-              renderer = undefined
-              update()
-            })
-            await renderer.updateBuildResult(buildresult)
-            console.info(
-              chalk.grey('Server initialized in', Date.now() - d, 'ms')
-            )
-            rendererBeingBuild = undefined
-            update()
-          }
-
-          if (!renderer || checksum !== renderer.checksum) {
-            if (renderer) {
-              try {
-                await renderer.updatecode(result)
-                await renderer.updateBuildResult(buildresult)
-                console.info(
-                  chalk.grey('Server updated in', Date.now() - d, 'ms')
-                )
-                rendererBeingBuild = undefined
-                update()
-              } catch (err) {
+            const makeSsr = async () => {
+              renderer = await genWorker(result)
+              renderer.once('error', async err => {
+                console.log(chalk.red('Server crashed'), err.message)
                 renderer.stop()
-                rendererBeingBuild = undefined
+                rendererError = {
+                  type: 'runtime',
+                  error: err,
+                  build: renderer.build
+                }
+                renderer = undefined
+                update()
+              })
+              await renderer.updateBuildResult(buildresult)
+              console.info(
+                chalk.grey('Server initialized in', Date.now() - d, 'ms')
+              )
+              rendererBeingBuild = undefined
+              update()
+            }
+
+            if (!renderer || checksum !== renderer.checksum) {
+              if (renderer) {
+                try {
+                  await renderer.updatecode(result)
+                  await renderer.updateBuildResult(buildresult)
+                  console.info(
+                    chalk.grey('Server updated in', Date.now() - d, 'ms')
+                  )
+                  rendererBeingBuild = undefined
+                  update()
+                } catch (err) {
+                  renderer.stop()
+                  rendererBeingBuild = undefined
+                  makeSsr()
+                }
+              } else {
                 makeSsr()
               }
-            } else {
-              makeSsr()
             }
           }
         }
@@ -167,7 +198,11 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       serve(res, genServeFromFile(file))
     } else {
       let result: ServeResult
-      if (renderer || rendererError) {
+      let bErrors = serverBuildErrors || buildErrors
+      if (bErrors) {
+        genRenderOpts(parseReq(req, false), buildresult)
+        result = genServeFromRender(await genErrorPage(...bErrors))
+      } else if (renderer || rendererError) {
         let error: AristotleError
         if (!rendererError) {
           const parsedReq = parseReq(req, false)

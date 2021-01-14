@@ -24,5 +24,5 @@ const render = async opts => {
 export default render
 
 setTimeout(() => {
-  console.log(lfapper.drol)
+  // console.log(lfapper.drol)
 }, 1e3)

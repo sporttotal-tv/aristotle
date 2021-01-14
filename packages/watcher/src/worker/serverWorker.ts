@@ -162,7 +162,8 @@ export class RenderWorker extends EventEmitter {
                 js: buildresult.js.map(v => v.url),
                 css: buildresult.css.map(v => v.url),
                 dependencies: buildresult.dependencies,
-                env: buildresult.env
+                env: buildresult.env,
+                entryPoints: buildresult.entryPoints
               }
             })
           }

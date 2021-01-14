@@ -33,7 +33,7 @@ const watch = async (opts, cb) => {
     }
     // store new meta
     store.meta = meta
-    // result
+    // resultZ
     res = await parseBuild(opts, result, store.files, store.dependencies)
   } else {
     // first build
@@ -69,5 +69,15 @@ export default (opts, cb) => {
   if (!bundleCache.has(opts)) {
     bundleCache.set(opts, watch(opts, cb))
   }
-  return bundleCache.get(opts).catch(parseBuild)
+  return bundleCache.get(opts).catch(async e => {
+    const store = bundleStore.get(opts)
+    const r = await parseBuild(
+      opts,
+      e,
+      store && store.files,
+      store && store.dependencies
+    )
+    cb(r)
+    return r
+  })
 }

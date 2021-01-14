@@ -20,14 +20,27 @@ export class File {
   }
 }
 
+export type BuildError = {
+  detail?: string
+  location: {
+    column: number
+    file: string
+    length: number
+    line: number
+    lineText: string
+  }
+  text: string
+}
+
 export type BuildResult = {
+  entryPoints: string[]
   env: string[]
   js: File[]
   css: File[]
   files: {
     [filename: string]: File
   }
-  errors: string[]
+  errors: BuildError[]
   dependencies: {
     [pkg: string]: string
   }

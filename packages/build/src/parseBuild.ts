@@ -1,4 +1,4 @@
-import { basename } from 'path'
+import { basename, join } from 'path'
 import mime from 'mime-types'
 import postcss from 'postcss'
 import autoprefixer from 'autoprefixer'
@@ -8,7 +8,6 @@ import unit from 'postcss-default-unit'
 // import { murmurHash } from 'murmurhash-native'
 import { hash } from '@saulx/utils'
 import zlib from 'zlib'
-import { join } from 'path'
 import { promisify } from 'util'
 import fs from 'fs'
 
@@ -124,12 +123,13 @@ const parseStyles = async files => {
 const parseBuild = async (opts, result, files, dependencies) => {
   const parsed = {
     // line and file
-    errors: result.errors || result instanceof Error ? [result] : [],
+    errors: result.errors || [],
     css: [],
     js: [],
     files: {},
     env: new Set(),
-    dependencies
+    dependencies,
+    entryPoints: opts.entryPoints
   }
 
   if (files) {
@@ -145,7 +145,7 @@ const parseBuild = async (opts, result, files, dependencies) => {
     }
   }
 
-  if (opts.cssReset !== false) {
+  if (opts.cssReset !== false && result.outputFiles) {
     result.outputFiles.push(await getCssReset())
   }
 
