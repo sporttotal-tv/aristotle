@@ -19,8 +19,6 @@ export class RenderWorker {
         if (this.requests[reqId]) {
           this.requests[reqId].ready(payload)
         }
-      } else if (type === 'method') {
-        // has to attach to req and res
       } else if (type === 'initialized') {
         this.initializedListeners.forEach(v => {
           this.initializedListeners.delete(v)
@@ -43,8 +41,6 @@ export class RenderWorker {
 
   public requests: {
     [reqId: string]: {
-      req: http.IncomingMessage
-      res: http.OutgoingMessage
       ready: (x: any) => void
     }
   } = {}
@@ -55,10 +51,7 @@ export class RenderWorker {
 
   public initializedListeners: Set<() => void> = new Set()
 
-  public render(
-    req: http.IncomingMessage,
-    res: http.OutgoingMessage
-  ): Promise<RenderResult> {
+  public render(req: http.IncomingMessage): Promise<RenderResult> {
     return new Promise((resolve, reject) => {
       const reqId = Math.round(Math.random() * 99999999)
 
@@ -69,9 +62,7 @@ export class RenderWorker {
         ready: x => {
           delete this.requests[reqId]
           resolve(x)
-        },
-        res,
-        req
+        }
       }
 
       this.worker.postMessage({

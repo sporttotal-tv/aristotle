@@ -99,10 +99,10 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       serve(res, genServeFromFile(file))
     } else {
       if (ssr) {
-        serve(res, genServeFromRender(await ssr.render(req, res)))
+        serve(res, genServeFromRender(await ssr.render(req)))
       } else {
         const renderRes = genRenderOpts(req, buildresult)
-        const r = await defaultRender(renderRes, req, res)
+        const r = await defaultRender(renderRes)
         if (r !== undefined) {
           serve(res, genServeFromRender(r))
         }
