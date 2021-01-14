@@ -2,7 +2,7 @@ import build from './build'
 import watch from './watch'
 
 export class File {
-  constructor(obj) {
+  constructor(obj: { [key: string]: any }) {
     for (let key in obj) {
       this[key] = obj[key]
     }
