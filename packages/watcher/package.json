@@ -19,6 +19,8 @@
   },
   "main": "dist/index.js",
   "devDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.3"
   }

@@ -1,9 +1,10 @@
 import { parentPort, workerData } from 'worker_threads'
 import evalServer from 'eval'
 import { BuildResult, File } from '@saulx/aristotle-build'
-import genRenderOpts from './genRenderOpts'
+import genRenderOpts from '../genRenderOpts'
 
 try {
+  // make this into a function in postmessage...
   const server = evalServer(workerData, 'app-server', {}, true)
   let serverFunction: (...args: any[]) => any
   if (server.default) {
@@ -55,12 +56,20 @@ try {
           key
         })
       } else if (type === 'render') {
-        const result = await serverFunction(genRenderOpts(req, buildresult))
-        parentPort.postMessage({
-          type: 'ready',
-          reqId,
-          payload: result
-        })
+        try {
+          const result = await serverFunction(genRenderOpts(req, buildresult))
+          parentPort.postMessage({
+            type: 'ready',
+            reqId,
+            payload: result
+          })
+        } catch (err) {
+          parentPort.postMessage({
+            type: 'ready',
+            reqId,
+            error: err
+          })
+        }
       }
     })
   } else {

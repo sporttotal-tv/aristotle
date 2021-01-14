@@ -4,21 +4,23 @@ import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
 import genRenderOpts from './genRenderOpts'
-import build, { BuildOpts, BuildResult } from '@saulx/aristotle-build'
+import build, { BuildOpts, BuildResult, File } from '@saulx/aristotle-build'
 import defaultRender from './defaultRender'
 import { genServeFromFile, genServeFromRender } from './genServeResult'
 import serve from './serve'
 import hasServer from './hasServer'
-import { genWorker, RenderWorker } from './serverWorker'
+import { genWorker, RenderWorker } from './worker/serverWorker'
 import parseReq from './parseReq'
+import { ServeResult } from './types'
 
+// also extra build options!
+// e.g exclude etc
 type Opts = {
   port: number
   target: string
   reloadPort?: number
 }
 
-// shared types
 export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   const ip = await v4()
 
@@ -30,7 +32,6 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     platform: 'browser'
   }
 
-  // want browser as a file prob
   const { update, browser } = startLiveReload(reloadPort)
 
   await console.info(
@@ -45,13 +46,17 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   let buildresult: BuildResult
   let ssr: RenderWorker
   let ssrInProgress: string
+  let ssrFiles: { [key: string]: File } = {}
 
   build(buildOpts, async result => {
     // compare all checksums and lengths
     buildresult = result
-    buildresult.files[browser.url] = browser
-    buildresult.js.push(browser)
     if (ssr) {
+      for (let key in ssrFiles) {
+        if (!result.files[key]) {
+          result.files[key] = ssrFiles[key]
+        }
+      }
       await ssr.updateBuildResult(buildresult)
     }
     update()
@@ -65,19 +70,36 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     }
     if (serverTarget) {
       build(buildOptsServer, async result => {
+        ssrFiles = {}
+        for (let key in result.files) {
+          const file = result.files[key]
+          if (
+            file.mime.split('/')[0] !== 'application' &&
+            file.mime !== 'text/css'
+          ) {
+            ssrFiles[key] = file
+            if (buildresult) {
+              buildresult.files[key] = file
+            }
+          }
+        }
+
         const checksum = result.js[0].checksum
         if (ssrInProgress === checksum) {
           // console.log('change with no update - ignore', checksum)
         } else {
           ssrInProgress = checksum
           if (!ssr || checksum !== ssr.checksum) {
+            const d = Date.now()
             if (ssr) {
               // can actualy not make new one all the time - just use one until it crashes
               ssr.stop()
             }
             ssr = await genWorker(result.js[0])
-            ssr.updateBuildResult(buildresult)
-            console.info(chalk.grey('Server initialized'))
+            await ssr.updateBuildResult(buildresult)
+            console.info(
+              chalk.grey('Server initialized in', Date.now() - d, 'ms')
+            )
             ssrInProgress = undefined
             update()
           }
@@ -90,22 +112,31 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
 
   const server = http.createServer(async (req, res) => {
     if (!buildresult) {
+      // make a nice ui for this
       res.end('WAIT FOR RESULT!')
       return
     }
 
     const url = req.url
     const file = buildresult.files[url]
+
     if (file) {
       serve(res, genServeFromFile(file))
     } else {
+      let result: ServeResult
       if (ssr) {
-        serve(res, genServeFromRender(await ssr.render(parseReq(req, false))))
+        result = genServeFromRender(await ssr.render(parseReq(req, false)))
       } else {
-        const renderRes = genRenderOpts(parseReq(req, false), buildresult)
-        const r = await defaultRender(renderRes)
-        serve(res, genServeFromRender(r))
+        const renderRes = await defaultRender(
+          genRenderOpts(parseReq(req, false), buildresult)
+        )
+        result = genServeFromRender(renderRes)
       }
+
+      result.contents = Buffer.concat([result.contents, browser.contents])
+      result.contentLength = result.contents.byteLength
+
+      serve(res, result)
     }
   })
 

@@ -1,8 +1,7 @@
-import { Worker, workerData } from 'worker_threads'
+import { Worker } from 'worker_threads'
 import { File, BuildResult } from '@saulx/aristotle-build'
 import { join } from 'path'
-import { ParsedReq, RenderResult } from './types'
-import { build } from 'esbuild'
+import { ParsedReq, RenderResult } from '../types'
 
 export class RenderWorker {
   public initialized: boolean = false
@@ -57,7 +56,13 @@ export class RenderWorker {
       const reqId = this.genReqId()
       this.requests[reqId] = x => {
         delete this.requests[reqId]
-        resolve(x.payload)
+        if (x.error) {
+          // SSR error make this a bit nicer
+          // make error here
+          resolve(x.error.message)
+        } else {
+          resolve(x.payload)
+        }
       }
       this.worker.postMessage({
         type: 'render',

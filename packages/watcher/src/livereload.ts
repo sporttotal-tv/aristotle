@@ -2,7 +2,9 @@ import WebSocket from 'ws'
 import { File } from '@saulx/aristotle-build'
 import { hash } from '@saulx/utils'
 
-const genBrowser = (port: number): string => `(function connect (timeout) {
+const genBrowser = (
+  port: number
+): string => `<script>(function connect (timeout) {
     var host = window.location.hostname
     if (!timeout) timeout = 0
     setTimeout(function () {
@@ -19,7 +21,7 @@ const genBrowser = (port: number): string => `(function connect (timeout) {
         connect(Math.min(timeout + 1000), 3000)
         })
     }, timeout)
-    })();`
+    })();</script>`
 
 type LiveReload = {
   browser: File
