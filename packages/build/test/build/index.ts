@@ -7,10 +7,15 @@ test('build', async t => {
     entryPoints: [join(__dirname, 'app.tsx')],
     platform: 'node',
     external: ['redis'],
-    gzip: true,
-    minify: true,
-    splitting: true,
-    format: 'esm'
+    sourcemap: true
+    // gzip: true,
+    // minify: true,
+    // splitting: true,
+    // format: 'esm'
   })
-  console.log(Object.values(r.files))
+  console.log(
+    '-->',
+    r.js[0].text.split('\n').find(v => /sourceMappingURL/.test(v))
+  )
+  console.log('files:', Object.keys(r.files))
 })
