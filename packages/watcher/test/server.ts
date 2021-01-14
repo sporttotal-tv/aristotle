@@ -5,14 +5,7 @@ import App from './App'
 console.log('?????', App)
 
 const render = async opts => {
-  console.log(
-    'Ok this is ssr',
-    opts.url.href,
-    opts.url.pathname,
-    opts.url.searchParams
-  )
-
-  // console.log(flapperlinus.x.drol)
+  console.log(flapperlinus.x.drol)
 
   return `<html>
     <head>
@@ -29,3 +22,7 @@ const render = async opts => {
 }
 
 export default render
+
+setTimeout(() => {
+  console.log(lfapper.drol)
+}, 1e3)

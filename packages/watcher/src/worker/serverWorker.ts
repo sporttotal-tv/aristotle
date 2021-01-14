@@ -2,12 +2,19 @@ import { Worker } from 'worker_threads'
 import { File, BuildResult } from '@saulx/aristotle-build'
 import { join } from 'path'
 import { ParsedReq, RenderResult } from '../types'
+import { EventEmitter } from 'events'
 
-export class RenderWorker {
-  public initialized: boolean = false
-  constructor(server: File) {
+export class RenderWorker extends EventEmitter {
+  constructor(build: BuildResult) {
+    super()
+    this.build = build
+
+    console.log(build.js)
+
+    const file = build.js[0]
+
     const worker = new Worker(join(__dirname, './worker.js'), {
-      workerData: server.text
+      workerData: file.text
     })
 
     worker.on('message', msg => {
@@ -22,18 +29,17 @@ export class RenderWorker {
         this.requests[reqId](msg)
       }
     })
-
     worker.on('error', err => {
-      console.log('yeshcrash in worker', err)
+      this.emit('error', err)
     })
-
     worker.on('exit', code => {
-      //   console.log('worker exit times', code)
+      this.emit('exit', code)
     })
-
     this.worker = worker
-    // worker.postMessage('flapperpants')
+    this.checksum = file.checksum
   }
+
+  public initialized: boolean = false
 
   public genReqId(): number {
     return Math.round(Math.random() * 99999999)
@@ -51,15 +57,15 @@ export class RenderWorker {
 
   public initializedListeners: Set<() => void> = new Set()
 
+  public build: BuildResult
+
   public render(req: ParsedReq): Promise<RenderResult> {
     return new Promise((resolve, reject) => {
       const reqId = this.genReqId()
       this.requests[reqId] = x => {
         delete this.requests[reqId]
         if (x.error) {
-          // SSR error make this a bit nicer
-          // make error here
-          resolve(x.error.message)
+          reject(x.error)
         } else {
           resolve(x.payload)
         }
@@ -68,6 +74,27 @@ export class RenderWorker {
         type: 'render',
         reqId,
         req
+      })
+    })
+  }
+
+  public updatecode(build: BuildResult): Promise<void> {
+    this.build = build
+    const file = build.js[0]
+    return new Promise((resolve, reject) => {
+      const reqId = this.genReqId()
+      this.requests[reqId] = x => {
+        delete this.requests[reqId]
+        if (x.error) {
+          reject()
+        } else {
+          resolve()
+        }
+      }
+      this.worker.postMessage({
+        type: 'updateCode',
+        reqId,
+        code: file.text
       })
     })
   }
@@ -162,13 +189,13 @@ export class RenderWorker {
   }
 
   public stop() {
-    delete this.sharedBuilds
     this.worker.terminate()
+    delete this.sharedBuilds
   }
 }
 
-export const genWorker = async (server: File): Promise<RenderWorker> => {
-  const worker = new RenderWorker(server)
+export const genWorker = async (build: BuildResult): Promise<RenderWorker> => {
+  const worker = new RenderWorker(build)
   await worker.isInitialized()
   return worker
 }

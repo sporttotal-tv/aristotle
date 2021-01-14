@@ -4,7 +4,9 @@ import watch from './watch'
 export class File {
   constructor(obj: { [key: string]: any }) {
     for (let key in obj) {
-      this[key] = obj[key]
+      if (key !== 'text') {
+        this[key] = obj[key]
+      }
     }
   }
   public contents: Buffer
