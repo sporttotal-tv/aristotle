@@ -12,9 +12,11 @@ export type RenderOpts = {
   files: {
     [filename: string]: File
   }
-  needsEs5: boolean
+  needsEs5: boolean // better name
   url: string
   queryString: string
+  ip: string
+  domain?: string // potentialy
   language: string
   userAgent: {
     device: string
