@@ -5,7 +5,8 @@ import autoprefixer from 'autoprefixer'
 import cssnano from 'cssnano'
 import fbFixes from 'postcss-flexbugs-fixes'
 import unit from 'postcss-default-unit'
-import { murmurHash } from 'murmurhash-native'
+// import { murmurHash } from 'murmurhash-native'
+import { hash } from '@saulx/utils'
 import zlib from 'zlib'
 import { join } from 'path'
 import { promisify } from 'util'
@@ -30,11 +31,13 @@ const reducer = (obj, file) => {
   const split = path.split('.')
   const name = split[0]
   const ext = split[split.length - 1]
-  const h = murmurHash(file.contents)
+  const t = file.text
+  const h = hash(t)
+
   let url
   if (ext === 'js') {
     obj.js.push(file)
-    const m = file.text.match(/process\.env\.([a-zA-Z0-9_])+/g)
+    const m = t.match(/process\.env\.([a-zA-Z0-9_])+/g)
     if (m) {
       m.forEach(obj.env.add, obj.env)
     }
