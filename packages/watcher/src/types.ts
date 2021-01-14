@@ -13,6 +13,7 @@ export type RenderOpts = {
   files: {
     [filename: string]: File
   }
+  needsEs5: boolean
   url: string
   queryString: string
   language: string
@@ -22,6 +23,8 @@ export type RenderOpts = {
     version: number
   }
 }
+
+// maybe seperate function for how to cache?
 
 export type RenderResult =
   | undefined
@@ -46,8 +49,4 @@ export type ServeResult = {
   statusCode: number
 }
 
-export type RenderFunction = (
-  renderOpts: RenderOpts,
-  req: http.IncomingMessage,
-  res: http.OutgoingMessage
-) => Promise<RenderResult>
+export type RenderFunction = (renderOpts: RenderOpts) => Promise<RenderResult>

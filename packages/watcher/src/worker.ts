@@ -46,8 +46,6 @@ try {
         //     payload: result
         //   })
       } else if (type === 'render') {
-        // console.log('go render time!', message)
-
         const result = await serverFunction({
           head: '',
           body: '',
