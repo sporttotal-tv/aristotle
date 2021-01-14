@@ -21,6 +21,10 @@ export default (req: http.IncomingMessage, build: BuildResult): RenderOpts => {
     url: req.url,
     queryString: '', // make this a getter maybe? and a class
     language: '',
+    ip: '',
+    domain: '',
+    es5browser: false,
+    headers: {},
     userAgent: {
       device: '',
       browser: '',
