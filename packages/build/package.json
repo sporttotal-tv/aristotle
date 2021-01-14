@@ -37,6 +37,7 @@
     "imagemin-pngquant": "^9.0.1",
     "imagemin-svgo": "^8.0.0",
     "mime-types": "^2.1.27",
+    "murmurhash-native": "^3.5.0",
     "postcss": "^8.2.2",
     "postcss-default-unit": "^1.0.0",
     "postcss-flexbugs-fixes": "^5.0.2"
