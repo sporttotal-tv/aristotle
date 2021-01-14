@@ -186,7 +186,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
         }
         if (error) {
           genRenderOpts(parseReq(req, false), buildresult)
-          result = genServeFromRender(genErrorPage(error))
+          result = genServeFromRender(await genErrorPage(error))
         }
       } else {
         const renderRes = await defaultRender(

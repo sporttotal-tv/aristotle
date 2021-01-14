@@ -1,8 +1,8 @@
 import img from './large.jpg'
 import img2 from './nasa.jpg'
-import App from './App'
+// import App from './App'
 
-console.log('?????', App)
+// console.log('?????', App)
 
 const render = async opts => {
   console.log(flapperlinus.x.drol)

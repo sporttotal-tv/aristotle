@@ -10,7 +10,8 @@
     "internal-ip": "^6.2.0",
     "murmurhash-native": "^3.5.0",
     "vigour-ua": "^4.0.0",
-    "ws": "^7.4.2"
+    "ws": "^7.4.2",
+    "source-map": "^0.7.3"
   },
   "scripts": {
     "watch": "tsc --watch",

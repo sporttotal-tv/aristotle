@@ -1,6 +1,8 @@
 import { BuildResult, File } from '@saulx/aristotle-build'
 import { ParsedReq } from '../types'
 
+import { SourceMapConsumer } from 'source-map'
+
 export type AristotleError = {
   type: 'render' | 'runtime' | 'build'
   error: Error
@@ -8,13 +10,36 @@ export type AristotleError = {
   parsedReq?: ParsedReq
 }
 
-const parseError = (error: AristotleError): string => {
+const parseError = async (error: AristotleError): string => {
   const type =
     error.type === 'render'
       ? 'server render error'
       : error.type === 'runtime'
       ? 'server runtime error'
       : 'build error'
+
+  let isServer = error.type === 'render' || error.type === 'runtime'
+
+  if (isServer) {
+    const map = error.build.files['/server.js.map'].contents.toString()
+    console.log(map)
+
+    const x = JSON.parse(map)
+
+    const consumer = await new SourceMapConsumer(x)
+
+    consumer.eachMapping(function(m) {
+      console.log(m)
+    })
+
+    console.log(
+      consumer.hasContentsOfAllSources(),
+      consumer.originalPositionFor({
+        line: 5,
+        column: 10
+      })
+    )
+  }
 
   return `<div class="error">
     <div class="inner">
@@ -25,7 +50,9 @@ const parseError = (error: AristotleError): string => {
   </div>`
 }
 
-export const genErrorPage = (...errors: AristotleError[]): string => {
+export const genErrorPage = async (
+  ...errors: AristotleError[]
+): Promise<string> => {
   return `<html>
     <head>
       <style>
@@ -53,7 +80,7 @@ export const genErrorPage = (...errors: AristotleError[]): string => {
       </style>
     </head>
     <body>
-       ${errors.map(err => parseError(err))}
+       ${await Promise.all(errors.map(err => parseError(err)))}
     </body>
   </html>`
 }
