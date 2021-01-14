@@ -28,7 +28,7 @@ const parseError = async (error: AristotleError): string => {
 
     const x = JSON.parse(map)
 
-    x.sourceRoot = join(__dirname, '../../')
+    x.sourceRoot = join(__dirname, '../../test')
 
     console.log(x)
 
