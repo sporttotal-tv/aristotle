@@ -27,7 +27,9 @@ const reducer = (obj, file) => {
   file.contents = Buffer.from(file.contents)
 
   const path = basename(file.path)
-  const [name, ext] = path.split('.')
+  const split = path.split('.')
+  const name = split[0]
+  const ext = split[split.length - 1]
   const h = murmurHash(file.contents)
   let url
   if (ext === 'js') {
