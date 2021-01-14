@@ -1,9 +1,7 @@
 import { Worker, workerData } from 'worker_threads'
 import { File, BuildResult } from '@saulx/aristotle-build'
 import { join } from 'path'
-import http from 'http'
-import { RenderResult } from './types'
-import chalk, { bgBlue } from 'chalk'
+import { ParsedReq, RenderResult } from './types'
 
 export class RenderWorker {
   constructor(server: File) {
@@ -51,7 +49,7 @@ export class RenderWorker {
 
   public initializedListeners: Set<() => void> = new Set()
 
-  public render(req: http.IncomingMessage): Promise<RenderResult> {
+  public render(req: ParsedReq): Promise<RenderResult> {
     return new Promise((resolve, reject) => {
       const reqId = Math.round(Math.random() * 99999999)
 
@@ -65,9 +63,12 @@ export class RenderWorker {
         }
       }
 
+      // just url needs to be parsed
+
       this.worker.postMessage({
         type: 'render',
-        reqId
+        reqId,
+        req
       })
     })
   }

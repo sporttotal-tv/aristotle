@@ -41,16 +41,25 @@ const startWs = (port: number): LiveReload => {
 
   const checksum = hash(browserScript).toString(16)
 
+  const buf = Buffer.from(browserScript)
+
+  const uint8 = new Uint8Array(buf)
+
+  for (let i = 0; i < buf.byteLength; ++i) {
+    uint8[i] = buf[i]
+  }
+
   return {
     update,
     browser: {
       checksum,
+      unint8: uint8,
       path: 'livereload.ts',
       compressed: false,
       mime: 'text/javascript',
       gzip: false,
       url: '/' + checksum + '.js',
-      contents: Buffer.from(browserScript),
+      contents: buf,
       text: browserScript
     }
   }

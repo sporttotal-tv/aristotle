@@ -1,12 +1,12 @@
-import { RenderOpts } from './types'
+import { RenderOpts, ParsedReq } from './types'
 import { BuildResult } from '@saulx/aristotle-build'
-import http from 'http'
 import genEnvfile from './genEnvfile'
 
-export default (req: http.IncomingMessage, build: BuildResult): RenderOpts => {
+export default (req: ParsedReq, build: BuildResult): RenderOpts => {
   const envFile = genEnvfile(build.env || [])
 
   const renderOpts: RenderOpts = {
+    ...req,
     body: `${build.js
       .map(file => {
         return `<script src="${file.url}"></script>`
@@ -17,19 +17,7 @@ export default (req: http.IncomingMessage, build: BuildResult): RenderOpts => {
     env: build.env,
     js: build.js,
     css: build.css,
-    files: build.files,
-    url: req.url,
-    queryString: '', // make this a getter maybe? and a class
-    language: '',
-    ip: '',
-    domain: '',
-    es5browser: false,
-    headers: {},
-    userAgent: {
-      device: '',
-      browser: '',
-      version: 0
-    }
+    files: build.files
   }
 
   if (build.css.length) {

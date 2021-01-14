@@ -10,6 +10,7 @@ import { genServeFromFile, genServeFromRender } from './genServeResult'
 import serve from './serve'
 import hasServer from './hasServer'
 import { genWorker, RenderWorker } from './serverWorker'
+import parseReq from './parseReq'
 
 type Opts = {
   port: number
@@ -99,13 +100,11 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       serve(res, genServeFromFile(file))
     } else {
       if (ssr) {
-        serve(res, genServeFromRender(await ssr.render(req)))
+        serve(res, genServeFromRender(await ssr.render(parseReq(req, false))))
       } else {
-        const renderRes = genRenderOpts(req, buildresult)
+        const renderRes = genRenderOpts(parseReq(req, false), buildresult)
         const r = await defaultRender(renderRes)
-        if (r !== undefined) {
-          serve(res, genServeFromRender(r))
-        }
+        serve(res, genServeFromRender(r))
       }
     }
   })

@@ -1,6 +1,5 @@
 const render = async opts => {
-  console.log('hello')
-  console.log('ok', opts, 'shit')
+  console.log('Ok this is ssr')
   return `<html>
     <head>
       <meta charset="UTF-8" />
@@ -12,7 +11,5 @@ const render = async opts => {
     </body>
   </html>`
 }
-
-console.log('???????????')
 
 export default render

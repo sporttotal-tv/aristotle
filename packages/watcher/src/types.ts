@@ -1,7 +1,40 @@
 import { File } from '@saulx/aristotle-build'
 
+export type Ua = {
+  version: number
+  prefix: string
+  platform: string
+  device: string
+}
+
+export type ParsedReq = {
+  es5browser: boolean // better name
+  headers: {
+    [key: string]: string | string[]
+  }
+  url: {
+    href: string
+    origin: string
+    protocol: string
+    username: string
+    password: string
+    host: string
+    hostname: string
+    port: string
+    pathname: string
+    search: string
+    searchParams: { [key: string]: string }
+    hash: string
+  }
+  ip: string
+  method: string
+  host: string
+  language: string
+  ua: Ua
+}
+
 // also send req ofc
-export type RenderOpts = {
+export type RenderOpts = ParsedReq & {
   body: string
   head: string
   env: string[]
@@ -11,24 +44,9 @@ export type RenderOpts = {
   files: {
     [filename: string]: File
   }
-  es5browser: boolean // better name
-  headers: {
-    [key: string]: string
-  }
-  url: string
-  queryString: string
-  ip: string
-  domain?: string
-  language: string
-  userAgent: {
-    device: string
-    browser: string
-    version: number
-  }
 }
 
 export type RenderResult =
-  | undefined
   | string
   | {
       cache: number
