@@ -1,5 +1,4 @@
 import { File } from '@saulx/aristotle-build'
-//   server: string
 
 // also send req ofc
 export type RenderOpts = {
@@ -12,11 +11,14 @@ export type RenderOpts = {
   files: {
     [filename: string]: File
   }
-  needsEs5: boolean // better name
+  es5browser: boolean // better name
+  headers: {
+    [key: string]: string
+  }
   url: string
   queryString: string
   ip: string
-  domain?: string // potentialy
+  domain?: string
   language: string
   userAgent: {
     device: string
@@ -24,8 +26,6 @@ export type RenderOpts = {
     version: number
   }
 }
-
-// maybe seperate function for how to cache?
 
 export type RenderResult =
   | undefined
@@ -51,3 +51,5 @@ export type ServeResult = {
 }
 
 export type RenderFunction = (renderOpts: RenderOpts) => Promise<RenderResult>
+
+export type CacheFunction = (renderOpts: RenderOpts) => string

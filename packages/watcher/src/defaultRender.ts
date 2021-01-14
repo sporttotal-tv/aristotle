@@ -1,4 +1,4 @@
-import { RenderOpts, RenderFunction } from './types'
+import { RenderOpts, RenderFunction, CacheFunction } from './types'
 
 const render: RenderFunction = async (renderOpts: RenderOpts) => {
   return `<html>
@@ -10,6 +10,11 @@ const render: RenderFunction = async (renderOpts: RenderOpts) => {
       ${renderOpts.body}
     </body>
   </html>`
+}
+
+export const cache: CacheFunction = (renderOpts: RenderOpts): string => {
+  // do something (or send renderOpts)
+  return 'lulls'
 }
 
 export default render
