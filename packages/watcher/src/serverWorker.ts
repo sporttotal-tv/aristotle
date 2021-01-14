@@ -2,8 +2,10 @@ import { Worker, workerData } from 'worker_threads'
 import { File, BuildResult } from '@saulx/aristotle-build'
 import { join } from 'path'
 import { ParsedReq, RenderResult } from './types'
+import { build } from 'esbuild'
 
 export class RenderWorker {
+  public initialized: boolean = false
   constructor(server: File) {
     const worker = new Worker(join(__dirname, './worker.js'), {
       workerData: server.text
@@ -11,17 +13,14 @@ export class RenderWorker {
 
     worker.on('message', msg => {
       const { type, reqId, payload } = msg
-      if (type === 'ready') {
-        // console.log('its ready!', type, reqId)
-
-        if (this.requests[reqId]) {
-          this.requests[reqId].ready(payload)
-        }
-      } else if (type === 'initialized') {
-        this.initializedListeners.forEach(v => {
-          this.initializedListeners.delete(v)
-          v()
+      if (type === 'initialized') {
+        this.initialized = true
+        this.initializedListeners.forEach(fn => {
+          fn()
+          this.initializedListeners.delete(fn)
         })
+      } else if (this.requests[reqId]) {
+        this.requests[reqId](msg)
       }
     })
 
@@ -37,34 +36,29 @@ export class RenderWorker {
     // worker.postMessage('flapperpants')
   }
 
+  public genReqId(): number {
+    return Math.round(Math.random() * 99999999)
+  }
+
   public requests: {
-    [reqId: string]: {
-      ready: (x: any) => void
-    }
+    [reqId: string]: (x: any) => void
   } = {}
 
   public worker: Worker
 
   public checksum: string
 
+  public sharedBuilds: { [key: string]: Uint8Array } = {}
+
   public initializedListeners: Set<() => void> = new Set()
 
   public render(req: ParsedReq): Promise<RenderResult> {
     return new Promise((resolve, reject) => {
-      const reqId = Math.round(Math.random() * 99999999)
-
-      // server side errors?
-
-      // default time out?
-      this.requests[reqId] = {
-        ready: x => {
-          delete this.requests[reqId]
-          resolve(x)
-        }
+      const reqId = this.genReqId()
+      this.requests[reqId] = x => {
+        delete this.requests[reqId]
+        resolve(x.payload)
       }
-
-      // just url needs to be parsed
-
       this.worker.postMessage({
         type: 'render',
         reqId,
@@ -74,56 +68,96 @@ export class RenderWorker {
   }
 
   public updateBuildResult(buildresult: BuildResult): Promise<void> {
-    return new Promise((resolve, reject) => {
-      // updated shared mem
-      //   console.log('update build', buildresult)
+    return new Promise(resolve => {
+      const sharedBuilds = this.sharedBuilds
+      const reqId = this.genReqId()
+      let cnt = 0
 
-      const sharedBuilds = {}
-
-      for (const key in buildresult.files) {
-        const file = buildresult.files[key]
-        const fileContents = file.contents
-
-        const buf: SharedArrayBuffer = new SharedArrayBuffer(
-          fileContents.byteLength
-        )
-
-        var uint8 = new Uint8Array(buf)
-
-        for (let i = 0; i < fileContents.byteLength; ++i) {
-          uint8[i] = fileContents[i]
+      for (const key in sharedBuilds) {
+        if (!buildresult.files[key]) {
+          cnt++
+          this.worker.postMessage({
+            type: 'buildresult',
+            operation: 'delete',
+            key,
+            reqId
+          })
+          delete sharedBuilds[key]
         }
-
-        // clear mem if they do not exist anymore!
-
-        this.worker.postMessage({
-          type: 'buildresult',
-          operation: 'new',
-          key,
-          file: {
-            url: key,
-            path: file.path,
-            checksum: file.checksum,
-            gzip: file.gzip,
-            mime: file.mime
-          },
-          data: uint8
-        })
       }
 
-      resolve(undefined)
+      for (const key in buildresult.files) {
+        if (!sharedBuilds[key]) {
+          const file = buildresult.files[key]
+          const fileContents = file.contents
+          const buf: SharedArrayBuffer = new SharedArrayBuffer(
+            fileContents.byteLength
+          )
+          var uint8 = new Uint8Array(buf)
+          for (let i = 0; i < fileContents.byteLength; ++i) {
+            uint8[i] = fileContents[i]
+          }
+          sharedBuilds[key] = uint8
+          cnt++
+          this.worker.postMessage({
+            type: 'buildresult',
+            operation: 'new',
+            key,
+            reqId,
+            file: {
+              url: key,
+              path: file.path,
+              checksum: file.checksum,
+              gzip: file.gzip,
+              mime: file.mime
+            },
+            data: uint8
+          })
+        }
+      }
+
+      if (cnt) {
+        this.requests[reqId] = x => {
+          cnt--
+          if (cnt === 0) {
+            delete this.requests[reqId]
+            const newReq = this.genReqId()
+            this.requests[newReq] = x => {
+              resolve()
+              delete this.requests[newReq]
+            }
+            this.worker.postMessage({
+              type: 'buildresult',
+              operation: 'meta',
+              reqId: newReq,
+              key: 'build',
+              meta: {
+                js: buildresult.js.map(v => v.url),
+                css: buildresult.css.map(v => v.url),
+                dependencies: buildresult.dependencies,
+                env: buildresult.env
+              }
+            })
+          }
+        }
+      } else {
+        resolve()
+      }
     })
   }
 
   public isInitialized(): Promise<void> {
     return new Promise(resolve => {
-      this.initializedListeners.add(resolve)
+      if (this.initialized) {
+        resolve()
+      } else {
+        this.initializedListeners.add(resolve)
+      }
     })
   }
 
   public stop() {
-    // or try to reuse :/
-    // delete this.requests
+    delete this.sharedBuilds
     this.worker.terminate()
   }
 }

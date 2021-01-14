@@ -5,11 +5,12 @@
     "@saulx/aristotle-build": "*",
     "@saulx/utils": "1.5.1",
     "chalk": "^4.0.0",
+    "eval": "^0.1.4",
     "get-port": "5.1.1",
     "internal-ip": "^6.2.0",
-    "eval": "^0.1.4",
-    "ws": "^7.4.2",
-    "vigour-ua": "^4.0.0"
+    "murmurhash-native": "^3.5.0",
+    "vigour-ua": "^4.0.0",
+    "ws": "^7.4.2"
   },
   "scripts": {
     "watch": "tsc --watch",

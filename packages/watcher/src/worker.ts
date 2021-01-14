@@ -1,6 +1,7 @@
 import { parentPort, workerData } from 'worker_threads'
 import evalServer from 'eval'
-import { BuildResult } from '@saulx/aristotle-build'
+import { BuildResult, File } from '@saulx/aristotle-build'
+import genRenderOpts from './genRenderOpts'
 
 try {
   const server = evalServer(workerData, 'app-server', {}, true)
@@ -28,30 +29,33 @@ try {
     })
 
     parentPort.on('message', async message => {
-      const { type, reqId } = message
+      const { type, reqId, req } = message
 
       if (type === 'buildresult') {
-        const { operation, data, file, key } = message
+        const { operation, data, file, key, meta } = message
         if (operation === 'new') {
-          buildresult.files[key] = {
+          buildresult.files[key] = new File({
             ...file,
+            gzip: file.gzip || false,
             contents: Buffer.from(data)
-          }
+          })
         } else if (operation === 'delete') {
           delete buildresult.files[key]
+        } else if (operation === 'meta') {
+          buildresult.js = meta.js.map(v => buildresult.files[v])
+          buildresult.css = meta.css.map(v => buildresult.files[v])
+          buildresult.env = meta.env
+          buildresult.dependencies = meta.dependencies
+          buildresult.errors = []
         }
-        // parentPort.postMessage({
-        //     type: 'buildresult-added',
-        //     reqId,
-        //     payload: result
-        //   })
-      } else if (type === 'render') {
-        const result = await serverFunction({
-          head: '',
-          body: '',
-          ...buildresult
+        parentPort.postMessage({
+          type: 'buildresult',
+          reqId,
+          operation,
+          key
         })
-
+      } else if (type === 'render') {
+        const result = await serverFunction(genRenderOpts(req, buildresult))
         parentPort.postMessage({
           type: 'ready',
           reqId,
@@ -62,9 +66,8 @@ try {
   } else {
     throw new Error('No server function defined, export function from file!')
   }
-  //   parentPort.postMessage('yesh from boy ' + message)
 } catch (err) {
-  console.error('CANNOT INITIALIZE DISCARD', err)
+  console.error('CANNOT INITIALIZE DISCARD WORKER', err)
   /*    
     1: cannot init
   */

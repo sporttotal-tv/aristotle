@@ -1,16 +1,21 @@
 import build from './build'
 import watch from './watch'
 
-export type File = {
-  checksum: string
-  path: string
-  contents: Buffer
-  unint8: Uint8Array
-  compressed: boolean
-  gzip: boolean
-  text: string
-  mime: string
-  url: string
+export class File {
+  constructor(obj) {
+    for (let key in obj) {
+      this[key] = obj[key]
+    }
+  }
+  public contents: Buffer
+  public gzip: boolean
+  public url: string
+  public checksum: string
+  public mime: string
+  public path: string
+  public get text(): string {
+    return this.contents.toString()
+  }
 }
 
 export type BuildResult = {

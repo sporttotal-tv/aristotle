@@ -24,7 +24,6 @@ const toKebabCase = str => {
 }
 
 const reducer = (obj, file) => {
-  file.unint8 = file.contents
   file.contents = Buffer.from(file.contents)
 
   const path = basename(file.path)
