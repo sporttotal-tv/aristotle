@@ -8,17 +8,12 @@ export class RenderWorker extends EventEmitter {
   constructor(build: BuildResult) {
     super()
     this.build = build
-
-    console.log(build.js)
-
     const file = build.js[0]
-
     const worker = new Worker(join(__dirname, './worker.js'), {
       workerData: file.text
     })
-
     worker.on('message', msg => {
-      const { type, reqId, payload } = msg
+      const { type, reqId } = msg
       if (type === 'initialized') {
         this.initialized = true
         this.initializedListeners.forEach(fn => {
