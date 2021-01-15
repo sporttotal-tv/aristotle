@@ -1,7 +1,6 @@
 import img from './large.jpg'
 import img2 from './nasa.jpg'
 // import App from './App'
-import kak
 // need to parse req at the top!
 export const cache = req => {
   console.info('doing me cache ??')
@@ -9,16 +8,11 @@ export const cache = req => {
 }
 
 const render = async opts => {
+  // console.log(xflap.x)
   if (opts.url.pathname === '/no') {
     // this kill sthe connectionxxxx
     return null
   }
-
-  // console.log(xflap.x)
-  // haha
-
-  // haha
-  // flups
 
   return `<html>
     <head>

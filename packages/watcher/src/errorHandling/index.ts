@@ -88,18 +88,18 @@ const parseError = async (error: AristotleError): Promise<string> => {
       const lines = match[1].split(':')
       const source = await SourceMapConsumer.with(parsedMap, null, consumer => {
         return consumer.originalPositionFor({
-          line: Number(lines[0]) - 1,
-          column: Number(lines[1]) - 1
+          line: Number(lines[0]),
+          column: Number(lines[1])
         })
       })
       const entry = error.build.entryPoints[0]
       file = source.source
       const path = join(dirname(entry), source.source)
-      fullpath = `${path}:${source.line + 1}:${source.column}`
+      fullpath = `${path}:${source.line}:${source.column}`
       code = parseFile({
         source: source.source,
-        line: source.line,
-        column: source.column,
+        line: source.line - 1,
+        column: source.column - 1,
         code: await readfile(path, { encoding: 'utf8' })
       })
     }
