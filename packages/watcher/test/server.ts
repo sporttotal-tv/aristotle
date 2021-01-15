@@ -1,7 +1,7 @@
 import img from './large.jpg'
 import img2 from './nasa.jpg'
 // import App from './App'
-
+import kak
 // need to parse req at the top!
 export const cache = req => {
   console.info('doing me cache ??')

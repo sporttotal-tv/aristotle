@@ -127,6 +127,8 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       build(buildOptsServer, async result => {
         if (result.errors.length) {
           serverBuildErrors = setBuildErrors(result)
+          renderer = undefined
+          rendererBeingBuild = undefined
           update()
         } else {
           serverBuildErrors = undefined
