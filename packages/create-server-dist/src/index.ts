@@ -1,3 +1,5 @@
+import { emptyDir } from 'fs-extra'
+
 console.log('this is a server!')
 
 /*
@@ -14,6 +16,6 @@ console.log('this is a server!')
 */
 
 // also add all extra options (need for watcher as well)
-export default ({ target, dest }: { target: string; dest: string }) => {
-  console.info('yesh make it', target, dest)
+export default async ({ target, dest }: { target: string; dest: string }) => {
+  await emptyDir(dest)
 }
