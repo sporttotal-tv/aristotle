@@ -12,7 +12,8 @@
     "vigour-ua": "^4.0.0",
     "ws": "^7.4.2",
     "escape-html": "^1.0.3",
-    "source-map": "^0.7.3"
+    "source-map": "^0.7.3",
+    "@saulx/aristotle-server-utils": "1.0.0"
   },
   "scripts": {
     "watch": "tsc --watch",
