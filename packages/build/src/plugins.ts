@@ -21,6 +21,11 @@ export default (opts, files, deps) => {
   const plugin = {
     name: 'aristotle',
     setup(build) {
+      // store all paths for watching
+      build.onLoad({ filter: /.*/, namespace: 'file' }, async ({ path }) => {
+        files.paths.add(path)
+      })
+
       if (opts.external) {
         build.onResolve(
           { filter: new RegExp(opts.external.join('|')) },
@@ -60,7 +65,6 @@ export default (opts, files, deps) => {
                     })
                   ]
                 })
-                console.log('COMPRESSED!!!', path)
                 files.fileCache[path] = { contents: data, loader: 'file' }
               } catch (e) {
                 return

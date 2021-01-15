@@ -1,16 +1,52 @@
 import test from 'ava'
 import build from '../../src'
 import { join } from 'path'
+import fs from 'fs'
 
-test('watch', async t => {
-  build(
-    {
-      entryPoints: [join(__dirname, 'app.ts')],
-      platform: 'node',
-      external: ['redis']
-    },
-    result => {
-      console.log('DO IT!!', result)
-    }
+// test.after(() => {
+//   process.exit()
+// })
+
+test.serial('watch', async t => {
+  const file = join(__dirname, 'change.ts')
+  let cnt = 5
+  t.plan(1)
+
+  await new Promise(resolve =>
+    build(
+      {
+        entryPoints: [file]
+      },
+      result => {
+        if (cnt) {
+          fs.promises.writeFile(file, `console.log('hello ${cnt--}')`)
+        } else {
+          resolve(result)
+        }
+      }
+    )
   )
+
+  t.pass()
+})
+
+test.serial('watch error', async t => {
+  const file = join(__dirname, 'error.ts')
+  let cnt = 5
+  t.plan(1)
+  await new Promise(resolve =>
+    build(
+      {
+        entryPoints: [file]
+      },
+      result => {
+        if (cnt) {
+          fs.promises.writeFile(file, `import ${cnt--}`)
+        } else {
+          resolve(result)
+        }
+      }
+    )
+  )
+  t.pass()
 })
