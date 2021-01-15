@@ -207,6 +207,19 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
         let error: AristotleError
         if (!rendererError) {
           try {
+            const cacheKey = await renderer.checkCache(parsedReq)
+
+            if (cacheKey !== 'default') {
+              console.log(
+                chalk.grey(
+                  'Using custom mem cache key',
+                  chalk.blue(cacheKey),
+                  'for',
+                  parsedReq.url.pathname
+                )
+              )
+            }
+
             const renderResult = await renderer.render(parsedReq)
             if (renderResult !== null) {
               result = genServeFromRender(renderResult)

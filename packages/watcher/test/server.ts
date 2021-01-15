@@ -7,7 +7,7 @@ console.log(App)
 // need to parse req at the top!
 export const cache = req => {
   console.info('doing me cache')
-  return req.pathname
+  return req.url.pathname
 }
 
 const render = async opts => {

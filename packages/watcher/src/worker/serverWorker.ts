@@ -73,10 +73,11 @@ export class RenderWorker extends EventEmitter {
     })
   }
 
-  public checkCache(req: ParsedReq): Promise<RenderResult> {
+  public checkCache(req: ParsedReq): Promise<string> {
     return new Promise((resolve, reject) => {
       const reqId = this.genReqId()
       this.requests[reqId] = x => {
+        console.log('ok go time', x)
         delete this.requests[reqId]
         if (x.error) {
           reject(x.error)

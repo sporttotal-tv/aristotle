@@ -13,7 +13,7 @@ const render: RenderFunction = async (renderOpts: RenderOpts) => {
 }
 
 export const cache: CacheFunction = (req: ParsedReq): string => {
-  return 'lulls'
+  return 'default'
 }
 
 export default render
