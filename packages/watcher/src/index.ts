@@ -10,7 +10,7 @@ import build, {
   BuildResult,
   File
 } from '@saulx/aristotle-build'
-import defaultRender from './defaultRender'
+import defaultRender from './defaultRenderer'
 import { genServeFromFile, genServeFromRender } from './genServeResult'
 import serve from './serve'
 import hasServer from './hasServer'
@@ -197,17 +197,20 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     if (file) {
       serve(res, genServeFromFile(file))
     } else {
+      const parsedReq = parseReq(req, false)
       let result: ServeResult
       let bErrors = serverBuildErrors || buildErrors
       if (bErrors) {
-        genRenderOpts(parseReq(req, false), buildresult)
+        genRenderOpts(parsedReq, buildresult)
         result = genServeFromRender(await genErrorPage(...bErrors))
       } else if (renderer || rendererError) {
         let error: AristotleError
         if (!rendererError) {
-          const parsedReq = parseReq(req, false)
           try {
-            result = genServeFromRender(await renderer.render(parsedReq))
+            const renderResult = await renderer.render(parsedReq)
+            if (renderResult !== null) {
+              result = genServeFromRender(renderResult)
+            }
           } catch (err) {
             error = {
               type: 'render',
@@ -220,18 +223,22 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
           error = rendererError
         }
         if (error) {
-          genRenderOpts(parseReq(req, false), buildresult)
+          genRenderOpts(parsedReq, buildresult)
           result = genServeFromRender(await genErrorPage(error))
         }
       } else {
         const renderRes = await defaultRender(
-          genRenderOpts(parseReq(req, false), buildresult)
+          genRenderOpts(parsedReq, buildresult)
         )
         result = genServeFromRender(renderRes)
       }
-      result.contents = Buffer.concat([result.contents, browser.contents])
-      result.contentLength = result.contents.byteLength
-      serve(res, result)
+      if (result) {
+        result.contents = Buffer.concat([result.contents, browser.contents])
+        result.contentLength = result.contents.byteLength
+        serve(res, result)
+      } else {
+        req.destroy()
+      }
     }
   })
 

@@ -46,9 +46,13 @@ export type RenderOpts = ParsedReq & {
   }
 }
 
+// allow undefined to break connection
+
 export type RenderResult =
+  | null
   | string
   | {
+      memCache: number
       cache: number
       checksum: string
       contents: Buffer | string
@@ -60,6 +64,7 @@ export type RenderResult =
 
 export type ServeResult = {
   cache: number | string
+  memCache: number
   checksum: string
   contents: Buffer
   contentLength: number

@@ -20,6 +20,7 @@ export const genServeFromRender = (
   if (typeof renderResult === 'object') {
     const serveResult: ServeResult = {
       cache: 300,
+      memCache: renderResult.memCache || 60,
       checksum: renderResult.checksum || hash(contents).toString(16),
       contents,
       contentLength:
@@ -35,6 +36,7 @@ export const genServeFromRender = (
     const checksum = hash(contents).toString(16)
     const serveResult: ServeResult = {
       cache: 300,
+      memCache: 60,
       checksum,
       contents,
       contentLength: contents.byteLength,
@@ -49,6 +51,7 @@ export const genServeFromRender = (
 export const genServeFromFile = (file: File): ServeResult => {
   const serveResult: ServeResult = {
     cache: 'immutable',
+    memCache: 0, // does not need it
     checksum: file.checksum,
     contents: file.contents,
     contentLength: file.contents.byteLength,

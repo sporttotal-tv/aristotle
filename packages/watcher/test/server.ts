@@ -1,11 +1,20 @@
 import img from './large.jpg'
 import img2 from './nasa.jpg'
-// import App from './App'
+import App from './App'
 
-// console.log('?????', App)
+console.log(App)
+
+// need to parse req at the top!
+export const cache = req => {
+  console.info('doing me cache')
+  return req.pathname
+}
 
 const render = async opts => {
-  console.log(flapperlinus.x.drol)
+  if (opts.url.pathname === '/no') {
+    // this kill sthe connection
+    return null
+  }
 
   return `<html>
     <head>
@@ -26,3 +35,7 @@ export default render
 setTimeout(() => {
   // console.log(lfapper.drol)
 }, 1e3)
+
+// import x
+
+// blurf

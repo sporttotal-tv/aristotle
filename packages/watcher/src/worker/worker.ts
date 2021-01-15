@@ -2,25 +2,35 @@ import { parentPort, workerData } from 'worker_threads'
 import evalCode from 'eval'
 import { BuildResult, File } from '@saulx/aristotle-build'
 import genRenderOpts from '../genRenderOpts'
+import { CacheFunction } from '../types'
+import { cache as defaultCache } from '../defaultRenderer'
 
 type ServerFunction = (...args: any[]) => any
 
 const evalServer = (
   code: string
-): { serverFunction?: ServerFunction; error?: Error } => {
+): {
+  serverFunction?: ServerFunction
+  error?: Error
+  cacheFunction?: CacheFunction
+} => {
   try {
     const server = evalCode(code, 'app-server', {}, true)
     let serverFunction: ServerFunction
+    let cacheFunction: CacheFunction
 
     if (server.default) {
       serverFunction = server.default
+      if (server.cache) {
+        cacheFunction = server.cache
+      }
     } else if (typeof server === 'function') {
       serverFunction = server
     } else {
       return { error: new Error('No server function defined') }
     }
     if (serverFunction) {
-      return { serverFunction: serverFunction }
+      return { serverFunction: serverFunction, cacheFunction }
     } else {
       return { error: new Error('No server function defined') }
     }
@@ -30,10 +40,18 @@ const evalServer = (
 }
 
 let server: ServerFunction
-const { serverFunction, error } = evalServer(workerData)
+let cache: CacheFunction
+
+const { serverFunction, error, cacheFunction } = evalServer(workerData)
 let buildError = error
 
 server = serverFunction
+
+if (cacheFunction) {
+  cache = cacheFunction
+} else {
+  cache = defaultCache
+}
 
 const buildresult: BuildResult = {
   js: [],
@@ -53,8 +71,13 @@ parentPort.on('message', async message => {
   const { type, reqId, req } = message
   if (type === 'updateCode') {
     const { code } = message
-    const { serverFunction, error } = evalServer(code)
+    const { serverFunction, error, cacheFunction } = evalServer(code)
     if (serverFunction) {
+      if (cacheFunction) {
+        cache = cacheFunction
+      } else {
+        cache = defaultCache
+      }
       // make nicer!
       server = serverFunction
       parentPort.postMessage({
@@ -94,7 +117,7 @@ parentPort.on('message', async message => {
       operation,
       key
     })
-  } else if (type === 'render') {
+  } else if (type === 'render' || type === 'cache') {
     if (!server) {
       parentPort.postMessage({
         type: 'ready',
@@ -103,7 +126,10 @@ parentPort.on('message', async message => {
       })
     } else {
       try {
-        const result = await server(genRenderOpts(req, buildresult))
+        const result =
+          type === 'cache'
+            ? cache(req)
+            : await server(genRenderOpts(req, buildresult))
         parentPort.postMessage({
           type: 'ready',
           reqId,

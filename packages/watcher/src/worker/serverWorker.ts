@@ -73,6 +73,25 @@ export class RenderWorker extends EventEmitter {
     })
   }
 
+  public checkCache(req: ParsedReq): Promise<RenderResult> {
+    return new Promise((resolve, reject) => {
+      const reqId = this.genReqId()
+      this.requests[reqId] = x => {
+        delete this.requests[reqId]
+        if (x.error) {
+          reject(x.error)
+        } else {
+          resolve(x.payload)
+        }
+      }
+      this.worker.postMessage({
+        type: 'cache',
+        reqId,
+        req
+      })
+    })
+  }
+
   public updatecode(build: BuildResult): Promise<void> {
     this.build = build
     const file = build.js[0]
