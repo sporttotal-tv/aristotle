@@ -20,6 +20,7 @@ exitHook(() => {
 const watch = async (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
   const store = bundleStore.get(opts)
   let res
+
   if (store && !store.result.errors) {
     // reset paths
     const prevPaths = store.meta.paths

@@ -93,26 +93,25 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
 
   build(buildOpts, async result => {
     if (result.errors.length) {
+      buildresult = result
       buildErrors = setBuildErrors(result)
       update()
-    } else {
-      if (buildChanged(result, buildresult)) {
-        buildErrors = undefined
-        // compare all checksums and lengths
-        buildresult = result
-        if (rendererBeingBuild) {
-          console.info(chalk.grey('Server rebuild in progress...'))
-        } else {
-          if (renderer) {
-            for (let key in rendererFiles) {
-              if (!result.files[key]) {
-                result.files[key] = rendererFiles[key]
-              }
-            }
-            await renderer.updateBuildResult(buildresult)
-          }
-          update()
+    } else if (buildChanged(result, buildresult)) {
+      buildErrors = undefined
+      // compare all checksums and lengths
+      buildresult = result
+      for (let key in rendererFiles) {
+        if (!result.files[key]) {
+          result.files[key] = rendererFiles[key]
         }
+      }
+      if (rendererBeingBuild) {
+        console.info(chalk.grey('Server rebuild in progress...'))
+      } else {
+        if (renderer) {
+          await renderer.updateBuildResult(buildresult)
+        }
+        update()
       }
     }
   })
@@ -132,6 +131,8 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
         } else {
           serverBuildErrors = undefined
           rendererFiles = {}
+
+          // update files
           for (let key in result.files) {
             const file = result.files[key]
             if (
@@ -144,16 +145,15 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
               }
             }
           }
-
           const checksum = result.js[0].checksum
           rendererError = undefined
           if (rendererBeingBuild === checksum) {
-            // console.log('change with no update - ignore', checksum)
+            console.log('change with no update - ignore', checksum)
           } else {
             rendererBeingBuild = checksum
             const d = Date.now()
 
-            const makeSsr = async () => {
+            const makeRenderer = async () => {
               renderer = await genWorker(result)
               renderer.once('error', async err => {
                 console.log(chalk.red('Server crashed'), err.message)
@@ -173,7 +173,6 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
               rendererBeingBuild = undefined
               update()
             }
-
             if (!renderer || checksum !== renderer.checksum) {
               if (renderer) {
                 try {
@@ -185,13 +184,15 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
                   rendererBeingBuild = undefined
                   update()
                 } catch (err) {
+                  console.log(err)
                   renderer.stop()
-                  rendererBeingBuild = undefined
-                  makeSsr()
+                  makeRenderer()
                 }
               } else {
-                makeSsr()
+                makeRenderer()
               }
+            } else {
+              rendererBeingBuild = undefined
             }
           }
         }

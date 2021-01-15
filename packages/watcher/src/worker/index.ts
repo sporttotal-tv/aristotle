@@ -99,6 +99,7 @@ export class RenderWorker extends EventEmitter {
     return new Promise((resolve, reject) => {
       const reqId = this.genReqId()
       this.requests[reqId] = x => {
+        this.checksum = file.checksum
         delete this.requests[reqId]
         if (x.error) {
           reject()
