@@ -1,8 +1,13 @@
 import { build as esbuild } from 'esbuild'
 import plugins from './plugins'
+import { BuildOpts } from './'
 
-const createBuild = async ({ gzip, production, cssReset, ...opts }, watch) => {
+const createBuild = async (
+  { gzip, production, cssReset, ...opts }: BuildOpts,
+  watch
+) => {
   const meta = { css: {}, fileCache: {}, paths: new Set(), dependencies: {} }
+  // @ts-ignore
   const result = await esbuild({
     bundle: true,
     outdir: 'out',

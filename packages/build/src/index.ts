@@ -57,11 +57,17 @@ export type BuildOpts = {
   gzip?: boolean
   splitting?: boolean
   format?: string
+  loader?: {
+    [ext: string]: string
+  }
+  define?: {
+    [variable: string]: string
+  }
 }
 
 export type WatchCb = (result: BuildResult) => void
 
-export default (opts: BuildOpts, watchCb?: WatchCb) => {
+export default (opts: BuildOpts, watchCb?: WatchCb): Promise<BuildResult> => {
   if (opts.production) {
     if (!('minify' in opts)) {
       opts.minify = true
@@ -70,5 +76,6 @@ export default (opts: BuildOpts, watchCb?: WatchCb) => {
       opts.gzip = true
     }
   }
+
   return watchCb ? watch(opts, watchCb) : build(opts)
 }

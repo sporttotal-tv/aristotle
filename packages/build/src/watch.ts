@@ -3,6 +3,7 @@ import createBuild from './createBuild'
 import parseBuild from './parseBuild'
 import { join, isAbsolute } from 'path'
 import exitHook from 'exit-hook'
+import { BuildOpts, BuildResult, WatchCb } from './'
 
 const bundleStore = new Map()
 const bundleCache = new Map()
@@ -16,7 +17,7 @@ exitHook(() => {
   }
 })
 
-const watch = async (opts, cb) => {
+const watch = async (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
   const store = bundleStore.get(opts)
   let res
   if (store && !store.result.errors) {
@@ -67,7 +68,7 @@ const watch = async (opts, cb) => {
   return res
 }
 
-export default (opts, cb) => {
+export default (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
   if (!bundleCache.has(opts)) {
     bundleCache.set(opts, watch(opts, cb))
   }

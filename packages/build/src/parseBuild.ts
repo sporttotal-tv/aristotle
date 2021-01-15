@@ -10,6 +10,7 @@ import { hash } from '@saulx/utils'
 import zlib from 'zlib'
 import { promisify } from 'util'
 import fs from 'fs'
+import { BuildOpts, BuildResult } from './'
 
 const STYLES_PATH = '/generated-styles.css'
 const RESET_PATH = '/reset-styles.css'
@@ -23,7 +24,7 @@ const toKebabCase = str => {
   return str.replace(/([A-Z])/g, replacer)
 }
 
-const reducer = (obj, file) => {
+const parseFile = (parsed: BuildResult, file, envs) => {
   file.contents = Buffer.from(file.contents)
 
   const path = basename(file.path)
@@ -35,25 +36,23 @@ const reducer = (obj, file) => {
 
   let url
   if (ext === 'js') {
-    obj.js.push(file)
+    parsed.js.push(file)
     const m = t.match(/process\.env\.([a-zA-Z0-9_])+/g)
     if (m) {
-      m.forEach(obj.env.add, obj.env)
+      m.forEach(envs.add, envs)
     }
     url = `/${name}.${h}.${ext}`
   } else if (ext === 'css') {
-    obj.css.push(file)
+    parsed.css.push(file)
     url = `/${name}.${h}.${ext}`
   } else {
     url = `/${path}`
   }
 
-  obj.files[url] = file
+  parsed.files[url] = file
   file.url = url
   file.checksum = h
   file.mime = mime.lookup(path) || 'application/octet-stream'
-
-  return obj
 }
 
 let cssReset
@@ -120,21 +119,29 @@ const parseStyles = async meta => {
   return parseCss(str)
 }
 
-const parseBuild = async (opts, result, meta) => {
+const parseBuild = async (
+  opts: BuildOpts,
+  result,
+  meta
+): Promise<BuildResult> => {
   const parsed = {
-    // line and file
     errors: result.errors || [],
     css: [],
     js: [],
     files: {},
-    env: new Set(),
+    env: [],
     dependencies: meta.dependencies,
     entryPoints: opts.entryPoints
+  }
+
+  if (result.errors) {
+    return parsed
   }
 
   if (!meta.cssCache) {
     meta.cssCache = await parseStyles(meta)
   }
+
   if (meta.cssCache) {
     result.outputFiles.push({
       path: STYLES_PATH,
@@ -143,22 +150,22 @@ const parseBuild = async (opts, result, meta) => {
     })
   }
 
-  if (opts.cssReset !== false && result.outputFiles) {
+  if (opts.cssReset !== false) {
     result.outputFiles.push(await getCssReset())
   }
 
-  const r = result.outputFiles
-    ? result.outputFiles.reduce(reducer, parsed)
-    : parsed
+  const envs = new Set()
+  for (const file of result.outputFiles) {
+    parseFile(parsed, file, envs)
+  }
 
-  r.env = Array.from(r.env)
-  r.env.forEach((env, i) => {
-    r.env[i] = env.substring(12)
+  envs.forEach((env: string, i) => {
+    parsed.env.push(env.substring(12))
   })
 
   if (opts.gzip) {
     await Promise.all(
-      Object.values(r.files).map(async file => {
+      Object.values(parsed.files).map(async file => {
         // @ts-ignore
         file.contents = await gzip(file.contents)
         // @ts-ignore
@@ -167,7 +174,7 @@ const parseBuild = async (opts, result, meta) => {
     )
   }
 
-  return r
+  return parsed
 }
 
 export default parseBuild
