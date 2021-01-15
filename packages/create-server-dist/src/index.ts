@@ -12,3 +12,8 @@ console.log('this is a server!')
             file
             
 */
+
+// also add all extra options (need for watcher as well)
+export default ({ target, dest }: { target: string; dest: string }) => {
+  console.info('yesh make it', target, dest)
+}

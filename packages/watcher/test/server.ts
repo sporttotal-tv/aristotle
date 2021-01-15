@@ -18,7 +18,7 @@ const render = async opts => {
       ${opts.head}
     </head>
     <body>
-      YESH  for  mxxyesh!
+      YESH  for  mxxyexxxxxxxxxxxxsh!
       ${opts.body}
       <img src="${img}" />
       <img src="${img2}" />

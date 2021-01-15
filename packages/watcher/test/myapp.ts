@@ -6,7 +6,7 @@ console.log(App)
 App()
 
 console.info(
-  'this is an YUZI FxxxxOR YOU?',
+  'this is an YUZI FxxxxOR ?',
   process.env.NODE_ENV,
   process.env.NVM_DIR
 )
