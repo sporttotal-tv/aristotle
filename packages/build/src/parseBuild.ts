@@ -93,11 +93,11 @@ const getCssReset = async () => {
   return cssReset
 }
 
-const parseStyles = async files => {
+const parseStyles = async meta => {
   let str = ''
-  for (const prop in files.css) {
-    for (const val in files.css[prop]) {
-      const className = files.css[prop][val]
+  for (const prop in meta.css) {
+    for (const val in meta.css[prop]) {
+      const className = meta.css[prop][val]
       if (typeof className === 'object') {
         if (prop[0] === '@') {
           // it's a media query or something funky
@@ -120,7 +120,7 @@ const parseStyles = async files => {
   return parseCss(str)
 }
 
-const parseBuild = async (opts, result, files, dependencies) => {
+const parseBuild = async (opts, result, meta) => {
   const parsed = {
     // line and file
     errors: result.errors || [],
@@ -128,21 +128,19 @@ const parseBuild = async (opts, result, files, dependencies) => {
     js: [],
     files: {},
     env: new Set(),
-    dependencies,
+    dependencies: meta.dependencies,
     entryPoints: opts.entryPoints
   }
 
-  if (files) {
-    if (!files.cssCache) {
-      files.cssCache = await parseStyles(files)
-    }
-    if (files.cssCache) {
-      result.outputFiles.push({
-        path: STYLES_PATH,
-        text: files.cssCache,
-        contents: Buffer.from(files.cssCache)
-      })
-    }
+  if (!meta.cssCache) {
+    meta.cssCache = await parseStyles(meta)
+  }
+  if (meta.cssCache) {
+    result.outputFiles.push({
+      path: STYLES_PATH,
+      text: meta.cssCache,
+      contents: Buffer.from(meta.cssCache)
+    })
   }
 
   if (opts.cssReset !== false && result.outputFiles) {
