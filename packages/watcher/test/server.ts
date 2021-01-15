@@ -4,7 +4,6 @@ import img2 from './nasa.jpg'
 // need to parse req at the top!
 
 export const cache = req => {
-  console.info('doing me cache ??')
   return req.url.pathname
 }
 
