@@ -2,8 +2,6 @@ import img from './large.jpg'
 import img2 from './nasa.jpg'
 import App from './App'
 
-console.log(App)
-
 // need to parse req at the top!
 export const cache = req => {
   console.info('doing me cache')
@@ -22,7 +20,7 @@ const render = async opts => {
       ${opts.head}
     </head>
     <body>
-      YESH SPExxxxxxxxxxxxELLO xwioeh myesh for you myesh!
+      YESH myesh for you myesh!
       ${opts.body}
       <img src="${img}" />
       <img src="${img2}" />
