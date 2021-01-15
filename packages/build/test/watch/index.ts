@@ -8,6 +8,9 @@ test.serial('watch', async t => {
   let cnt = 5
   t.plan(1)
 
+  const updateFile = () =>
+    fs.promises.writeFile(file, `console.log('hello ${cnt}')`)
+  await updateFile()
   await new Promise(resolve =>
     build(
       {
@@ -17,8 +20,8 @@ test.serial('watch', async t => {
         if (result.errors.length) {
           t.fail()
         }
-        if (cnt) {
-          fs.promises.writeFile(file, `console.log('hello ${cnt--}')`)
+        if (cnt--) {
+          updateFile()
         } else {
           resolve(result)
         }
@@ -34,6 +37,8 @@ test.serial('watch error', async t => {
   let cnt = 5
   t.plan(1)
 
+  const updateFile = () => fs.promises.writeFile(file, `import ${cnt}`)
+  await updateFile()
   await new Promise(resolve =>
     build(
       {
@@ -43,8 +48,8 @@ test.serial('watch error', async t => {
         if (!result.errors.length) {
           t.fail()
         }
-        if (cnt) {
-          fs.promises.writeFile(file, `import ${cnt--}`)
+        if (cnt--) {
+          updateFile()
         } else {
           resolve(result)
         }

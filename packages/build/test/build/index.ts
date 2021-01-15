@@ -2,7 +2,7 @@ import test from 'ava'
 import build from '../../src'
 import { join } from 'path'
 
-test.serial('build', async t => {
+test.serial.only('build', async t => {
   const { files, dependencies } = await build({
     entryPoints: [join(__dirname, 'app.tsx')],
     platform: 'node',
