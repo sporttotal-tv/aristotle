@@ -3,23 +3,27 @@ import { v4 } from 'internal-ip'
 import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
-import genRenderOpts from './genRenderOpts'
 import build, {
   BuildError,
   BuildOpts,
   BuildResult,
   File
 } from '@saulx/aristotle-build'
-import defaultRender from './defaultRenderer'
-import { genServeFromFile, genServeFromRender } from './genServeResult'
-import serve from './serve'
-import hasServer from './hasServer'
 import { genWorker, RenderWorker } from './worker'
-import parseReq from './parseReq'
-import { ServeResult } from './types'
 import fs from 'fs'
 import { join } from 'path'
 import { genErrorPage, AristotleError } from './errorHandling'
+
+import {
+  parseReq,
+  ServeResult,
+  serve,
+  genRenderOpts,
+  defaultRenderer,
+  genServeFromFile,
+  genServeFromRender,
+  hasServer
+} from '@saulx/aristotle-server-utils'
 
 const loadingHtml = fs.readFileSync(join(__dirname, '../static/loading.html'))
 
@@ -250,7 +254,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
           result = genServeFromRender(await genErrorPage(error))
         }
       } else {
-        const renderRes = await defaultRender(
+        const renderRes = await defaultRenderer(
           genRenderOpts(parsedReq, buildresult)
         )
         result = genServeFromRender(renderRes)

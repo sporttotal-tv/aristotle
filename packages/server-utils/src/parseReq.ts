@@ -1,5 +1,5 @@
 import http from 'http'
-import { ParsedReq, Ua } from './types'
+import { ParsedReq } from './types'
 import uaParser from 'vigour-ua'
 
 const langRe = /^.*?([a-z]{2,4});/

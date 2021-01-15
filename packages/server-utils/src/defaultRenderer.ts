@@ -12,8 +12,9 @@ const render: RenderFunction = async (renderOpts: RenderOpts) => {
   </html>`
 }
 
+// make this a solid default
 export const cache: CacheFunction = (req: ParsedReq): string => {
-  return 'default'
+  return req.url.href
 }
 
 export default render
