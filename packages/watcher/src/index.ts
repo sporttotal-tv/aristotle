@@ -31,6 +31,19 @@ type Opts = {
   reloadPort?: number
 }
 
+const buildChanged = (newBuild: BuildResult, old: BuildResult): boolean => {
+  if (!old) {
+    return true
+  } else {
+    for (const key in newBuild.files) {
+      if (!old.files[key]) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
 export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   const ip = await v4()
 
@@ -79,21 +92,23 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       buildErrors = setBuildErrors(result)
       update()
     } else {
-      buildErrors = undefined
-      // compare all checksums and lengths
-      buildresult = result
-      if (rendererBeingBuild) {
-        console.info(chalk.grey('Server rebuild in progress...'))
-      } else {
-        if (renderer) {
-          for (let key in rendererFiles) {
-            if (!result.files[key]) {
-              result.files[key] = rendererFiles[key]
+      if (buildChanged(result, buildresult)) {
+        buildErrors = undefined
+        // compare all checksums and lengths
+        buildresult = result
+        if (rendererBeingBuild) {
+          console.info(chalk.grey('Server rebuild in progress...'))
+        } else {
+          if (renderer) {
+            for (let key in rendererFiles) {
+              if (!result.files[key]) {
+                result.files[key] = rendererFiles[key]
+              }
             }
+            await renderer.updateBuildResult(buildresult)
           }
-          await renderer.updateBuildResult(buildresult)
+          update()
         }
-        update()
       }
     }
   })
