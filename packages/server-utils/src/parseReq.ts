@@ -50,7 +50,6 @@ export default (req: http.IncomingMessage, isSsl: boolean): ParsedReq => {
     language,
     ip: req.socket.remoteAddress,
     method: '',
-    host: req.headers.host,
     es5browser: false,
     headers: { ...req.headers },
     ua: uaParser(req.headers['user-agent'])

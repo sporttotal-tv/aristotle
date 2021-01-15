@@ -3,6 +3,8 @@ import App from './App'
 
 console.log(App)
 
+App()
+
 console.info(
   'this is an YUZI FxxxxOR YOU?',
   process.env.NODE_ENV,
