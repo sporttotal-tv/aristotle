@@ -5,6 +5,7 @@ import genRenderOpts from './genRenderOpts'
 import { genServeFromFile, genServeFromRender } from './genServeResult'
 import hasServer from './hasServer'
 import serve from './serve'
+import isPublicFile from './isPublicFile'
 
 export {
   parseReq,
@@ -15,6 +16,7 @@ export {
   genServeFromFile,
   genServeFromRender,
   hasServer,
+  isPublicFile,
   serve
 }
 

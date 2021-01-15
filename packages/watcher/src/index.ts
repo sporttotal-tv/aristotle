@@ -18,6 +18,7 @@ import {
   parseReq,
   ServeResult,
   serve,
+  isPublicFile,
   genRenderOpts,
   defaultRenderer,
   genServeFromFile,
@@ -137,10 +138,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
           // update files
           for (let key in result.files) {
             const file = result.files[key]
-            if (
-              file.mime.split('/')[0] !== 'application' &&
-              file.mime !== 'text/css'
-            ) {
+            if (isPublicFile(file)) {
               rendererFiles[key] = file
               if (buildresult) {
                 buildresult.files[key] = file
