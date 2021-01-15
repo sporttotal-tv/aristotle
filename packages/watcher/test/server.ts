@@ -8,7 +8,6 @@ export const cache = req => {
 }
 
 const render = async opts => {
-  // console.log(xflap.x)
   if (opts.url.pathname === '/no') {
     // this kill sthe connectionxxxx
     return null
@@ -20,8 +19,7 @@ const render = async opts => {
       ${opts.head}
     </head>
     <body>
-      <div id="root"/>
-      YESH  for  mxxyesh!
+      YESH  for  mxxyexxxxxxxxxxxxsh!
       ${opts.body}
       <img src="${img}" />
       <img src="${img2}" />

@@ -18,6 +18,7 @@ import {
   parseReq,
   ServeResult,
   serve,
+  isPublicFile,
   genRenderOpts,
   defaultRenderer,
   genServeFromFile,
@@ -137,10 +138,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
           // update files
           for (let key in result.files) {
             const file = result.files[key]
-            if (
-              file.mime.split('/')[0] !== 'application' &&
-              file.mime !== 'text/css'
-            ) {
+            if (isPublicFile(file)) {
               rendererFiles[key] = file
               if (buildresult) {
                 buildresult.files[key] = file
@@ -150,7 +148,9 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
           const checksum = result.js[0].checksum
           rendererError = undefined
           if (rendererBeingBuild === checksum) {
-            console.log('change with no update - ignore', checksum)
+            console.log(
+              chalk.grey('Same renderer being build - ignore', checksum)
+            )
           } else {
             rendererBeingBuild = checksum
             const d = Date.now()
@@ -233,7 +233,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
                   'Using custom mem cache key',
                   chalk.blue(cacheKey),
                   'for',
-                  parsedReq.url.pathname
+                  parsedReq.url.href
                 )
               )
             }

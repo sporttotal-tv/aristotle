@@ -1,18 +1,22 @@
 {
-  "name": "@saulx/aristotle-server",
+  "name": "@saulx/aristotle-create-server-dist",
   "main": "./dist/index.js",
   "public": true,
   "version": "1.0.1",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "test": "node test/index.js"
   },
   "repository": "https://github.com/atelier-saulx/aristotle",
   "devDependencies": {
     "ts-node": "^8.5.4",
     "typescript": "^3.7.3"
   },
-  "peerDependencies": {
-    "@saulx/aristotle-build": "*"
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "fs-extra": "^9.0.1",
+    "@saulx/aristotle-build": "*",
+    "@saulx/aristotle-server-utils": "*"
   }
 }
