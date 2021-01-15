@@ -28,7 +28,6 @@ export type ParsedReq = {
   }
   ip: string
   method: string
-  host: string
   language: string
   ua: Ua
 }
