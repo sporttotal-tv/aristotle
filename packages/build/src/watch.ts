@@ -2,66 +2,69 @@ import chokidar from 'chokidar'
 import createBuild from './createBuild'
 import parseBuild from './parseBuild'
 import { join, isAbsolute } from 'path'
+import exitHook from 'exit-hook'
 
 const bundleStore = new Map()
 const bundleCache = new Map()
 const cwd = process.cwd()
 
-const parseMeta = result =>
-  JSON.parse(
-    result.outputFiles.find(({ path }) => /\/meta\.json$/.test(path)).text
-  )
+exitHook(() => {
+  for (const [, { result }] of bundleStore) {
+    if (result.rebuild) {
+      result.rebuild.dispose()
+    }
+  }
+})
 
 const watch = async (opts, cb) => {
+  const store = bundleStore.get(opts)
   let res
-  if (bundleStore.has(opts)) {
-    const store = bundleStore.get(opts)
+  if (store && !store.result.errors) {
+    // reset paths
+    const prevPaths = store.files.paths
+    const newPaths = (store.files.paths = new Set())
     // rebuild it
-    const result = await store.result.rebuild()
-    const meta = parseMeta(result)
+    const result = await store.result.rebuild().catch(e => e)
+    res = await parseBuild(opts, result, store.files, store.dependencies)
     // unwatch removed files
-    for (const file in store.meta.inputs) {
-      if (!(file in meta.inputs)) {
-        store.watcher.unwatch(file)
+    for (const path in prevPaths) {
+      if (!newPaths.has(path)) {
+        store.watcher.unwatch(path)
       }
     }
     // add new files
-    for (const file in meta.inputs) {
-      if (!(file in store.meta.inputs)) {
-        store.watcher.add(file)
+    for (const path in newPaths) {
+      if (!(path in prevPaths)) {
+        store.watcher.add(path)
       }
     }
-    // store new meta
-    store.meta = meta
-    // resultZ
-    res = await parseBuild(opts, result, store.files, store.dependencies)
   } else {
     // first build
     const { result, files, dependencies } = await createBuild(opts, true)
-    const meta = parseMeta(result)
-    // create new watcher
-    const watcher = chokidar.watch(Object.keys(meta.inputs))
-
-    watcher.on('change', file => {
-      // remove file from file cache
-      delete files.fileCache[isAbsolute(file) ? file : join(cwd, file)]
-      // update bundleCache
-      bundleCache.set(opts, watch(opts, cb))
-    })
-
-    // store for reuse
-    bundleStore.set(opts, {
-      dependencies,
-      watcher,
-      files,
-      result,
-      meta
-    })
-
     res = await parseBuild(opts, result, files, dependencies)
+
+    if (!store) {
+      // create new watcher
+      // @ts-ignore
+      const watcher = chokidar.watch(Array.from(files.paths))
+      watcher.on('change', file => {
+        // remove file from file cache
+        delete files.fileCache[isAbsolute(file) ? file : join(cwd, file)]
+        // update bundleCache
+        bundleCache.set(opts, watch(opts, cb))
+      })
+      // store for reuse
+      bundleStore.set(opts, {
+        dependencies,
+        watcher,
+        files,
+        result
+      })
+    }
   }
 
   cb(res)
+
   return res
 }
 
@@ -69,15 +72,5 @@ export default (opts, cb) => {
   if (!bundleCache.has(opts)) {
     bundleCache.set(opts, watch(opts, cb))
   }
-  return bundleCache.get(opts).catch(async e => {
-    const store = bundleStore.get(opts)
-    const r = await parseBuild(
-      opts,
-      e,
-      store && store.files,
-      store && store.dependencies
-    )
-    cb(r)
-    return r
-  })
+  return bundleCache.get(opts)
 }

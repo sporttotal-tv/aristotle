@@ -2,20 +2,23 @@ import test from 'ava'
 import build from '../../src'
 import { join } from 'path'
 
-test('build', async t => {
-  const r = await build({
+test.serial('build', async t => {
+  const { files, dependencies } = await build({
     entryPoints: [join(__dirname, 'app.tsx')],
     platform: 'node',
     external: ['redis'],
     sourcemap: true
-    // gzip: true,
-    // minify: true,
-    // splitting: true,
-    // format: 'esm'
   })
-  console.log(
-    '-->',
-    r.js[0].text.split('\n').find(v => /sourceMappingURL/.test(v))
-  )
-  console.log('files:', Object.keys(r.files))
+
+  t.truthy(dependencies.redis)
+  t.is(Object.keys(files).length, 5)
+})
+
+test.serial('build error handling', async t => {
+  const { errors } = await build({
+    entryPoints: [join(__dirname, 'error.tsx')]
+  })
+
+  t.true(Array.isArray(errors))
+  t.is(errors.length, 1)
 })
