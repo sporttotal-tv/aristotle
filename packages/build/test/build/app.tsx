@@ -5,12 +5,14 @@ import './style.css'
 console.log(process.env.SMURK)
 
 const Three = ({ style }) => {
+  const a = String(Math.random())
   return (
     <div
-      className="hello"
+      className={a}
       style={{
         backgroundColor: 'blue',
-        ...style
+        ...style,
+        backgroundColor: 'blue'
       }}
     />
   )

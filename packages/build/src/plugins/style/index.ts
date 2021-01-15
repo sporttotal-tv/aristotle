@@ -32,6 +32,9 @@ const join = set => Array.from(set).join(' ')
 const addClassName = (node, className) => {
   if (!node._classNames) {
     node._classNames = new Set()
+  } else if (node._classNames.has(className)) {
+    // this is to have the correct order of classNames
+    node._classNames.delete(className)
   }
   node._classNames.add(className)
 }
