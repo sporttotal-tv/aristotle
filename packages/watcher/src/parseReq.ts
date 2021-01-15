@@ -47,7 +47,7 @@ export default (req: http.IncomingMessage, isSsl: boolean): ParsedReq => {
       hash: parsedUrl.hash,
       searchParams: paramsToObject(parsedUrl.searchParams)
     },
-    language: lang ? lang.match(langRe)[1] : 'en',
+    language,
     ip: req.socket.remoteAddress,
     method: '',
     host: req.headers.host,
