@@ -1,7 +1,7 @@
 import { Worker } from 'worker_threads'
-import { File, BuildResult } from '@saulx/aristotle-build'
+import { BuildResult } from '@saulx/aristotle-build'
 import { join } from 'path'
-import { ParsedReq, RenderResult } from '../types'
+import { ParsedReq, RenderResult } from '@saulx/aristotle-server-utils'
 import { EventEmitter } from 'events'
 
 export class RenderWorker extends EventEmitter {

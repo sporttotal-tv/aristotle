@@ -1,5 +1,5 @@
 import { BuildError, BuildResult } from '@saulx/aristotle-build'
-import { ParsedReq } from '../types'
+import { ParsedReq } from '@saulx/aristotle-server-utils'
 import escape from 'escape-html'
 import { SourceMapConsumer } from 'source-map'
 import { join, dirname } from 'path'

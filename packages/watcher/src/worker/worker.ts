@@ -1,9 +1,11 @@
 import { parentPort, workerData } from 'worker_threads'
 import evalCode from 'eval'
 import { BuildResult, File } from '@saulx/aristotle-build'
-import genRenderOpts from '../genRenderOpts'
-import { CacheFunction } from '../types'
-import { cache as defaultCache } from '../defaultRenderer'
+import {
+  CacheFunction,
+  genRenderOpts,
+  defaultCache
+} from '@saulx/aristotle-server-utils'
 
 type ServerFunction = (...args: any[]) => any
 
