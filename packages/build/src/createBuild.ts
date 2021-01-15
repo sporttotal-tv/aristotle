@@ -2,8 +2,7 @@ import { build as esbuild } from 'esbuild'
 import plugins from './plugins'
 
 const createBuild = async ({ gzip, production, cssReset, ...opts }, watch) => {
-  const files = { css: {}, fileCache: {}, paths: new Set() }
-  const dependencies = {}
+  const meta = { css: {}, fileCache: {}, paths: new Set(), dependencies: {} }
   const result = await esbuild({
     bundle: true,
     outdir: 'out',
@@ -26,11 +25,11 @@ const createBuild = async ({ gzip, production, cssReset, ...opts }, watch) => {
       'process.env.NODE_ENV': production ? '"production"' : '"dev"',
       ...opts.define
     },
-    plugins: [plugins(opts, files, dependencies)],
+    plugins: [plugins(opts, meta)],
     write: false
   }).catch(e => e)
 
-  return { result, files, dependencies }
+  return { result, meta }
 }
 
 export default createBuild

@@ -16,21 +16,21 @@ const comment = (text, start, end) => {
   )}*/${text.substring(end, text.length)}`
 }
 
-export default (opts, files, deps) => {
+export default (opts, meta) => {
   let styleCnt = 0
   const plugin = {
     name: 'aristotle',
     setup(build) {
       // store all paths for watching
       build.onLoad({ filter: /.*/, namespace: 'file' }, async ({ path }) => {
-        files.paths.add(path)
+        meta.paths.add(path)
       })
 
       if (opts.external) {
         build.onResolve(
           { filter: new RegExp(opts.external.join('|')) },
           async args => {
-            if (!(args.path in deps)) {
+            if (!(args.path in meta.dependencies)) {
               try {
                 // try to get the installed version
                 const contents = await fs.promises.readFile(
@@ -39,11 +39,12 @@ export default (opts, files, deps) => {
                   }),
                   'utf-8'
                 )
-                deps[args.path] = JSON.parse(contents).version
+                meta.dependencies[args.path] = JSON.parse(contents).version
               } catch (e) {
                 // get the version from the dependencies
                 const pkg = await getPkg(args.resolveDir)
-                deps[args.path] = pkg.dependencies[args.path] || '*'
+                meta.dependencies[args.path] =
+                  pkg.dependencies[args.path] || '*'
               }
             }
           }
@@ -54,7 +55,7 @@ export default (opts, files, deps) => {
         build.onLoad(
           { filter: /(\.jpg|\.png|\.jpeg|\.svg|\.gif)$/, namespace: 'file' },
           async ({ path }) => {
-            if (!(path in files.fileCache)) {
+            if (!(path in meta.fileCache)) {
               try {
                 const { data } = await imagemin([path], {
                   use: [
@@ -65,12 +66,12 @@ export default (opts, files, deps) => {
                     })
                   ]
                 })
-                files.fileCache[path] = { contents: data, loader: 'file' }
+                meta.fileCache[path] = { contents: data, loader: 'file' }
               } catch (e) {
                 return
               }
             }
-            return files.fileCache[path]
+            return meta.fileCache[path]
           }
         )
       }
@@ -78,7 +79,7 @@ export default (opts, files, deps) => {
       build.onLoad(
         { filter: /\.tsx$|\.jsx$/, namespace: 'file' },
         async ({ path }) => {
-          if (!(path in files.fileCache)) {
+          if (!(path in meta.fileCache)) {
             const text = await fs.promises.readFile(path, 'utf8')
             try {
               const ast = jsxParser.parse(text, {
@@ -111,7 +112,7 @@ export default (opts, files, deps) => {
                       }
                       const key = node.key.name
                       const val = node.value.value
-                      let target = files.css
+                      let target = meta.css
                       if (parentStyleKey) {
                         if (!(parentStyleKey in target)) {
                           target[parentStyleKey] = {}
@@ -127,7 +128,7 @@ export default (opts, files, deps) => {
                           className = `${Number(styleCnt++).toString(16)}`
                         }
                         target[key][val] = className
-                        files.cssCache = null
+                        meta.cssCache = null
                       }
                       styleOwnerNode._classNames = styleOwnerNode._classNames
                         ? `${styleOwnerNode._classNames} ${target[key][val]}`
@@ -195,7 +196,7 @@ export default (opts, files, deps) => {
 
               const store = { offset: 0, text }
               walk(ast, store)
-              files.fileCache[path] = {
+              meta.fileCache[path] = {
                 contents: store.text,
                 loader: 'jsx'
               }
@@ -207,7 +208,7 @@ export default (opts, files, deps) => {
           } else {
             // console.log('cached:', { path })
           }
-          return files.fileCache[path]
+          return meta.fileCache[path]
         }
       )
     }

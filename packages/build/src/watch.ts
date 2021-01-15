@@ -21,11 +21,11 @@ const watch = async (opts, cb) => {
   let res
   if (store && !store.result.errors) {
     // reset paths
-    const prevPaths = store.files.paths
-    const newPaths = (store.files.paths = new Set())
+    const prevPaths = store.meta.paths
+    const newPaths = (store.meta.paths = new Set())
     // rebuild it
     const result = await store.result.rebuild().catch(e => e)
-    res = await parseBuild(opts, result, store.files, store.dependencies)
+    res = await parseBuild(opts, result, store.meta)
     // unwatch removed files
     for (const path in prevPaths) {
       if (!newPaths.has(path)) {
@@ -40,24 +40,23 @@ const watch = async (opts, cb) => {
     }
   } else {
     // first build
-    const { result, files, dependencies } = await createBuild(opts, true)
-    res = await parseBuild(opts, result, files, dependencies)
+    const { result, meta } = await createBuild(opts, true)
+    res = await parseBuild(opts, result, meta)
 
     if (!store) {
       // create new watcher
       // @ts-ignore
-      const watcher = chokidar.watch(Array.from(files.paths))
+      const watcher = chokidar.watch(Array.from(meta.paths))
       watcher.on('change', file => {
         // remove file from file cache
-        delete files.fileCache[isAbsolute(file) ? file : join(cwd, file)]
+        delete meta.fileCache[isAbsolute(file) ? file : join(cwd, file)]
         // update bundleCache
         bundleCache.set(opts, watch(opts, cb))
       })
       // store for reuse
       bundleStore.set(opts, {
-        dependencies,
         watcher,
-        files,
+        meta,
         result
       })
     }
