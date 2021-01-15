@@ -4,7 +4,7 @@ import App from './App'
 console.log(App)
 
 console.info(
-  'this is an YUZI FOR YOU',
+  'this is an YUZI FxxxxOR YOU?',
   process.env.NODE_ENV,
   process.env.NVM_DIR
 )

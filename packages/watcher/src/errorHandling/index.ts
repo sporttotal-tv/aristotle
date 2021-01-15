@@ -141,6 +141,7 @@ export const genErrorPage = async (
       <style>
         body {
           padding: 25px;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         }
         .bar {
           display: flex;
