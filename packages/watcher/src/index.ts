@@ -14,7 +14,7 @@ import defaultRender from './defaultRenderer'
 import { genServeFromFile, genServeFromRender } from './genServeResult'
 import serve from './serve'
 import hasServer from './hasServer'
-import { genWorker, RenderWorker } from './worker/serverWorker'
+import { genWorker, RenderWorker } from './worker'
 import parseReq from './parseReq'
 import { ServeResult } from './types'
 import fs from 'fs'
@@ -106,7 +106,6 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       sourcemap: true
     }
     if (serverTarget) {
-      // make this into a fucntion
       build(buildOptsServer, async result => {
         if (result.errors.length) {
           serverBuildErrors = setBuildErrors(result)
@@ -192,8 +191,6 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     const url = req.url
     const file = buildresult.files[url]
 
-    // if build errors (also for server)
-
     if (file) {
       serve(res, genServeFromFile(file))
     } else {
@@ -208,7 +205,6 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
         if (!rendererError) {
           try {
             const cacheKey = await renderer.checkCache(parsedReq)
-
             if (cacheKey !== 'default') {
               console.log(
                 chalk.grey(
@@ -219,7 +215,6 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
                 )
               )
             }
-
             const renderResult = await renderer.render(parsedReq)
             if (renderResult !== null) {
               result = genServeFromRender(renderResult)
