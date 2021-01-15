@@ -1,5 +1,5 @@
 {
-  "name": "@saulx/aristotle-server",
+  "name": "@saulx/aristotle-create-server-dist",
   "main": "./dist/index.js",
   "public": true,
   "version": "1.0.1",
