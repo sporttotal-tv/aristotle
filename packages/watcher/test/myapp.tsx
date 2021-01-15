@@ -1,9 +1,10 @@
 import './css.css'
 import App from './App'
+import React from 'react'
+import dom from 'react-dom'
+console.log(dom)
 
-console.log(App)
-
-App()
+// App()
 
 console.info(
   'this is an YUZI FxxxxOR? YOU?',
@@ -11,3 +12,5 @@ console.info(
   process.env.NVM_DIR,
   process.env.GREP_COLOR
 )
+
+dom.render(<App />, document.getElementById('root'))

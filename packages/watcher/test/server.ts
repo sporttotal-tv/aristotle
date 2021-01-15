@@ -20,6 +20,7 @@ const render = async opts => {
       ${opts.head}
     </head>
     <body>
+      <div id="root"/>
       YESH  for  mxxyesh!
       ${opts.body}
       <img src="${img}" />
