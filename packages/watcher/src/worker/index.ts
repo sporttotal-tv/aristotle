@@ -77,7 +77,6 @@ export class RenderWorker extends EventEmitter {
     return new Promise((resolve, reject) => {
       const reqId = this.genReqId()
       this.requests[reqId] = x => {
-        console.log('ok go time', x)
         delete this.requests[reqId]
         if (x.error) {
           reject(x.error)
