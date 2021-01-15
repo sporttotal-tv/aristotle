@@ -150,7 +150,9 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
           const checksum = result.js[0].checksum
           rendererError = undefined
           if (rendererBeingBuild === checksum) {
-            console.log('change with no update - ignore', checksum)
+            console.log(
+              chalk.grey('Same renderer being build - ignore', checksum)
+            )
           } else {
             rendererBeingBuild = checksum
             const d = Date.now()
@@ -233,7 +235,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
                   'Using custom mem cache key',
                   chalk.blue(cacheKey),
                   'for',
-                  parsedReq.url.pathname
+                  parsedReq.url.href
                 )
               )
             }

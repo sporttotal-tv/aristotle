@@ -81,29 +81,35 @@ const parseError = async (error: AristotleError): Promise<string> => {
     const mapfile =
       error.build.files['/server.js.map'] ||
       error.build.files['/server/index.js.map']
-    const map = mapfile.contents.toString()
-    const parsedMap = JSON.parse(map)
-    const match = error.error.stack.match(/app-server:(\d+:\d+)/)
-    if (match) {
-      const lines = match[1].split(':')
-      const source = await SourceMapConsumer.with(parsedMap, null, consumer => {
-        return consumer.originalPositionFor({
-          line: Number(lines[0]),
-          column: Number(lines[1])
+
+    if (mapfile) {
+      const map = mapfile.contents.toString()
+      const parsedMap = JSON.parse(map)
+      const match = error.error.stack.match(/app-server:(\d+:\d+)/)
+      if (match) {
+        const lines = match[1].split(':')
+        const source = await SourceMapConsumer.with(
+          parsedMap,
+          null,
+          consumer => {
+            return consumer.originalPositionFor({
+              line: Number(lines[0]),
+              column: Number(lines[1])
+            })
+          }
+        )
+        const entry = error.build.entryPoints[0]
+        file = source.source
+        const path = join(dirname(entry), source.source)
+        fullpath = `${path}:${source.line}:${source.column}`
+        code = parseFile({
+          source: source.source,
+          line: source.line - 1,
+          column: source.column - 1,
+          code: await readfile(path, { encoding: 'utf8' })
         })
-      })
-      const entry = error.build.entryPoints[0]
-      file = source.source
-      const path = join(dirname(entry), source.source)
-      fullpath = `${path}:${source.line}:${source.column}`
-      code = parseFile({
-        source: source.source,
-        line: source.line - 1,
-        column: source.column - 1,
-        code: await readfile(path, { encoding: 'utf8' })
-      })
-    }
-    return `<a class="error" href="vscode://file${fullpath}">
+      }
+      return `<a class="error" href="vscode://file${fullpath}">
     <div class="type">${type}</div>
       <div class="bar" >
         <div>${error.error.message}</div>
@@ -111,6 +117,7 @@ const parseError = async (error: AristotleError): Promise<string> => {
       </div>
       ${code}
     </a>`
+    }
   } else if (error.type === 'build') {
     file = error.buildError.location.file
     const entry = error.build.entryPoints[0]

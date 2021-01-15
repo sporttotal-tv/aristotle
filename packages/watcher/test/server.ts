@@ -7,7 +7,6 @@ export const cache = req => {
 }
 
 const render = async opts => {
-  // console.log(xflap.x)
   if (opts.url.pathname === '/no') {
     // this kill sthe connectionxxxx
     return null
