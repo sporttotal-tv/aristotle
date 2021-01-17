@@ -3,6 +3,7 @@ export default (env: string[]): string => {
     return ''
   }
   const envObj = {}
+
   env.forEach(e => {
     envObj[e] = process.env[e]
   })
