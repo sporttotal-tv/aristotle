@@ -76,14 +76,14 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     )
 
     const serverFile = `
-      const { default, cache} = require('./server.js')
-      const startServer = require('@saulx/aristotle-server')
+      const { default, cache } = require('./server.js')
       const { join } = require('path')
+      const startServer = require('@saulx/aristotle-server')
       startServer({ 
         port: process.env.PORT, 
         renderer: default, 
         cacheFunction: cache, 
-        buildDescriptor: join(__dirname, '../build.json')  
+        buildJson: join(__dirname, '../build.json')  
       })
     `
 
@@ -91,9 +91,10 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
   } else {
     const serverFile = `
     const startServer = require('@saulx/aristotle-server')
+    const { join } = require('path')
     startServer({ 
       port: process.env.PORT, 
-      buildDescriptor: join(__dirname, '../build.json')  
+      buildJson: join(__dirname, '../build.json')  
     })
    `
     q.push(writeFile(join(path, 'index.js'), serverFile))
@@ -123,7 +124,8 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     css: browserBuild.css.map(v => v.url),
     files: Object.keys(browserBuild.files).map(key => './files/' + key + '.gz'),
     env: browserBuild.env,
-    entryPoints: browserBuild.entryPoints.map(v => relative(dirname(v), v))
+    // bit weird to add these entrypoints
+    entryPoints: browserBuild.entryPoints.map(v => relative(process.cwd(), v))
   }
 
   q.push(writeJson(buildPath, buildJson))
