@@ -13,6 +13,7 @@
     "typescript": "^3.7.3"
   },
   "dependencies": {
-    "@saulx/aristotle-server-utils": "*"
+    "@saulx/aristotle-server-utils": "*",
+    "@saulx/ops-get-ssl": "^1.0.1"
   }
 }

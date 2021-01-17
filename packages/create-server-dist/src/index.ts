@@ -1,7 +1,11 @@
 import { emptyDir, writeFile, writeJson } from 'fs-extra'
-import { join, relative, dirname } from 'path'
+import { join, relative } from 'path'
 import build from '@saulx/aristotle-build'
-import { hasServer, isPublicFile } from '@saulx/aristotle-server-utils'
+import {
+  hasServer,
+  isPublicFile,
+  BuildJson
+} from '@saulx/aristotle-server-utils'
 import getPkg from '@saulx/get-package'
 import gzip from 'zlib'
 import util from 'util'
@@ -80,7 +84,7 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
       const { join } = require('path')
       const startServer = require('@saulx/aristotle-server')
       startServer({ 
-        port: process.env.PORT, 
+        port: process.env.PORT ? Number(process.env.PORT) : 443, 
         renderer: default, 
         cacheFunction: cache, 
         buildJson: join(__dirname, '../build.json')  
@@ -93,7 +97,7 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     const startServer = require('@saulx/aristotle-server')
     const { join } = require('path')
     startServer({ 
-      port: process.env.PORT, 
+      port: process.env.PORT ? Number(process.env.PORT) : 443, 
       buildJson: join(__dirname, '../build.json')  
     })
    `
@@ -119,7 +123,7 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
 
   const buildPath = join(dest, 'build.json')
 
-  const buildJson = {
+  const buildJson: BuildJson = {
     js: browserBuild.js.map(v => v.url),
     css: browserBuild.css.map(v => v.url),
     files: Object.keys(browserBuild.files).map(key => './files/' + key + '.gz'),
@@ -129,5 +133,4 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
   }
 
   q.push(writeJson(buildPath, buildJson))
-  // also need to add all the meta info when reading those files
 }

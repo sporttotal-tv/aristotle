@@ -7,6 +7,14 @@ import hasServer from './hasServer'
 import serve from './serve'
 import isPublicFile from './isPublicFile'
 
+export type BuildJson = {
+  js: string[]
+  css: string[]
+  files: string[]
+  env: string[]
+  entryPoints: string[]
+}
+
 export {
   parseReq,
   defaultRenderer,
