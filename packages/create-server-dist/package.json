@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
+    "@saulx/get-package": "^1.0.7",
     "fs-extra": "^9.0.1",
     "@saulx/aristotle-build": "*",
     "@saulx/aristotle-server-utils": "*"

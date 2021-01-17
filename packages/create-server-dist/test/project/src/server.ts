@@ -1,3 +1,5 @@
+import img from '../large.jpg'
+
 export default () => {
-  return 'very nice'
+  return `very nice ${img}`
 }
