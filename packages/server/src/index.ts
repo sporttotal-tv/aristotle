@@ -9,7 +9,6 @@ import {
 import getSsl from '@saulx/ops-get-ssl'
 import https from 'https'
 import http from 'http'
-import render from '@saulx/aristotle-server-utils/dist/defaultRenderer'
 
 console.log('this is a server!')
 
@@ -50,3 +49,5 @@ const createServer = async ({
 
   server.listen(port)
 }
+
+export default createServer
