@@ -2,11 +2,14 @@ import { BuildResult } from '@saulx/aristotle-build'
 import {
   RenderFunction,
   CacheFunction,
-  BuildJson
+  BuildJson,
+  defaultRenderer,
+  defaultCache
 } from '@saulx/aristotle-server-utils'
 import getSsl from '@saulx/ops-get-ssl'
 import https from 'https'
 import http from 'http'
+import render from '@saulx/aristotle-server-utils/dist/defaultRenderer'
 
 console.log('this is a server!')
 
@@ -34,9 +37,11 @@ const createServer = async ({
   }
 
   if (!renderer) {
+    renderer = defaultRenderer
   }
 
   if (!cacheFunction) {
+    cacheFunction = defaultCache
   }
 
   const handler = (req: http.IncomingMessage, res: http.OutgoingMessage) => {}
