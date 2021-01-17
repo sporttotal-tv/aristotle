@@ -1,5 +1,5 @@
 import { emptyDir, writeFile, writeJson } from 'fs-extra'
-import { join } from 'path'
+import { join, relative, dirname } from 'path'
 import build from '@saulx/aristotle-build'
 import { hasServer, isPublicFile } from '@saulx/aristotle-server-utils'
 import getPkg from '@saulx/get-package'
@@ -42,10 +42,16 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     version: folderPkg.version,
     scripts: {
       start: 'node ./server.js'
+    },
+    dependencies: {
+      '@saulx/aristotle-server': '^1.0.0'
     }
   }
 
   const q = []
+
+  const path = join(dest, 'server')
+  await emptyDir(path)
 
   if (serverPath) {
     const serverBuild = await build({
@@ -61,17 +67,36 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
         browserBuild.files[key] = file
       }
     }
-    const path = join(dest, 'server')
-    await emptyDir(path)
+
     q.push(
       writeFile(
         join(path, 'server.js'),
         await unzip(serverBuild.js[0].contents)
       )
     )
+
+    const serverFile = `
+      const { default, cache} = require('./server.js')
+      const startServer = require('@saulx/aristotle-server')
+      const { join } = require('path')
+      startServer({ 
+        port: process.env.PORT, 
+        renderer: default, 
+        cacheFunction: cache, 
+        buildDescriptor: join(__dirname, '../build.json')  
+      })
+    `
+
+    q.push(writeFile(join(path, 'index.js'), serverFile))
   } else {
-    // add the default renderer (can also do this in the actual server)
-    // make server index file
+    const serverFile = `
+    const startServer = require('@saulx/aristotle-server')
+    startServer({ 
+      port: process.env.PORT, 
+      buildDescriptor: join(__dirname, '../build.json')  
+    })
+   `
+    q.push(writeFile(join(path, 'index.js'), serverFile))
   }
 
   await emptyDir(join(dest, 'files'))
@@ -91,15 +116,16 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
 
   await Promise.all(q)
 
+  const buildPath = join(dest, 'build.json')
+
   const buildJson = {
     js: browserBuild.js.map(v => v.url),
     css: browserBuild.css.map(v => v.url),
-    files: Object.keys(browserBuild.files),
+    files: Object.keys(browserBuild.files).map(key => './files/' + key + '.gz'),
     env: browserBuild.env,
-    entryPoints: browserBuild.entryPoints,
-    gzip: true
+    entryPoints: browserBuild.entryPoints.map(v => relative(dirname(v), v))
   }
 
-  q.push(writeJson(join(dest, 'build.json'), buildJson))
+  q.push(writeJson(buildPath, buildJson))
   // also need to add all the meta info when reading those files
 }
