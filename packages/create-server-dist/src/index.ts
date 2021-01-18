@@ -128,7 +128,9 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
 
     const x = await unzip(file.contents)
 
-    console.log('??', x.toString('utf8'))
+    if (file.mime === 'text/css') {
+      console.log('??', x.toString('utf8'))
+    }
 
     q.push(writeFile(path, file.contents))
   }

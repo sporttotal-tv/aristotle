@@ -10,7 +10,7 @@ import { hash } from '@saulx/utils'
 import zlib from 'zlib'
 import { promisify } from 'util'
 import fs from 'fs'
-import { BuildOpts, BuildResult } from './'
+import { BuildOpts, File, BuildResult } from './'
 
 const STYLES_PATH = '/generated-styles.css'
 const RESET_PATH = '/reset-styles.css'
@@ -165,11 +165,13 @@ const parseBuild = async (
 
   if (opts.gzip) {
     await Promise.all(
-      Object.values(parsed.files).map(async file => {
-        // @ts-ignore
-        file.contents = await gzip(file.contents)
-        // @ts-ignore
-        file.gzip = true
+      Object.values(parsed.files).map(async (file: File) => {
+        if (!file.gzip) {
+          // @ts-ignore
+          file.contents = await gzip(file.contents)
+          // @ts-ignore
+          file.gzip = true
+        }
       })
     )
   }
