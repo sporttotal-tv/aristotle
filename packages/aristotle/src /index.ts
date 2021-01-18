@@ -61,7 +61,11 @@ program
       external: config ? config.external : undefined
     })
 
-    console.info(chalk.blue('✨ Build ready in'), Date.now() - d, 'ms')
+    console.info(
+      chalk.blue('✨ Build ready in'),
+      Date.now() - d,
+      chalk.blue('ms')
+    )
   })
 
 program.parse(process.argv)
