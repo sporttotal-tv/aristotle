@@ -2,14 +2,11 @@ import test from 'ava'
 import build from '../../src'
 import { join } from 'path'
 
-test.serial.only('build', async t => {
-  const { js, files, dependencies } = await build({
+test.serial('build', async t => {
+  const { files, dependencies } = await build({
     entryPoints: [join(__dirname, 'app.tsx')],
     external: ['redis']
   })
-
-  const str = js[0].text
-  console.log(str.substr(str.indexOf('SMURK') + 1))
 
   t.truthy(dependencies.redis)
   t.is(Object.keys(files).length, 5)
