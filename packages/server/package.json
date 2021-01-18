@@ -10,7 +10,8 @@
   "repository": "https://github.com/atelier-saulx/aristotle",
   "devDependencies": {
     "ts-node": "^8.5.4",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.3",
+    "@saulx/aristotle-create-server-dist": "*"
   },
   "dependencies": {
     "@saulx/aristotle-server-utils": "*",
