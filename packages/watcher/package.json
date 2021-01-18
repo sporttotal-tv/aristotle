@@ -1,6 +1,6 @@
 {
   "name": "@saulx/aristotle-watcher",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "dependencies": {
     "@saulx/aristotle-build": "^1.0.1",
     "@saulx/utils": "1.5.1",
