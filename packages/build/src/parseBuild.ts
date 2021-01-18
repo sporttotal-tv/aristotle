@@ -167,9 +167,7 @@ const parseBuild = async (
     await Promise.all(
       Object.values(parsed.files).map(async (file: File) => {
         if (!file.gzip) {
-          // @ts-ignore
           file.contents = await gzip(file.contents)
-          // @ts-ignore
           file.gzip = true
         }
       })
