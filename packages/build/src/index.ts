@@ -4,7 +4,6 @@ import { BuildResult } from '@saulx/aristotle-types'
 
 export type BuildOpts = {
   entryPoints: string[]
-  external?: string[]
   minify?: boolean
   production?: boolean
   platform?: 'node' | 'browser'
@@ -13,6 +12,7 @@ export type BuildOpts = {
   gzip?: boolean
   splitting?: boolean
   format?: string
+  external?: string[]
   loader?: {
     [ext: string]: string
   }

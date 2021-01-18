@@ -30,6 +30,7 @@ type Opts = {
   port: number
   target: string
   reloadPort?: number
+  external?: string[]
 }
 
 const buildChanged = (newBuild: BuildResult, old: BuildResult): boolean => {
@@ -45,7 +46,12 @@ const buildChanged = (newBuild: BuildResult, old: BuildResult): boolean => {
   return false
 }
 
-export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
+export default async ({
+  target,
+  port = 3001,
+  reloadPort = 6634,
+  external
+}: Opts) => {
   const ip = await v4()
 
   reloadPort = await getPort({ port: reloadPort })
@@ -54,6 +60,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
   const buildOpts: BuildOpts = {
     entryPoints: [target],
     platform: 'browser',
+    external,
     sourcemap: true
   }
 
@@ -118,7 +125,8 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     const buildOptsServer: BuildOpts = {
       entryPoints: [serverTarget],
       platform: 'node',
-      sourcemap: true
+      sourcemap: true,
+      external
     }
     if (serverTarget) {
       build(buildOptsServer, async result => {

@@ -27,7 +27,15 @@ const unzip = util.promisify(gzip.gunzip)
 */
 
 // also add all extra options (need for watcher as well)
-export default async ({ target, dest }: { target: string; dest: string }) => {
+export default async ({
+  target,
+  dest,
+  external
+}: {
+  target: string
+  dest: string
+  external?: string[]
+}) => {
   await emptyDir(dest)
 
   const serverPath = await hasServer(target)
@@ -37,7 +45,8 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     minify: true,
     platform: 'browser',
     production: true,
-    gzip: true
+    gzip: true,
+    external
   })
 
   const folderPkg = await getPkg(target)
@@ -64,7 +73,8 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
       platform: 'node',
       minify: true,
       production: true,
-      gzip: true
+      gzip: true,
+      external
     })
     for (const key in serverBuild.files) {
       const file = serverBuild.files[key]
