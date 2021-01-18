@@ -55,6 +55,7 @@ const createServer = async ({
   } = {}
   const cachedPaths: { [key: string]: string } = {}
 
+  // can be pretty heavy
   setInterval(() => {
     ts = Date.now()
     for (let key in cache) {
