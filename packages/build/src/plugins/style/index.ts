@@ -3,19 +3,19 @@ import jsx from 'acorn-jsx'
 
 const jsxParser = Parser.extend(jsx())
 
-const replaceChar = (store, i, str) => {
+const replaceCharAtIndex = (store, i, str) => {
   store.text = `${store.text.substring(0, i)}${str}${store.text.substring(
     i + 1
   )}`
   store.offset += str.length - 1
 }
 
-const insert = (store, i, str) => {
+const insertAtIndex = (store, i, str) => {
   store.text = `${store.text.substring(0, i)}${str}${store.text.substring(i)}`
   store.offset += str.length
 }
 
-const comment = (store, start, end) => {
+const commentFromTo = (store, start, end) => {
   const { text } = store
   if (text[end] === ',') {
     end += 1
@@ -76,7 +76,7 @@ const parseStyle = (text, meta) => {
           // how to check efficiently in this node?
           // name classname a little bit funky as well e.g. parsedStylesClassName: ClassName (against colish)
           // so we want to add classname as prop here
-          insert(store, styleStart + store.offset, 'className, ')
+          insertAtIndex(store, styleStart + store.offset, 'className, ')
         }
       }
     }
@@ -86,11 +86,11 @@ const parseStyle = (text, meta) => {
         const start = node.start + store.offset
         const end = node.end + store.offset
         if (node.value.type === 'ObjectExpression') {
-          comment(store, start, end)
+          commentFromTo(store, start, end)
           parentStyleKey = node.key.name || node.key.value
         } else if (node.value.type === 'Literal') {
           if (!parentStyleKey) {
-            comment(store, start, end)
+            commentFromTo(store, start, end)
           }
           const key = node.key.name
           const val = node.value.value
@@ -124,7 +124,11 @@ const parseStyle = (text, meta) => {
         if (node.argument.name === 'style') {
           // eslint-disable-next-line
           addClassName(styleOwnerNode, '${className}')
-          comment(store, node.start + store.offset, node.end + store.offset)
+          commentFromTo(
+            store,
+            node.start + store.offset,
+            node.end + store.offset
+          )
           styleOwnerNode._classNameTemplate = true
         }
       }
@@ -176,16 +180,20 @@ const parseStyle = (text, meta) => {
         // use existing className
         if (isTemplateString) {
           if (store.text[node._classNameStart] === '"') {
-            replaceChar(store, node._classNameStart, '{`')
-            replaceChar(store, node._classNameEnd, '`}')
+            replaceCharAtIndex(store, node._classNameStart, '{`')
+            replaceCharAtIndex(store, node._classNameEnd, '`}')
             node._classNameEnd += 1
           } else {
-            replaceChar(store, node._classNameStart, '{`${')
-            replaceChar(store, node._classNameEnd + 2, '}`}')
+            replaceCharAtIndex(store, node._classNameStart, '{`${')
+            replaceCharAtIndex(store, node._classNameEnd + 2, '}`}')
             node._classNameEnd += 4
           }
         }
-        insert(store, node._classNameEnd - 1, ` ${join(node._classNames)}`)
+        insertAtIndex(
+          store,
+          node._classNameEnd - 1,
+          ` ${join(node._classNames)}`
+        )
       } else {
         // add a new className
         const str = isTemplateString
@@ -193,7 +201,7 @@ const parseStyle = (text, meta) => {
             ? `className={className} `
             : `className={\`${join(node._classNames)}\`} `
           : `className="${join(node._classNames)}" `
-        insert(store, node._styleStart, str)
+        insertAtIndex(store, node._styleStart, str)
       }
     }
   }
