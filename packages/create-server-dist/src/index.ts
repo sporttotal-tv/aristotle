@@ -55,7 +55,7 @@ export default async ({
     name: folderPkg.name,
     version: folderPkg.version,
     scripts: {
-      start: 'node ./server.js'
+      start: 'node ./server/index.js'
     },
     dependencies: {
       '@saulx/aristotle-server': '^1.0.0'
