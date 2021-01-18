@@ -6,6 +6,11 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "clean-all": "find packages -maxdepth 1 -mindepth 1 -type d -exec bash -c \"cd '{}' && pwd && rm -rf dist\" \\;",
+    "build-all": "find packages -maxdepth 1 -mindepth 1 -type d -exec bash -c \"cd '{}' && pwd && yarn build\" \\;",
+    "publish-all": "find packages -maxdepth 1 -mindepth 1 -type d -exec bash -c \"cd '{}' && pwd && npm publish --access public\" \\;"
+  },
   "prettier": "@saulx/prettier-config",
   "eslintConfig": {
     "extends": "@saulx/eslint-config"
