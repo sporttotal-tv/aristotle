@@ -82,7 +82,6 @@ const createServer = async ({
       const checksum = cacheKey && cachedPaths[cacheKey]
       const cachedResult = checksum && cache[checksum]
       if (cachedResult) {
-        console.log('from cache result', cacheKey)
         serve(req, res, cachedResult.result)
       } else {
         const renderResult = await renderer(
