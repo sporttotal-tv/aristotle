@@ -47,6 +47,7 @@ const startWs = (port: number): LiveReload => {
 
   return {
     update,
+    // @ts-ignore
     browser: {
       checksum,
       path: 'livereload.ts',
