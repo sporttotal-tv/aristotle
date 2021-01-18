@@ -48,17 +48,15 @@ const parseStyle = (text, meta) => {
   const walk = (
     node,
     store,
-    styleOwnerNode = null,
+    nodeWithStyleProp = null,
     parentStyleKey = null,
     parentNode = null,
-    classArrowFunction = null
+    nodeWithStyleArg = null
   ) => {
     // check if i have jsx and if style is being passed to something jsx
     if (node.type === 'ArrowFunctionExpression') {
-      // console.dir(node, { depth: null })
       if (node.params[0] && node.params[0].type === 'ObjectPattern') {
         const props = node.params[0]
-        // TODO optimize!!!
         let styleStart
         for (const prop of props.properties) {
           const name = prop.key && prop.key.name
@@ -71,7 +69,7 @@ const parseStyle = (text, meta) => {
         }
 
         if (styleStart) {
-          classArrowFunction = node
+          nodeWithStyleArg = node
           // node.classNameCandidate = true
           // how to check efficiently in this node?
           // name classname a little bit funky as well e.g. parsedStylesClassName: ClassName (against colish)
@@ -81,7 +79,7 @@ const parseStyle = (text, meta) => {
       }
     }
 
-    if (styleOwnerNode) {
+    if (nodeWithStyleProp) {
       if (node.type === 'Property') {
         const start = node.start + store.offset
         const end = node.end + store.offset
@@ -112,30 +110,30 @@ const parseStyle = (text, meta) => {
             target[key][val] = className
             meta.cssCache = null
           }
-          addClassName(styleOwnerNode, target[key][val])
+          addClassName(nodeWithStyleProp, target[key][val])
         }
       } else if (node.type === 'Identifier') {
         if (node.name === 'style') {
           // eslint-disable-next-line
-          addClassName(styleOwnerNode, '${className}')
-          styleOwnerNode._classNameTemplate = true
+          addClassName(nodeWithStyleProp, '${className}')
+          nodeWithStyleProp._classNameTemplate = true
         }
       } else if (node.type === 'SpreadElement') {
         if (node.argument.name === 'style') {
           // eslint-disable-next-line
-          addClassName(styleOwnerNode, '${className}')
+          addClassName(nodeWithStyleProp, '${className}')
           commentFromTo(
             store,
             node.start + store.offset,
             node.end + store.offset
           )
-          styleOwnerNode._classNameTemplate = true
+          nodeWithStyleProp._classNameTemplate = true
         }
       }
     } else if (node.type === 'JSXAttribute') {
       if (node.name.name === 'style') {
-        styleOwnerNode = parentNode
-        styleOwnerNode._styleStart = node.start + store.offset
+        nodeWithStyleProp = parentNode
+        nodeWithStyleProp._styleStart = node.start + store.offset
       } else if (node.name.name === 'className') {
         parentNode._classNameStart = node.value.start + store.offset
         parentNode._classNameEnd = node.value.end + store.offset
@@ -152,10 +150,10 @@ const parseStyle = (text, meta) => {
           walk(
             val,
             store,
-            styleOwnerNode,
+            nodeWithStyleProp,
             parentStyleKey,
             node,
-            classArrowFunction
+            nodeWithStyleArg
           )
         } else if (Array.isArray(val)) {
           for (const childNode of val) {
@@ -163,10 +161,10 @@ const parseStyle = (text, meta) => {
               walk(
                 childNode,
                 store,
-                styleOwnerNode,
+                nodeWithStyleProp,
                 parentStyleKey,
                 node,
-                classArrowFunction
+                nodeWithStyleArg
               )
             }
           }
