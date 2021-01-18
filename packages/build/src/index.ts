@@ -12,6 +12,7 @@ export type BuildOpts = {
   gzip?: boolean
   splitting?: boolean
   format?: string
+  target?: string
   external?: string[]
   loader?: {
     [ext: string]: string

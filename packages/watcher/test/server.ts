@@ -20,9 +20,12 @@ const render = async opts => {
     </head>
     <body>
       YESH  for  mxxyexxxxxxxxxxxxsh!
-      ${opts.body}
       <img src="${img}" />
       <img src="${img2}" />
+
+      <div id="react" />
+      ${opts.body}
+
     </body>
   </html>`
 }

@@ -1,8 +1,8 @@
 import React from 'react'
 
-// const Purf = ({ style }) => {
-//   return <div style={style} />
-// }
+const Purf = ({ style }) => {
+  return <div style={style}>PERV</div>
+}
 
 const Snurk = ({ style }) => {
   const r = (
@@ -18,11 +18,9 @@ const Snurk = ({ style }) => {
       }}
     >
       YESH REACTxxxx
-      {/* <Purf style={style} /> */}
+      <Purf style={style} />
     </div>
   )
-
-  setTimeout(() => console.log(xxxsx))
 
   return r
 }
@@ -30,7 +28,7 @@ const Snurk = ({ style }) => {
 export default () => (
   <Snurk
     style={{
-      border: '1px solid red'
+      border: '10px solid red'
     }}
   />
 )

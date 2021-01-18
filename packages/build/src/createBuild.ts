@@ -14,6 +14,7 @@ const createBuild = async (
     incremental: watch,
     metafile: watch ? 'meta.json' : undefined,
     publicPath: '/',
+    target: 'es6',
     ...opts,
     loader: {
       '.woff': 'file',
