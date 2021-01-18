@@ -2,7 +2,7 @@
   "name": "@saulx/aristotle-watcher",
   "version": "0.0.1",
   "dependencies": {
-    "@saulx/aristotle-build": "*",
+    "@saulx/aristotle-build": "^1.0.1",
     "@saulx/utils": "1.5.1",
     "chalk": "^4.0.0",
     "eval": "^0.1.4",
