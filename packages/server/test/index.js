@@ -7,10 +7,6 @@ const main = async () => {
     target: join(__dirname, './project/src/index.ts'),
     dest: join(__dirname, 'dist')
   })
-  await startServer.default({
-    port: 8888,
-    buildJson: join(__dirname, 'dist', 'build.json')
-  })
 }
 
 main()

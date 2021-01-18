@@ -85,13 +85,13 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     )
 
     const serverFile = `
-      const { default, cache } = require('./server.js')
+      const renderer = require('./server.js')
       const { join } = require('path')
-      const startServer = require('@saulx/aristotle-server')
+      const startServer = require('@saulx/aristotle-server').default
       startServer({ 
         port: process.env.PORT ? Number(process.env.PORT) : 443, 
-        renderer: default, 
-        cacheFunction: cache, 
+        renderer: renderer.default, 
+        cacheFunction: renderer.cache, 
         buildJson: join(__dirname, '../build.json')  
       })
     `
@@ -99,7 +99,7 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     q.push(writeFile(join(path, 'index.js'), serverFile))
   } else {
     const serverFile = `
-    const startServer = require('@saulx/aristotle-server')
+    const startServer = require('@saulx/aristotle-server').default
     const { join } = require('path')
     startServer({ 
       port: process.env.PORT ? Number(process.env.PORT) : 443, 

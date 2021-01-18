@@ -6,13 +6,15 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch",
-    "test": "node ./test/index.js"
+    "test": "node ./test/index.js && PORT=8888 node ./test/dist/server/index.js"
   },
   "repository": "https://github.com/atelier-saulx/aristotle",
   "devDependencies": {
     "ts-node": "^8.5.4",
     "typescript": "^3.7.3",
-    "@saulx/aristotle-create-server-dist": "*"
+    "@saulx/aristotle-create-server-dist": "*",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "dependencies": {
     "chalk": "^4.1.0",
