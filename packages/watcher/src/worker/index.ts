@@ -1,5 +1,5 @@
 import { Worker } from 'worker_threads'
-import { BuildResult } from '@saulx/aristotle-build'
+import { BuildResult } from '@saulx/aristotle-types'
 import { join } from 'path'
 import { ParsedReq, RenderResult } from '@saulx/aristotle-server-utils'
 import { EventEmitter } from 'events'

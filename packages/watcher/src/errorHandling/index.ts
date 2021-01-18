@@ -1,4 +1,4 @@
-import { BuildError, BuildResult } from '@saulx/aristotle-build'
+import { BuildError, BuildResult } from '@saulx/aristotle-types'
 import { ParsedReq } from '@saulx/aristotle-server-utils'
 import escape from 'escape-html'
 import { SourceMapConsumer } from 'source-map'

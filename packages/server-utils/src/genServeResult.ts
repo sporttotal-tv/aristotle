@@ -1,6 +1,6 @@
 import { RenderResult, ServeResult } from './types'
 import { hash } from '@saulx/utils'
-import { File } from '@saulx/aristotle-build'
+import { File } from '@saulx/aristotle-types'
 import util from 'util'
 import zlib from 'zlib'
 

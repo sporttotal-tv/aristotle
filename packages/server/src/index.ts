@@ -1,4 +1,4 @@
-import { BuildResult } from '@saulx/aristotle-build'
+import { BuildResult } from '@saulx/aristotle-types'
 import {
   RenderFunction,
   CacheFunction,

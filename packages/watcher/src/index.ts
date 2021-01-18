@@ -3,12 +3,8 @@ import { v4 } from 'internal-ip'
 import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
-import build, {
-  BuildError,
-  BuildOpts,
-  BuildResult,
-  File
-} from '@saulx/aristotle-build'
+import build, { BuildOpts } from '@saulx/aristotle-build'
+import { BuildError, BuildResult, File } from '@saulx/aristotle-types'
 import { genWorker, RenderWorker } from './worker'
 import fs from 'fs'
 import { join } from 'path'

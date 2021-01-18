@@ -1,4 +1,4 @@
-import { BuildResult, File } from '@saulx/aristotle-build'
+import { BuildResult, File } from '@saulx/aristotle-types'
 import { BuildJson, BuildJsonFile } from '@saulx/aristotle-server-utils'
 import fs from 'fs'
 import util from 'util'

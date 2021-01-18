@@ -1,5 +1,5 @@
 import { RenderOpts, ParsedReq } from './types'
-import { BuildResult } from '@saulx/aristotle-build'
+import { BuildResult } from '@saulx/aristotle-types'
 import genEnvfile from './genEnvfile'
 
 export default (req: ParsedReq, build: BuildResult): RenderOpts => {

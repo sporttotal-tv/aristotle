@@ -3,7 +3,8 @@ import createBuild from './createBuild'
 import parseBuild from './parseBuild'
 import { join, isAbsolute } from 'path'
 import exitHook from 'exit-hook'
-import { BuildOpts, BuildResult, WatchCb } from './'
+import { BuildOpts, WatchCb } from './'
+import { BuildResult } from '@saulx/aristotle-types'
 
 const bundleStore = new Map()
 const bundleCache = new Map()

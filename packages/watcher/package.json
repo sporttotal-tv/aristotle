@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "@saulx/aristotle-build": "^1.0.1",
+    "@saulx/aristotle-types": "^1.0.0",
+    "@saulx/aristotle-server-utils": "^1.0.0",
     "@saulx/utils": "1.5.1",
     "chalk": "^4.0.0",
     "eval": "^0.1.4",
@@ -11,8 +13,7 @@
     "murmurhash-native": "^3.5.0",
     "ws": "^7.4.2",
     "escape-html": "^1.0.3",
-    "source-map": "^0.7.3",
-    "@saulx/aristotle-server-utils": "^1.0.0"
+    "source-map": "^0.7.3"
   },
   "scripts": {
     "watch": "tsc --watch",

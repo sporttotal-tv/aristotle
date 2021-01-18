@@ -1,5 +1,5 @@
 import WebSocket from 'ws'
-import { File } from '@saulx/aristotle-build'
+import { File } from '@saulx/aristotle-types'
 import { hash } from '@saulx/utils'
 
 const genBrowser = (
