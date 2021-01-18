@@ -125,13 +125,6 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     const file = browserBuild.files[key]
     const name = key.slice(1)
     const path = join(dest, 'files', file.gzip ? name + '.gz' : name)
-
-    const x = await unzip(file.contents)
-
-    if (file.mime === 'text/css') {
-      console.log('??', x.toString('utf8'))
-    }
-
     q.push(writeFile(path, file.contents))
   }
 
