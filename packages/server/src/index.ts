@@ -2,13 +2,13 @@ import { BuildResult } from '@saulx/aristotle-build'
 import {
   RenderFunction,
   CacheFunction,
-  BuildJson,
   defaultRenderer,
   defaultCache
 } from '@saulx/aristotle-server-utils'
 import getSsl from '@saulx/ops-get-ssl'
 import https from 'https'
 import http from 'http'
+import createBuildResult from './createBuildResult'
 
 console.log('this is a server!')
 
@@ -16,7 +16,7 @@ type ServerOpts = {
   port: number
   renderer?: RenderFunction
   cacheFunction?: CacheFunction
-  buildJson?: BuildJson
+  buildJson?: string
   buildResult?: BuildResult
 }
 
@@ -33,6 +33,7 @@ const createServer = async ({
   const ssl = getSsl()
 
   if (!buildResult && buildJson) {
+    buildResult = await createBuildResult(buildJson)
   }
 
   if (!renderer) {

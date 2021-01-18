@@ -5,7 +5,8 @@
   "version": "1.0.1",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "test": "node ./test/index.js"
   },
   "repository": "https://github.com/atelier-saulx/aristotle",
   "devDependencies": {

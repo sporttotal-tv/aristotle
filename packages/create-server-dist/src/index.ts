@@ -1,10 +1,11 @@
 import { emptyDir, writeFile, writeJson } from 'fs-extra'
-import { join, relative } from 'path'
+import { join, relative, basename } from 'path'
 import build from '@saulx/aristotle-build'
 import {
   hasServer,
   isPublicFile,
-  BuildJson
+  BuildJson,
+  BuildJsonFile
 } from '@saulx/aristotle-server-utils'
 import getPkg from '@saulx/get-package'
 import gzip from 'zlib'
@@ -123,12 +124,25 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
 
   const buildPath = join(dest, 'build.json')
 
+  const files: { [key: string]: BuildJsonFile } = {}
+
+  for (const key in browserBuild.files) {
+    const file = browserBuild.files[key]
+    files[key] = {
+      gzip: file.gzip,
+      url: file.url,
+      checksum: file.checksum,
+      path: basename(file.path),
+      mime: file.mime,
+      contents: file.gzip ? join('./files', key + '.gz') : join('./files', key)
+    }
+  }
+
   const buildJson: BuildJson = {
     js: browserBuild.js.map(v => v.url),
     css: browserBuild.css.map(v => v.url),
-    files: Object.keys(browserBuild.files).map(key => './files/' + key + '.gz'),
+    files,
     env: browserBuild.env,
-    // bit weird to add these entrypoints
     entryPoints: browserBuild.entryPoints.map(v => relative(process.cwd(), v))
   }
 

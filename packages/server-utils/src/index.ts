@@ -7,10 +7,19 @@ import hasServer from './hasServer'
 import serve from './serve'
 import isPublicFile from './isPublicFile'
 
+export type BuildJsonFile = {
+  contents: string
+  gzip: boolean
+  url: string
+  checksum: string
+  mime: string
+  path: string
+}
+
 export type BuildJson = {
   js: string[]
   css: string[]
-  files: string[]
+  files: { [key: string]: BuildJsonFile }
   env: string[]
   entryPoints: string[]
 }
