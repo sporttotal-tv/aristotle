@@ -1,6 +1,6 @@
 {
   "name": "@saulx/aristotle",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "dependencies": {
     "commander": "^7.0.0",
     "chalk": "^4.1.0",
@@ -11,7 +11,7 @@
     "expand-home-dir": "^0.0.3"
   },
   "bin": {
-    "ops": "bin/cmd.js"
+    "aristotle": "bin/cmd.js"
   },
   "scripts": {
     "build": "rm -rf ./dist && tsc",
