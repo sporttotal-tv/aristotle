@@ -1,10 +1,27 @@
 import { RenderResult, ServeResult } from './types'
 import { hash } from '@saulx/utils'
 import { File } from '@saulx/aristotle-build'
+import util from 'util'
+import zlib from 'zlib'
 
-export const genServeFromRender = (
-  renderResult: string | RenderResult
-): ServeResult => {
+const gzip = util.promisify(zlib.gzip)
+
+const minify = str => {
+  if (typeof str === 'string' && str.indexOf('<html') !== -1) {
+    str = str.replace(/\n/g, '')
+    str = str.replace(/[\t ]+</g, '<')
+    str = str.replace(/>[\t ]+</g, '><')
+    str = str.replace(/>[\t ]+$/g, '>')
+    str = str.replace(/\s{1, 30}+/g, ' ')
+    str = str.replace(/\t{1, 30}+/g, ' ')
+  }
+  return str
+}
+
+export const genServeFromRender = async (
+  renderResult: string | RenderResult,
+  compress: boolean = false
+): Promise<ServeResult> => {
   let contents: Buffer
 
   if (typeof renderResult === 'string') {
@@ -18,29 +35,40 @@ export const genServeFromRender = (
   }
 
   if (typeof renderResult === 'object') {
+    const isGzip = renderResult.gzip
+
+    let realContents: Buffer
+    if (compress && !isGzip) {
+      realContents = await gzip(contents)
+    } else {
+      realContents = contents
+    }
+
     const serveResult: ServeResult = {
       cache: 300,
       memCache: renderResult.memCache || 60,
       checksum: renderResult.checksum || hash(contents).toString(16),
-      contents,
-      contentLength:
-        renderResult.contentLength === undefined
-          ? contents.byteLength
-          : renderResult.contentLength,
-      gzip: renderResult.gzip || false,
+      contents: realContents,
+      contentLength: realContents.byteLength,
+      gzip: renderResult.gzip || compress,
       mime: renderResult.mime || 'text/html',
       statusCode: renderResult.statusCode || 200
     }
     return serveResult
   } else {
     const checksum = hash(contents).toString(16)
+
+    if (compress) {
+      contents = await gzip(contents)
+    }
+
     const serveResult: ServeResult = {
       cache: 300,
       memCache: 60,
       checksum,
       contents,
       contentLength: contents.byteLength,
-      gzip: false,
+      gzip: compress,
       mime: 'text/html',
       statusCode: 200
     }

@@ -221,7 +221,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       let bErrors = serverBuildErrors || buildErrors
       if (bErrors) {
         genRenderOpts(parsedReq, buildresult)
-        result = genServeFromRender(await genErrorPage(...bErrors))
+        result = await genServeFromRender(await genErrorPage(...bErrors))
       } else if (renderer || rendererError) {
         let error: AristotleError
         if (!rendererError) {
@@ -239,7 +239,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
             }
             const renderResult = await renderer.render(parsedReq)
             if (renderResult !== null) {
-              result = genServeFromRender(renderResult)
+              result = await genServeFromRender(renderResult)
             }
           } catch (err) {
             error = {
@@ -254,13 +254,13 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
         }
         if (error) {
           genRenderOpts(parsedReq, buildresult)
-          result = genServeFromRender(await genErrorPage(error))
+          result = await genServeFromRender(await genErrorPage(error))
         }
       } else {
         const renderRes = await defaultRenderer(
           genRenderOpts(parsedReq, buildresult)
         )
-        result = genServeFromRender(renderRes)
+        result = await genServeFromRender(renderRes)
       }
       if (result) {
         result.contents = Buffer.concat([result.contents, browser.contents])

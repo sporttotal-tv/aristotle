@@ -3,7 +3,13 @@ import {
   RenderFunction,
   CacheFunction,
   defaultRenderer,
-  defaultCache
+  defaultCache,
+  parseReq,
+  ServeResult,
+  serve,
+  genRenderOpts,
+  genServeFromFile,
+  genServeFromRender
 } from '@saulx/aristotle-server-utils'
 import getSsl from '@saulx/ops-get-ssl'
 import https from 'https'
@@ -44,9 +50,37 @@ const createServer = async ({
     cacheFunction = defaultCache
   }
 
-  const handler = (req: http.IncomingMessage, res: http.OutgoingMessage) => {}
+  const handler = async (
+    req: http.IncomingMessage,
+    res: http.OutgoingMessage
+  ) => {
+    const url = req.url
+    const file = buildResult.files[url]
 
-  const server = ssl ? https.createServer(handler) : http.createServer(handler)
+    if (file) {
+      serve(res, genServeFromFile(file))
+    } else {
+      const parsedReq = parseReq(req, false)
+      let result: ServeResult
+
+      const cacheKey = cacheFunction(parsedReq)
+      console.log(cacheKey)
+
+      const renderResult = await renderer(genRenderOpts(parsedReq, buildResult))
+      if (renderResult !== null) {
+        result = await genServeFromRender(renderResult, true)
+      }
+      if (result) {
+        serve(res, result)
+      } else {
+        req.destroy()
+      }
+    }
+  }
+
+  const server = ssl
+    ? https.createServer(ssl, handler)
+    : http.createServer(handler)
 
   server.listen(port)
 }

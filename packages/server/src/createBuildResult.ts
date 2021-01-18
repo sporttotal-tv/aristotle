@@ -2,7 +2,7 @@ import { BuildResult, File } from '@saulx/aristotle-build'
 import { BuildJson, BuildJsonFile } from '@saulx/aristotle-server-utils'
 import fs from 'fs'
 import util from 'util'
-import { join } from 'path'
+import { join, dirname } from 'path'
 
 const readFile = util.promisify(fs.readFile)
 
@@ -16,7 +16,7 @@ export default async (buildJson: string): Promise<BuildResult> => {
 
   const loadFile = async (file: BuildJsonFile) => {
     const { contents, ...rest } = file
-    const buffer: Buffer = await readFile(join(buildJson, contents))
+    const buffer: Buffer = await readFile(join(dirname(buildJson), contents))
     parsedFiles[file.url] = new File({
       ...rest,
       contents: buffer

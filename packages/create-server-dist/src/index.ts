@@ -111,6 +111,10 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
 
   await emptyDir(join(dest, 'files'))
 
+  for (const key in browserBuild.dependencies) {
+    pkg.dependencies[key] = browserBuild.dependencies[key]
+  }
+
   q.push(
     writeJson(join(dest, 'package.json'), pkg, {
       spaces: 2

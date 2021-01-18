@@ -74,4 +74,4 @@ export type ServeResult = {
 
 export type RenderFunction = (renderOpts: RenderOpts) => Promise<RenderResult>
 
-export type CacheFunction = (renderOpts: RenderOpts) => string
+export type CacheFunction = (parsedReq: ParsedReq) => string
