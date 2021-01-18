@@ -6,7 +6,7 @@ import zlib from 'zlib'
 
 const gzip = util.promisify(zlib.gzip)
 
-const minify = str => {
+const minify = (str: string): string => {
   if (typeof str === 'string' && str.indexOf('<html') !== -1) {
     str = str.replace(/\n/g, '')
     str = str.replace(/[\t ]+</g, '<')
@@ -25,25 +25,25 @@ export const genServeFromRender = async (
   let contents: Buffer
 
   if (typeof renderResult === 'string') {
-    contents = Buffer.from(renderResult)
+    if (compress) {
+      contents = Buffer.from(minify(renderResult))
+    } else {
+      contents = Buffer.from(renderResult)
+    }
   } else if (renderResult === undefined) {
     contents = Buffer.from('')
   } else if (typeof renderResult.contents === 'string') {
-    contents = Buffer.from(renderResult.contents)
+    contents = Buffer.from(
+      compress && (!renderResult.mime || renderResult.mime === 'text/html')
+        ? minify(renderResult.contents)
+        : renderResult.contents
+    )
   } else {
     contents = renderResult.contents
   }
 
   if (typeof renderResult === 'object') {
     const isGzip = renderResult.gzip
-
-    if (
-      !renderResult.gzip &&
-      (!renderResult.mime || renderResult.mime === 'text/html')
-    ) {
-      contents = minify(contents)
-    }
-
     let realContents: Buffer
     if (compress && !isGzip) {
       realContents = await gzip(contents)
@@ -65,7 +65,7 @@ export const genServeFromRender = async (
   } else {
     const checksum = hash(contents).toString(16)
     if (compress) {
-      contents = await gzip(minify(contents))
+      contents = await gzip(contents)
     }
     const serveResult: ServeResult = {
       cache: 300,

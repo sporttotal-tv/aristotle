@@ -65,7 +65,7 @@ const createServer = async ({
       let result: ServeResult
 
       const cacheKey = cacheFunction(parsedReq)
-      console.log(cacheKey)
+      // console.log(cacheKey)
       // make mem cache after this
 
       const renderResult = await renderer(genRenderOpts(parsedReq, buildResult))
