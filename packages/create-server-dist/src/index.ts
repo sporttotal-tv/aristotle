@@ -11,7 +11,7 @@ import getPkg from '@saulx/get-package'
 import gzip from 'zlib'
 import util from 'util'
 
-const unzip = util.promisify(gzip.unzip)
+const unzip = util.promisify(gzip.gunzip)
 
 /*
     dist
@@ -125,6 +125,11 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     const file = browserBuild.files[key]
     const name = key.slice(1)
     const path = join(dest, 'files', file.gzip ? name + '.gz' : name)
+
+    const x = await unzip(file.contents)
+
+    console.log('??', x.toString('utf8'))
+
     q.push(writeFile(path, file.contents))
   }
 

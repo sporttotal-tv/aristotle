@@ -1,5 +1,6 @@
 import build from './build'
 import watch from './watch'
+import zlib from 'zlib'
 
 export class File {
   constructor(obj: { [key: string]: any }) {
@@ -15,7 +16,20 @@ export class File {
   public checksum: string
   public mime: string
   public path: string
+  private _uncompressed: string
   public get text(): string {
+    if (this.gzip) {
+      if (!this._uncompressed) {
+        const raw = zlib.gunzipSync(this.contents)
+
+        // console.log('make raw', raw)
+
+        this._uncompressed = raw.toString('utf8')
+      }
+      console.log(this.url, this._uncompressed)
+      return this._uncompressed
+    }
+
     return this.contents.toString()
   }
 }

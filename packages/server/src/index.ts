@@ -14,6 +14,7 @@ import {
 import getSsl from '@saulx/ops-get-ssl'
 import https from 'https'
 import http from 'http'
+import chalk from 'chalk'
 import createBuildResult from './createBuildResult'
 
 console.log('this is a server!')
@@ -25,8 +26,6 @@ type ServerOpts = {
   buildJson?: string
   buildResult?: BuildResult
 }
-
-// then we make it into a render Opts
 
 const createServer = async ({
   port,
@@ -50,6 +49,8 @@ const createServer = async ({
     cacheFunction = defaultCache
   }
 
+  // add time out!
+  // and default error page
   const handler = async (
     req: http.IncomingMessage,
     res: http.OutgoingMessage
@@ -65,10 +66,12 @@ const createServer = async ({
 
       const cacheKey = cacheFunction(parsedReq)
       console.log(cacheKey)
+      // make mem cache after this
 
       const renderResult = await renderer(genRenderOpts(parsedReq, buildResult))
       if (renderResult !== null) {
         result = await genServeFromRender(renderResult, true)
+        // needs to check mem cache
       }
       if (result) {
         serve(res, result)
@@ -83,6 +86,11 @@ const createServer = async ({
     : http.createServer(handler)
 
   server.listen(port)
+
+  console.info(
+    chalk.blue(`Start ${ssl ? 'ssl' : 'non ssl'} server on port`),
+    port
+  )
 }
 
 export default createServer

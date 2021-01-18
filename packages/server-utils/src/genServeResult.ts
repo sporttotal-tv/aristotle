@@ -37,6 +37,13 @@ export const genServeFromRender = async (
   if (typeof renderResult === 'object') {
     const isGzip = renderResult.gzip
 
+    if (
+      !renderResult.gzip &&
+      (!renderResult.mime || renderResult.mime === 'text/html')
+    ) {
+      contents = minify(contents)
+    }
+
     let realContents: Buffer
     if (compress && !isGzip) {
       realContents = await gzip(contents)
@@ -57,11 +64,9 @@ export const genServeFromRender = async (
     return serveResult
   } else {
     const checksum = hash(contents).toString(16)
-
     if (compress) {
-      contents = await gzip(contents)
+      contents = await gzip(minify(contents))
     }
-
     const serveResult: ServeResult = {
       cache: 300,
       memCache: 60,
