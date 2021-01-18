@@ -2363,6 +2363,11 @@ exit-hook@^2.2.0:
   resolved "https://registry.yarnpkg.com/exit-hook/-/exit-hook-2.2.0.tgz#f5502f92179018e867f2d8ee4428392da7f3894e"
   integrity sha512-YFH+2oGdldRH5GqGpnaiKbBxWHMmuXHmKTMtUC58kWSOrnTf95rKITVSFTTtas14DWvWpih429+ffAvFetPwNA==
 
+expand-home-dir@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/expand-home-dir/-/expand-home-dir-0.0.3.tgz#72de8a0486cc28a3bbd704635398825b5b62827d"
+  integrity sha1-ct6KBIbMKKO71wRjU5iCW1tign0=
+
 ext-list@^2.0.0:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/ext-list/-/ext-list-2.2.2.tgz#0b98e64ed82f5acf0f2931babf69212ef52ddd37"

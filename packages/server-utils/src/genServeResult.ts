@@ -68,7 +68,7 @@ export const genServeFromRender = async (
       contents = await gzip(contents)
     }
     const serveResult: ServeResult = {
-      cache: 'max-age=604800',
+      cache: 'max-age=300',
       memCache: 60,
       checksum,
       contents,

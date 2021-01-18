@@ -6,7 +6,9 @@
     "chalk": "^4.1.0",
     "@saulx/aristotle-build": "^1.0.1",
     "@saulx/aristotle-watcher": "^1.0.0",
-    "@saulx/aristotle-create-server-dist": "^1.0.0"
+    "@saulx/aristotle-create-server-dist": "^1.0.0",
+    "@saulx/get-package": "^1.0.7",
+    "expand-home-dir": "^0.0.3"
   },
   "bin": {
     "ops": "bin/cmd.js"
