@@ -21,12 +21,8 @@ export class File {
     if (this.gzip) {
       if (!this._uncompressed) {
         const raw = zlib.gunzipSync(this.contents)
-
-        // console.log('make raw', raw)
-
         this._uncompressed = raw.toString('utf8')
       }
-      console.log(this.url, this._uncompressed)
       return this._uncompressed
     }
 
