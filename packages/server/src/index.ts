@@ -49,34 +49,64 @@ const createServer = async ({
     cacheFunction = defaultCache
   }
 
-  // add time out!
-  // and default error page
+  let ts: number = Date.now()
+  const cache: {
+    [key: string]: { result: ServeResult; ts: number; refs: Set<string> }
+  } = {}
+  const cachedPaths: { [key: string]: string } = {}
+
+  setInterval(() => {
+    ts = Date.now()
+    for (let key in cache) {
+      if (cache[key].ts + cache[key].result.memCache * 1e3 > ts) {
+        cache[key].refs.forEach(v => {
+          delete cachedPaths[v]
+        })
+        delete cache[key]
+      }
+    }
+  }, 1e3)
+
   const handler = async (
     req: http.IncomingMessage,
     res: http.OutgoingMessage
   ) => {
     const url = req.url
     const file = buildResult.files[url]
-
     if (file) {
-      serve(res, genServeFromFile(file))
+      serve(req, res, genServeFromFile(file))
     } else {
       const parsedReq = parseReq(req, false)
       let result: ServeResult
-
       const cacheKey = cacheFunction(parsedReq)
-      // console.log(cacheKey)
-      // make mem cache after this
-
-      const renderResult = await renderer(genRenderOpts(parsedReq, buildResult))
-      if (renderResult !== null) {
-        result = await genServeFromRender(renderResult, true)
-        // needs to check mem cache
-      }
-      if (result) {
-        serve(res, result)
+      const checksum = cacheKey && cachedPaths[cacheKey]
+      const cachedResult = checksum && cache[checksum]
+      if (cachedResult) {
+        console.log('from cache result', cacheKey)
+        serve(req, res, cachedResult.result)
       } else {
-        req.destroy()
+        const renderResult = await renderer(
+          genRenderOpts(parsedReq, buildResult)
+        )
+        if (renderResult !== null) {
+          result = await genServeFromRender(renderResult, true)
+        }
+        if (result) {
+          if (result.memCache) {
+            if (!cache[result.checksum]) {
+              cache[result.checksum] = {
+                ts,
+                result: result,
+                refs: new Set()
+              }
+            }
+            cachedPaths[cacheKey] = result.checksum
+            cache[result.checksum].refs.add(cacheKey)
+          }
+          serve(req, res, result)
+        } else {
+          req.destroy()
+        }
       }
     }
   }

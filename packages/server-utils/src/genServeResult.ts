@@ -52,7 +52,7 @@ export const genServeFromRender = async (
     }
 
     const serveResult: ServeResult = {
-      cache: 300,
+      cache: 'max-age=604800',
       memCache: renderResult.memCache || 60,
       checksum: renderResult.checksum || hash(contents).toString(16),
       contents: realContents,
@@ -68,7 +68,7 @@ export const genServeFromRender = async (
       contents = await gzip(contents)
     }
     const serveResult: ServeResult = {
-      cache: 300,
+      cache: 'max-age=604800',
       memCache: 60,
       checksum,
       contents,
@@ -83,7 +83,7 @@ export const genServeFromRender = async (
 
 export const genServeFromFile = (file: File): ServeResult => {
   const serveResult: ServeResult = {
-    cache: 'immutable',
+    cache: 'public, max-age=604800, immutable',
     memCache: 0, // does not need it
     checksum: file.checksum,
     contents: file.contents,

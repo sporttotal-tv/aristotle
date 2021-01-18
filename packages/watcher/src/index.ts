@@ -214,7 +214,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
     const file = buildresult.files[url]
 
     if (file) {
-      serve(res, genServeFromFile(file))
+      serve(req, res, genServeFromFile(file))
     } else {
       const parsedReq = parseReq(req, false)
       let result: ServeResult
@@ -265,7 +265,7 @@ export default async ({ target, port = 3001, reloadPort = 6634 }: Opts) => {
       if (result) {
         result.contents = Buffer.concat([result.contents, browser.contents])
         result.contentLength = result.contents.byteLength
-        serve(res, result)
+        serve(req, res, result)
       } else {
         req.destroy()
       }
