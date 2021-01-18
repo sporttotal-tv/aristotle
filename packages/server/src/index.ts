@@ -58,7 +58,7 @@ const createServer = async ({
   setInterval(() => {
     ts = Date.now()
     for (let key in cache) {
-      if (cache[key].ts + cache[key].result.memCache * 1e3 > ts) {
+      if (cache[key].ts + cache[key].result.memCache * 1e3 < ts) {
         cache[key].refs.forEach(v => {
           delete cachedPaths[v]
         })

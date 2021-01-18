@@ -11,7 +11,7 @@ let cnt = 0
 
 setInterval(() => {
   cnt++
-}, 1e3)
+}, 10e3)
 
 const render = async opts => {
   if (opts.url.pathname === '/no') {
@@ -32,7 +32,7 @@ const render = async opts => {
       <img src="${img2}" />
     </body>
   </html>`,
-    memcache: 1
+    memCache: 10
   }
 }
 
