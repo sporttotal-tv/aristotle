@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "dependencies": {
     "commander": "^7.0.0",
+    "chalk": "^4.1.0",
     "@saulx/aristotle-build": "^1.0.1",
     "@saulx/aristotle-watcher": "^1.0.0",
     "@saulx/aristotle-create-server-dist": "^1.0.0"
