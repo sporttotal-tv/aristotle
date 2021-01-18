@@ -73,6 +73,10 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
       }
     }
 
+    for (const key in serverBuild.dependencies) {
+      browserBuild.dependencies[key] = serverBuild.dependencies[key]
+    }
+
     q.push(
       writeFile(
         join(path, 'server.js'),
@@ -142,6 +146,7 @@ export default async ({ target, dest }: { target: string; dest: string }) => {
     js: browserBuild.js.map(v => v.url),
     css: browserBuild.css.map(v => v.url),
     files,
+    dependencies: browserBuild.dependencies,
     env: browserBuild.env,
     entryPoints: browserBuild.entryPoints.map(v => relative(process.cwd(), v))
   }

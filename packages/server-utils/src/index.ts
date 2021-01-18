@@ -22,6 +22,7 @@ export type BuildJson = {
   files: { [key: string]: BuildJsonFile }
   env: string[]
   entryPoints: string[]
+  dependencies: { [key: string]: string }
 }
 
 export {
