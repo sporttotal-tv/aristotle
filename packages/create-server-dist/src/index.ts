@@ -58,7 +58,7 @@ export default async ({
       start: 'node ./server/index.js'
     },
     dependencies: {
-      '@saulx/aristotle-server': '^1.0.0'
+      '@saulx/aristotle-server': '^1.0.1'
     }
   }
 
