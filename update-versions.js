@@ -52,7 +52,7 @@ readdir(PACKAGES).then(async files => {
                 p.bumpedVersion = true
               }
               pkg.dependencies[depName] = newVersion
-
+              updated[pkg.name] = pkg
               done = false
             }
           }
