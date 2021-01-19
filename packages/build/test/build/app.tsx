@@ -33,5 +33,4 @@ const One = () => {
   )
 }
 
-console.log(One)
-console.log(process.env.FOO)
+console.log(One, process.env.FOO, redis)

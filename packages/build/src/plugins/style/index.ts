@@ -1,7 +1,9 @@
-import { Parser } from 'acorn'
-import jsx from 'acorn-jsx'
+// import { Parser } from 'acorn'
+// import jsx from 'acorn-jsx'
+// import { createSourceFile, ScriptTarget } from 'typescript'
+import { parse } from '@babel/parser'
 
-const jsxParser = Parser.extend(jsx())
+// const jsxParser = Parser.extend(jsx())
 
 const replaceCharAtIndex = (store, i, str) => {
   store.text = `${store.text.substring(0, i)}${str}${store.text.substring(
@@ -40,10 +42,17 @@ const addClassName = (node, className) => {
 }
 
 const parseStyle = (text, meta) => {
-  const ast = jsxParser.parse(text, {
-    sourceType: 'module',
-    ecmaVersion: 2020
-  })
+  // const ast = jsxParser.parse(text, {
+  //   sourceType: 'module',
+  //   ecmaVersion: 2020
+  // })
+
+  // const ast = createSourceFile('x.ts', text, ScriptTarget.Latest)
+
+  const ast = parse(text, {
+    sourceType: 'unambiguous',
+    plugins: ['jsx', 'typescript']
+  }).program
 
   const walk = (
     node,
@@ -53,7 +62,6 @@ const parseStyle = (text, meta) => {
     parentNode = null,
     nodeWithStyleArg = null
   ) => {
-    // check if i have jsx and if style is being passed to something jsx
     if (node.type === 'ArrowFunctionExpression') {
       if (node.params[0] && node.params[0].type === 'ObjectPattern') {
         const props = node.params[0]
@@ -70,23 +78,22 @@ const parseStyle = (text, meta) => {
 
         if (styleStart) {
           nodeWithStyleArg = node
-          // node.classNameCandidate = true
-          // how to check efficiently in this node?
-          // name classname a little bit funky as well e.g. parsedStylesClassName: ClassName (against colish)
-          // so we want to add classname as prop here
           insertAtIndex(store, styleStart + store.offset, 'className, ')
         }
       }
     }
 
     if (nodeWithStyleProp) {
-      if (node.type === 'Property') {
+      if (node.type === 'ObjectProperty') {
         const start = node.start + store.offset
         const end = node.end + store.offset
         if (node.value.type === 'ObjectExpression') {
           commentFromTo(store, start, end)
           parentStyleKey = node.key.name || node.key.value
-        } else if (node.value.type === 'Literal') {
+        } else if (
+          node.value.type === 'StringLiteral' ||
+          node.value.type === 'NumericLiteral'
+        ) {
           if (!parentStyleKey) {
             commentFromTo(store, start, end)
           }
@@ -112,23 +119,13 @@ const parseStyle = (text, meta) => {
           }
           addClassName(nodeWithStyleProp, target[key][val])
         }
-      } else if (node.type === 'Identifier') {
-        if (node.name === 'style') {
-          // eslint-disable-next-line
-          addClassName(nodeWithStyleProp, '${className}')
-          nodeWithStyleProp._classNameTemplate = true
-        }
-      } else if (node.type === 'SpreadElement') {
-        if (node.argument.name === 'style') {
-          // eslint-disable-next-line
-          addClassName(nodeWithStyleProp, '${className}')
-          commentFromTo(
-            store,
-            node.start + store.offset,
-            node.end + store.offset
-          )
-          nodeWithStyleProp._classNameTemplate = true
-        }
+      } else if (
+        (node.type === 'Identifier' && node.name === 'style') ||
+        (node.type === 'SpreadElement' && node.argument.name === 'style')
+      ) {
+        // eslint-disable-next-line
+        addClassName(nodeWithStyleProp, '${className}')
+        nodeWithStyleProp._classNameTemplate = true
       }
     } else if (node.type === 'JSXAttribute') {
       if (node.name.name === 'style') {
@@ -206,6 +203,7 @@ const parseStyle = (text, meta) => {
 
   const store = { offset: 0, text }
   walk(ast, store)
+
   return store.text
 }
 

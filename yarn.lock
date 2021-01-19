@@ -380,14 +380,7 @@
   version "1.0.0"
   resolved "https://github.com/atelier-saulx/prettier-config#bfbde3d591b3d9c26f68ffa063e7cb2a4bc5f6de"
 
-"@saulx/utils@1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@saulx/utils/-/utils-1.5.1.tgz#f63efbfb47a1cb3412e47e29c239c85f79af0f5d"
-  integrity sha512-rvWzt+4VH4hutk1m7zE6CjcdBNNLuBP+MkICH7Kx/DxfFW+BNRrAWgLWldPshz2t6cCYOM0eVtlbPiEkP+bxQA==
-  dependencies:
-    is-plain-obj "^3.0.0"
-
-"@saulx/utils@^1.6.1":
+"@saulx/utils@^1.6.1", "@saulx/utils@^1.6.6":
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/@saulx/utils/-/utils-1.6.6.tgz#4be3cab609a4ad70b043a8487056812964327cac"
   integrity sha512-JNH7jM2HmG/JsCO+QnYb998iyoQ50Xf/eIp2STLKC/kbLzM/Yu+ONsbPBcElxeVkFmk1c3ZFLkJ3A/neOeEhgA==
@@ -1139,6 +1132,21 @@ chokidar@^3.0.2:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.0.tgz#458a4816a415e9d3b3caa4faec2b96a6935a9e65"
   integrity sha512-JgQM9JS92ZbFR4P90EvmzNpSGhpPBGBSj10PILeDyYFwp4h2/D9OM03wsJ4zW1fEp4ka2DGrnUeD7FuvQ2aZ2Q==
+  dependencies:
+    anymatch "~3.1.1"
+    braces "~3.0.2"
+    glob-parent "~5.1.0"
+    is-binary-path "~2.1.0"
+    is-glob "~4.0.1"
+    normalize-path "~3.0.0"
+    readdirp "~3.5.0"
+  optionalDependencies:
+    fsevents "~2.3.1"
+
+chokidar@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.1.tgz#ee9ce7bbebd2b79f49f304799d5468e31e14e68a"
+  integrity sha512-9+s+Od+W0VJJzawDma/gvBNQqkTiqYTWLuZoyAsivsI4AaWTCzHG06/TMjsf1cYe9Cb97UCEhjz7HvnPk2p/tw==
   dependencies:
     anymatch "~3.1.1"
     braces "~3.0.2"

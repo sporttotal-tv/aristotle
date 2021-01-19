@@ -24,8 +24,9 @@ export default (opts, meta) => {
             try {
               const text = await fs.promises.readFile(path, 'utf8')
               const contents = parseStyle(text, meta)
-              meta.fileCache[path] = { contents, loader: 'jsx' }
+              meta.fileCache[path] = { contents, loader: 'tsx' }
             } catch (e) {
+              console.error('error parsing style', e)
               return
             }
           }
