@@ -2,7 +2,7 @@
   "name": "@saulx/aristotle-build",
   "main": "./dist/index.js",
   "public": true,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch",

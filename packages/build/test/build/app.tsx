@@ -1,5 +1,5 @@
 import redis from 'redis'
-import React, { CSSProperties } from 'react'
+import React from 'react'
 import './style.css'
 
 console.log(process.env.SMURK)
@@ -22,21 +22,15 @@ const Two = ({ style }) => {
   return <Three style={style} />
 }
 
-// const One = () => {
-//   return (
-//     <Two
-//       style={{
-//         border: '1px solid red',
-//         fontSize: Math.random() * 10
-//       }}
-//     />
-//   )
-// }
-
-const One = ({ style }: { style?: CSSProperties }) => {
-  return <div style={{ ...style, background: 'red' }}>gurky</div>
+const One = () => {
+  return (
+    <Two
+      style={{
+        border: '1px solid red',
+        fontSize: Math.random() * 10
+      }}
+    />
+  )
 }
 
-console.log(One)
-console.log(process.env.FOO)
-console.log(redis)
+console.log(One, process.env.FOO, redis)

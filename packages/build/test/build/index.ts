@@ -12,7 +12,7 @@ test.serial.only('build', async t => {
   console.log(txt.substring(txt.indexOf('SMURK')))
 
   t.truthy(dependencies.redis)
-  t.is(Object.keys(files).length, 4)
+  t.is(Object.keys(files).length, 5)
 })
 
 test.serial('build error handling', async t => {

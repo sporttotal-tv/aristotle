@@ -62,8 +62,6 @@ const parseStyle = (text, meta) => {
     parentNode = null,
     nodeWithStyleArg = null
   ) => {
-    // console.log('????????????', NodeObject)
-    // check if i have jsx and if style is being passed to something jsx
     if (node.type === 'ArrowFunctionExpression') {
       if (node.params[0] && node.params[0].type === 'ObjectPattern') {
         const props = node.params[0]
@@ -80,10 +78,6 @@ const parseStyle = (text, meta) => {
 
         if (styleStart) {
           nodeWithStyleArg = node
-          // node.classNameCandidate = true
-          // how to check efficiently in this node?
-          // name classname a little bit funky as well e.g. parsedStylesClassName: ClassName (against colish)
-          // so we want to add classname as prop here
           insertAtIndex(store, styleStart + store.offset, 'className, ')
         }
       }
@@ -125,23 +119,13 @@ const parseStyle = (text, meta) => {
           }
           addClassName(nodeWithStyleProp, target[key][val])
         }
-      } else if (node.type === 'Identifier') {
-        if (node.name === 'style') {
-          // eslint-disable-next-line
-          addClassName(nodeWithStyleProp, '${className}')
-          nodeWithStyleProp._classNameTemplate = true
-        }
-      } else if (node.type === 'SpreadElement') {
-        if (node.argument.name === 'style') {
-          // eslint-disable-next-line
-          addClassName(nodeWithStyleProp, '${className}')
-          commentFromTo(
-            store,
-            node.start + store.offset,
-            node.end + store.offset
-          )
-          nodeWithStyleProp._classNameTemplate = true
-        }
+      } else if (
+        (node.type === 'Identifier' && node.name === 'style') ||
+        (node.type === 'SpreadElement' && node.argument.name === 'style')
+      ) {
+        // eslint-disable-next-line
+        addClassName(nodeWithStyleProp, '${className}')
+        nodeWithStyleProp._classNameTemplate = true
       }
     } else if (node.type === 'JSXAttribute') {
       if (node.name.name === 'style') {
