@@ -26,6 +26,8 @@ const watch = async (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
     // reset paths
     const prevPaths = store.meta.paths
     const newPaths = (store.meta.paths = new Set())
+    // reset errors
+    store.meta.errors = []
     // rebuild it
     const result = await store.result.rebuild().catch(e => e)
     res = await parseBuild(opts, result, store.meta)

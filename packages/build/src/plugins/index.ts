@@ -27,6 +27,7 @@ export default (opts, meta) => {
               meta.fileCache[path] = { contents, loader: 'tsx' }
             } catch (e) {
               console.error('error parsing style', e)
+              meta.errors.push(e)
               return
             }
           }

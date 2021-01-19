@@ -22,12 +22,17 @@ const Two = ({ style }) => {
   return <Three style={style} />
 }
 
+const x = v => v
+
 const One = () => {
   return (
     <Two
       style={{
         border: '1px solid red',
-        fontSize: Math.random() * 10
+        fontSize: Math.random() * 10,
+        backgroundColor: x({
+          alpha: 1
+        })
       }}
     />
   )

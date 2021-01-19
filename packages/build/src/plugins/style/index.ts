@@ -1,9 +1,4 @@
-// import { Parser } from 'acorn'
-// import jsx from 'acorn-jsx'
-// import { createSourceFile, ScriptTarget } from 'typescript'
 import { parse } from '@babel/parser'
-
-// const jsxParser = Parser.extend(jsx())
 
 const replaceCharAtIndex = (store, i, str) => {
   store.text = `${store.text.substring(0, i)}${str}${store.text.substring(
@@ -42,13 +37,6 @@ const addClassName = (node, className) => {
 }
 
 const parseStyle = (text, meta) => {
-  // const ast = jsxParser.parse(text, {
-  //   sourceType: 'module',
-  //   ecmaVersion: 2020
-  // })
-
-  // const ast = createSourceFile('x.ts', text, ScriptTarget.Latest)
-
   const ast = parse(text, {
     sourceType: 'unambiguous',
     plugins: ['jsx', 'typescript']
@@ -118,6 +106,8 @@ const parseStyle = (text, meta) => {
             meta.cssCache = null
           }
           addClassName(nodeWithStyleProp, target[key][val])
+        } else {
+          return
         }
       } else if (
         (node.type === 'Identifier' && node.name === 'style') ||

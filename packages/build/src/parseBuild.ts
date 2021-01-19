@@ -126,7 +126,7 @@ const parseBuild = async (
   meta
 ): Promise<BuildResult> => {
   const parsed = {
-    errors: result.errors || [],
+    errors: result.errors || meta.errors || [],
     css: [],
     js: [],
     files: {},

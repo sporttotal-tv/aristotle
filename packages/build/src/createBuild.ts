@@ -6,7 +6,13 @@ const createBuild = async (
   { gzip, production, cssReset, ...opts }: BuildOpts,
   watch
 ) => {
-  const meta = { css: {}, fileCache: {}, paths: new Set(), dependencies: {} }
+  const meta = {
+    css: {},
+    fileCache: {},
+    paths: new Set(),
+    dependencies: {},
+    errors: []
+  }
   // @ts-ignore
   const result = await esbuild({
     bundle: true,
