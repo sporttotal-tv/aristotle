@@ -232,14 +232,14 @@ export default async ({
           try {
             const cacheKey = await renderer.checkCache(parsedReq)
             if (cacheKey !== 'default') {
-              console.log(
-                chalk.grey(
-                  'Using custom mem cache key',
-                  chalk.blue(cacheKey),
-                  'for',
-                  parsedReq.url.href
-                )
-              )
+              // console.log(
+              //   chalk.grey(
+              //     'Using custom mem cache key',
+              //     chalk.blue(cacheKey),
+              //     'for',
+              //     parsedReq.url.href
+              //   )
+              // )
             }
             const renderResult = await renderer.render(parsedReq)
             if (renderResult !== null) {
