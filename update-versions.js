@@ -16,13 +16,13 @@ readdir(PACKAGES).then(async files => {
 
       const pkg = JSON.parse(pkgText)
       const { stdout } = await execAsync('npm v --json', { cwd: pkgDir })
-      const npm = JSON.parse(stdout)
+      const npmVersion = JSON.parse(stdout).version
 
-      if (npm.version !== pkg.version) {
+      if (npmVersion !== pkg.version) {
         updated[pkg.name] = pkg
       }
 
-      return { pkg, pkgPath }
+      return { pkg, pkgPath, npmVersion }
     })
   )
 
@@ -30,7 +30,7 @@ readdir(PACKAGES).then(async files => {
   while (!done) {
     done = true
     for (const p of pkgs) {
-      const { pkg, pkgPath, bumpedVersion } = p
+      const { pkg, pkgPath, bumpedVersion, npmVersion } = p
       if (pkg.dependencies) {
         for (const depName in pkg.dependencies) {
           if (depName in updated) {
@@ -40,13 +40,15 @@ readdir(PACKAGES).then(async files => {
               console.info(`Updating: ${pkgPath}:`)
               console.info(`- ${depName} from ${depVersion} to ${newVersion}`)
               if (!bumpedVersion) {
-                const split = pkg.version.split('.')
-                split[split.length - 1] = Number(split[split.length - 1]) + 1
-                const bumpedVersion = split.join('.')
-                console.info(
-                  `- version from ${pkg.version} to ${bumpedVersion}`
-                )
-                pkg.version = bumpedVersion
+                if (pkg.version === npmVersion) {
+                  const split = pkg.version.split('.')
+                  split[split.length - 1] = Number(split[split.length - 1]) + 1
+                  const bumpedVersion = split.join('.')
+                  console.info(
+                    `- version from ${pkg.version} to ${bumpedVersion}`
+                  )
+                  pkg.version = bumpedVersion
+                }
                 p.bumpedVersion = true
               }
               pkg.dependencies[depName] = newVersion
