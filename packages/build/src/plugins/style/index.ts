@@ -78,7 +78,7 @@ const parseStyle = (text, meta) => {
 
         if (styleStart) {
           nodeWithStyleArg = node
-          insertAtIndex(store, styleStart + store.offset, 'className, ')
+          insertAtIndex(store, styleStart + store.offset, "className = '', ")
         }
       }
     }
