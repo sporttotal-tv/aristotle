@@ -1,10 +1,10 @@
 {
   "name": "@saulx/aristotle",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "dependencies": {
     "commander": "^7.0.0",
     "chalk": "^4.1.0",
-    "@saulx/aristotle-build": "^1.0.3",
+    "@saulx/aristotle-build": "^1.0.4",
     "@saulx/aristotle-watcher": "^1.0.2",
     "@saulx/aristotle-create-server-dist": "^1.0.4",
     "@saulx/get-package": "^1.0.7",

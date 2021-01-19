@@ -49,7 +49,7 @@ readdir(PACKAGES).then(async files => {
                     `- version from ${pkg.version} to ${bumpedVersion}`
                   )
                   pkg.version = bumpedVersion
-                  p.bumped.version = true
+                  p.bumpedVersion = true
                 }
 
                 pkg.dependencies[depName] = newVersion
