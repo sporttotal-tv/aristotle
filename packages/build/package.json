@@ -24,15 +24,13 @@
   },
   "repository": "https://github.com/atelier-saulx/aristotle",
   "dependencies": {
-    "@saulx/get-package": "^1.0.7",
+    "@babel/parser": "^7.12.11",
     "@saulx/aristotle-types": "^1.0.0",
+    "@saulx/get-package": "^1.0.7",
     "@saulx/utils": "^1.6.1",
-    "acorn": "^8.0.4",
-    "acorn-jsx": "^5.3.1",
-    "acorn-walk": "^8.0.0",
     "autoprefixer": "^10.1.0",
-    "cssnano": "^4.1.10",
     "chokidar": "^3.5.1",
+    "cssnano": "^4.1.10",
     "esbuild": "^0.8.22",
     "exit-hook": "^2.2.0",
     "imagemin": "^7.0.1",
@@ -49,7 +47,6 @@
     "ava": "2.4.0",
     "react": "^17.0.1",
     "redis": "*",
-    "ts-node": "^8.5.4",
-    "typescript": "^3.7.3"
+    "ts-node": "^8.5.4"
   }
 }

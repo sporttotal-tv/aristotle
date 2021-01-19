@@ -1,7 +1,9 @@
-import { Parser } from 'acorn'
-import jsx from 'acorn-jsx'
+// import { Parser } from 'acorn'
+// import jsx from 'acorn-jsx'
+// import { createSourceFile, ScriptTarget } from 'typescript'
+import { parse } from '@babel/parser'
 
-const jsxParser = Parser.extend(jsx())
+// const jsxParser = Parser.extend(jsx())
 
 const replaceCharAtIndex = (store, i, str) => {
   store.text = `${store.text.substring(0, i)}${str}${store.text.substring(
@@ -40,10 +42,17 @@ const addClassName = (node, className) => {
 }
 
 const parseStyle = (text, meta) => {
-  const ast = jsxParser.parse(text, {
-    sourceType: 'module',
-    ecmaVersion: 2020
-  })
+  // const ast = jsxParser.parse(text, {
+  //   sourceType: 'module',
+  //   ecmaVersion: 2020
+  // })
+
+  // const ast = createSourceFile('x.ts', text, ScriptTarget.Latest)
+
+  const ast = parse(text, {
+    sourceType: 'unambiguous',
+    plugins: ['jsx', 'typescript']
+  }).program
 
   const walk = (
     node,
@@ -53,6 +62,7 @@ const parseStyle = (text, meta) => {
     parentNode = null,
     nodeWithStyleArg = null
   ) => {
+    // console.log('????????????', NodeObject)
     // check if i have jsx and if style is being passed to something jsx
     if (node.type === 'ArrowFunctionExpression') {
       if (node.params[0] && node.params[0].type === 'ObjectPattern') {
