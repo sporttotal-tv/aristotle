@@ -172,7 +172,6 @@ export default async ({
                 renderer = undefined
                 update()
               })
-
               if (buildresult) {
                 await renderer.updateBuildResult(buildresult)
               }
