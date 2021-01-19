@@ -66,7 +66,7 @@ export default async ({
 
   const { update, browser } = startLiveReload(reloadPort)
 
-  await console.info(
+  console.info(
     chalk.blue('Aristotle development server'),
     'http://' + ip + ':' + port
   )
@@ -172,7 +172,10 @@ export default async ({
                 renderer = undefined
                 update()
               })
-              await renderer.updateBuildResult(buildresult)
+
+              if (buildresult) {
+                await renderer.updateBuildResult(buildresult)
+              }
               console.info(
                 chalk.grey('Server initialized in', Date.now() - d, 'ms')
               )
