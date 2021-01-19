@@ -90,13 +90,16 @@ const parseStyle = (text, meta) => {
     }
 
     if (nodeWithStyleProp) {
-      if (node.type === 'Property') {
+      if (node.type === 'ObjectProperty') {
         const start = node.start + store.offset
         const end = node.end + store.offset
         if (node.value.type === 'ObjectExpression') {
           commentFromTo(store, start, end)
           parentStyleKey = node.key.name || node.key.value
-        } else if (node.value.type === 'Literal') {
+        } else if (
+          node.value.type === 'StringLiteral' ||
+          node.value.type === 'NumericLiteral'
+        ) {
           if (!parentStyleKey) {
             commentFromTo(store, start, end)
           }
@@ -216,6 +219,7 @@ const parseStyle = (text, meta) => {
 
   const store = { offset: 0, text }
   walk(ast, store)
+
   return store.text
 }
 

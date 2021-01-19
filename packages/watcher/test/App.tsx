@@ -14,6 +14,9 @@ const Snurk = ({ style }) => {
         color: 'white',
         ':hover': {
           color: 'blue'
+        },
+        '@media (max-width: 600px)': {
+          backgroundColor: 'yellow'
         }
       }}
     >
@@ -28,7 +31,8 @@ const Snurk = ({ style }) => {
 export default () => (
   <Snurk
     style={{
-      border: '10px solid red'
+      border: '10px solid red',
+      fontSize: 36
     }}
   />
 )
