@@ -38,7 +38,8 @@ const watch = async (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
       }
     }
     // add new files
-    for (const path in newPaths) {
+    for (const path of newPaths) {
+      // @ts-ignore
       if (!(path in prevPaths)) {
         store.watcher.add(path)
       }
@@ -52,12 +53,14 @@ const watch = async (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
       // create new watcher
       // @ts-ignore
       const watcher = chokidar.watch(Array.from(meta.paths))
-      watcher.on('change', file => {
+      const update = file => {
         // remove file from file cache
         delete meta.fileCache[isAbsolute(file) ? file : join(cwd, file)]
         // update bundleCache
         bundleCache.set(opts, watch(opts, cb))
-      })
+      }
+      watcher.on('change', update)
+      watcher.on('unlink', update)
       // store for reuse
       bundleStore.set(opts, {
         watcher,

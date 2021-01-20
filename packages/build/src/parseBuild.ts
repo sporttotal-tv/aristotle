@@ -99,7 +99,10 @@ const parseStyles = async meta => {
     for (const val in meta.css[prop]) {
       const className = meta.css[prop][val]
       if (typeof className === 'object') {
-        if (prop[0] === '@') {
+        if (prop === '@keyframes') {
+          console.warn('ignoring keyframes, TODO')
+          // console.log(prop, meta.css[prop])
+        } else if (prop[0] === '@') {
           // it's a media query or something funky
           str += `${prop}{`
           for (const i in className) {

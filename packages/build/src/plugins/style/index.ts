@@ -46,7 +46,7 @@ const parseStyle = (text, meta) => {
     node,
     store,
     nodeWithStyleProp = null,
-    parentStyleKey = null,
+    parentStylePath = null,
     parentNode = null,
     nodeWithStyleArg = null
   ) => {
@@ -76,27 +76,34 @@ const parseStyle = (text, meta) => {
         const start = node.start + store.offset
         const end = node.end + store.offset
         if (node.value.type === 'ObjectExpression') {
-          commentFromTo(store, start, end)
-          parentStyleKey = node.key.name || node.key.value
+          if (!parentStylePath) {
+            commentFromTo(store, start, end)
+            parentStylePath = []
+          }
+          parentStylePath.push(node.key.name || node.key.value)
         } else if (
           node.value.type === 'StringLiteral' ||
           node.value.type === 'NumericLiteral'
         ) {
-          if (!parentStyleKey) {
+          if (!parentStylePath) {
             commentFromTo(store, start, end)
           }
           const key = node.key.name
           const val = node.value.value
           let target = meta.css
-          if (parentStyleKey) {
-            if (!(parentStyleKey in target)) {
-              target[parentStyleKey] = {}
+
+          if (parentStylePath) {
+            for (const k of parentStylePath) {
+              if (!(k in target)) {
+                target[k] = {}
+              }
+              target = target[k]
             }
-            target = target[parentStyleKey]
           }
           if (!(key in target)) {
             target[key] = {}
           }
+
           if (!(val in target[key])) {
             let className = `${Number(meta.styleCnt++).toString(16)}`
             while (className[0] <= '9') {
@@ -110,8 +117,9 @@ const parseStyle = (text, meta) => {
           return
         }
       } else if (
-        (node.type === 'Identifier' && node.name === 'style') ||
-        (node.type === 'SpreadElement' && node.argument.name === 'style')
+        nodeWithStyleArg &&
+        ((node.type === 'Identifier' && node.name === 'style') ||
+          (node.type === 'SpreadElement' && node.argument.name === 'style'))
       ) {
         // eslint-disable-next-line
         addClassName(nodeWithStyleProp, '${className}')
@@ -138,7 +146,7 @@ const parseStyle = (text, meta) => {
             val,
             store,
             nodeWithStyleProp,
-            parentStyleKey,
+            parentStylePath,
             node,
             nodeWithStyleArg
           )
@@ -149,7 +157,7 @@ const parseStyle = (text, meta) => {
                 childNode,
                 store,
                 nodeWithStyleProp,
-                parentStyleKey,
+                parentStylePath,
                 node,
                 nodeWithStyleArg
               )

@@ -4,38 +4,61 @@ import './style.css'
 
 console.log(process.env.SMURK)
 
-const Three = ({ style }) => {
-  const a = String(Math.random())
+// const Three = ({ style }) => {
+//   const a = String(Math.random())
+//   return (
+//     <div
+//       className={a}
+//       style={{
+//         backgroundColor: 'blue',
+//         ...style,
+//         backgroundColor: 'blue'
+//       }}
+//     />
+//   )
+// }
+
+// const Two = ({ style }) => {
+//   return <Three style={style} />
+// }
+
+// const x = v => v
+
+// const One = () => {
+//   return (
+//     <Two
+//       style={{
+//         border: '1px solid red',
+//         fontSize: Math.random() * 10,
+//         backgroundColor: x({
+//           alpha: 1
+//         })
+//       }}
+//     />
+//   )
+// }
+
+// const fn = style => {
+//   return <div style={style} />
+// }
+
+// fn({ border: '1px solid red' })
+
+const KeyFrames = () => {
   return (
     <div
-      className={a}
       style={{
-        backgroundColor: 'blue',
-        ...style,
-        backgroundColor: 'blue'
+        // border: '10px solid red'
+        '@keyframes': {
+          '0%': {
+            transform: 'rotate(0deg)'
+          }
+        }
       }}
     />
   )
 }
 
-const Two = ({ style }) => {
-  return <Three style={style} />
-}
+KeyFrames()
 
-const x = v => v
-
-const One = () => {
-  return (
-    <Two
-      style={{
-        border: '1px solid red',
-        fontSize: Math.random() * 10,
-        backgroundColor: x({
-          alpha: 1
-        })
-      }}
-    />
-  )
-}
-
-console.log(One, process.env.FOO, redis)
+console.log(process.env.FOO, redis)
