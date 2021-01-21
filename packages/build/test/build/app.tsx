@@ -48,13 +48,16 @@ const KeyFrames = () => {
   return (
     <div
       style={{
-        // border: '10px solid red'
-        '@keyframes': {
-          '0%': {
-            transform: 'rotate(0deg)',
-            opacity: 0
-          }
+        ':hover': {
+          opacity: 0.5
         }
+        // border: '10px solid red'
+        // '@keyframes': {
+        //   '0%': {
+        //     transform: 'rotate(0deg)',
+        //     opacity: 0
+        //   }
+        // }
       }}
     />
   )

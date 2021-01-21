@@ -2,7 +2,7 @@
   "name": "@saulx/aristotle-create-server-dist",
   "main": "./dist/index.js",
   "public": true,
-  "version": "1.0.9",
+  "version": "1.0.10",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch",
@@ -17,7 +17,7 @@
     "chalk": "^4.1.0",
     "@saulx/get-package": "^1.0.7",
     "fs-extra": "^9.0.1",
-    "@saulx/aristotle-build": "^1.0.8",
+    "@saulx/aristotle-build": "^1.0.9",
     "@saulx/aristotle-server-utils": "^1.0.1"
   }
 }

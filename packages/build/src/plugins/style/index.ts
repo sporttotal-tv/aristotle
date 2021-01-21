@@ -81,6 +81,8 @@ const walk = (
         // TODO only do when no unresolvable shi
         if (!stylePath) commentFromTo(store, start, end)
         const key = node.key.name || node.key.value
+
+        // console.log('--->', node)
         stylePath = stylePath ? [...stylePath, key] : [key]
       }
     } else if (stylePath) {
@@ -100,6 +102,8 @@ const walk = (
           }
           target = target[key]
         }
+
+        // console.log(meta.css, target, val, node.type)
 
         if (!(val in target)) {
           const cntField = isKeyframe ? 'keyframesCnt' : 'styleCnt'
@@ -156,7 +160,12 @@ const walk = (
 
   for (const i in node) {
     const val = node[i]
-    if (typeof val === 'object' && val !== null && i !== 'test') {
+    if (
+      typeof val === 'object' &&
+      val !== null &&
+      i !== 'test' &&
+      i !== 'key'
+    ) {
       if (val.type) {
         walk(
           meta,
@@ -237,6 +246,8 @@ const parseStyle = (text, meta) => {
   }).program
 
   walk(meta, ast, store)
+  // console.log(meta.css)
+  // console.log(store.text)
 
   return store.text
 }
