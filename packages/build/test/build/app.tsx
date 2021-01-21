@@ -51,7 +51,8 @@ const KeyFrames = () => {
         // border: '10px solid red'
         '@keyframes': {
           '0%': {
-            transform: 'rotate(0deg)'
+            transform: 'rotate(0deg)',
+            opacity: 0
           }
         }
       }}

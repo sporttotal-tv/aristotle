@@ -95,13 +95,25 @@ const getCssReset = async () => {
 
 const parseStyles = async meta => {
   let str = ''
+  const keyframes = meta.css['@keyframes']
+  if (keyframes) {
+    for (const val in keyframes) {
+      const className = keyframes[val]
+      for (const i in className) {
+        for (const j in className[i]) {
+          str += `@keyframes ${className[i][j]} {`
+          str += `${val}{${toKebabCase(i)}:${j}}`
+          str += '}'
+        }
+      }
+    }
+  }
+
   for (const prop in meta.css) {
     for (const val in meta.css[prop]) {
       const className = meta.css[prop][val]
       if (typeof className === 'object') {
         if (prop === '@keyframes') {
-          console.warn('ignoring keyframes, TODO')
-          // console.log(prop, meta.css[prop])
         } else if (prop[0] === '@') {
           // it's a media query or something funky
           str += `${prop}{`

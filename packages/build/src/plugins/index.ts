@@ -8,6 +8,8 @@ import imageminSvgo from 'imagemin-svgo'
 
 export default (opts, meta) => {
   meta.styleCnt = 0
+  meta.keyframesCnt = 0
+
   const plugin = {
     name: 'aristotle',
     setup(build) {
@@ -26,7 +28,6 @@ export default (opts, meta) => {
               const contents = parseStyle(text, meta)
               meta.fileCache[path] = { contents, loader: 'tsx' }
             } catch (e) {
-              console.error('error parsing style', e)
               meta.errors.push(e)
               return
             }
