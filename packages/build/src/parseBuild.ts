@@ -132,7 +132,7 @@ const parseStyles = async meta => {
     }
   }
 
-  // console.log(str)
+  console.log(str)
 
   return parseCss(str)
 }

@@ -2,7 +2,7 @@
   "name": "@saulx/aristotle-build",
   "main": "./dist/index.js",
   "public": true,
-  "version": "1.0.9",
+  "version": "1.0.10",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch",
@@ -24,6 +24,7 @@
   },
   "repository": "https://github.com/atelier-saulx/aristotle",
   "dependencies": {
+    "@babel/generator": "^7.12.11",
     "@babel/parser": "^7.12.11",
     "@saulx/aristotle-types": "^1.0.0",
     "@saulx/get-package": "^1.0.7",

@@ -2,66 +2,36 @@ import redis from 'redis'
 import React from 'react'
 import './style.css'
 
+// const fn = () => true
 console.log(process.env.SMURK)
-
-// const Three = ({ style }) => {
-//   const a = String(Math.random())
-//   return (
-//     <div
-//       className={a}
-//       style={{
-//         backgroundColor: 'blue',
-//         ...style,
-//         backgroundColor: 'blue'
-//       }}
-//     />
-//   )
-// }
-
-// const Two = ({ style }) => {
-//   return <Three style={style} />
-// }
-
-// const x = v => v
-
-// const One = () => {
-//   return (
-//     <Two
-//       style={{
-//         border: '1px solid red',
-//         fontSize: Math.random() * 10,
-//         backgroundColor: x({
-//           alpha: 1
-//         })
-//       }}
-//     />
-//   )
-// }
-
-// const fn = style => {
-//   return <div style={style} />
-// }
-
-// fn({ border: '1px solid red' })
-
-const KeyFrames = () => {
+const KeyFrames = ({ style }) => {
+  const value = 1
   return (
     <div
-      style={{
-        ':hover': {
-          opacity: 0.5
-        }
-        // border: '10px solid red'
-        // '@keyframes': {
-        //   '0%': {
-        //     transform: 'rotate(0deg)',
-        //     opacity: 0
-        //   }
-        // }
-      }}
+      // style={{
+      //   '@media (max-width:snurk)': {
+      //     border: '1px solid red'
+      //   }
+      // }}
+      // className="smurky"
+      style={
+        value
+          ? {
+              background: 'red',
+              // background: value ? 'blue' : null,
+              // background: 'green',
+              fontSize: Math.random()
+            }
+          : null
+      }
     />
   )
 }
+
+// function bla() {
+//   console.log('!!!')
+//   return
+// }
 
 KeyFrames()
 

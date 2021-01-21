@@ -9,7 +9,7 @@ test.serial.only('build', async t => {
   })
 
   const txt = js[0].text
-  // console.log(txt.substring(txt.indexOf('SMURK')))
+  console.log(txt.substring(txt.indexOf('SMURK')))
 
   t.truthy(dependencies.redis)
   t.is(Object.keys(files).length, 5)
