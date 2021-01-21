@@ -4,35 +4,17 @@ import './style.css'
 
 // const fn = () => true
 console.log(process.env.SMURK)
-const KeyFrames = ({ style }) => {
-  const value = 1
-  return (
-    <div
-      // style={{
-      //   '@media (max-width:snurk)': {
-      //     border: '1px solid red'
-      //   }
-      // }}
-      // className="smurky"
-      style={
-        value
-          ? {
-              background: 'red',
-              // background: value ? 'blue' : null,
-              // background: 'green',
-              fontSize: Math.random()
-            }
-          : null
-      }
-    />
-  )
+const RenderComponents = ({ category, grid, bg = 'transparent' }) => {
+  const s: CSSProperties = {
+    padding: '20px',
+    borderRadius: '7px',
+    display: 'flex',
+    flexWrap: grid ? 'wrap' : 'nowrap',
+    backgroundColor: bg,
+    flexDirection: grid ? 'row' : 'column'
+  }
+  return <div style={s} />
 }
-
-// function bla() {
-//   console.log('!!!')
-//   return
-// }
-
-KeyFrames()
+RenderComponents()
 
 console.log(process.env.FOO, redis)

@@ -5,10 +5,11 @@ import imagemin from 'imagemin'
 import imageminMozjpeg from 'imagemin-mozjpeg'
 import imageminPngquant from 'imagemin-pngquant'
 import imageminSvgo from 'imagemin-svgo'
-
+import { relative } from 'path'
 export default (opts, meta) => {
   meta.styleCnt = 0
   meta.keyframesCnt = 0
+  const cwd = process.cwd()
 
   const plugin = {
     name: 'aristotle',
@@ -25,9 +26,10 @@ export default (opts, meta) => {
           if (!(path in meta.fileCache)) {
             try {
               const text = await fs.promises.readFile(path, 'utf8')
-              const contents = parseStyle(text, meta)
+              const contents = parseStyle(text, meta, path) //relative(cwd, path))
               meta.fileCache[path] = { contents, loader: 'tsx' }
             } catch (e) {
+              console.log(e)
               meta.errors.push(e)
               return
             }
