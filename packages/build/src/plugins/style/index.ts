@@ -33,12 +33,15 @@ const generateClassName = (meta, cntField) => {
   return className
 }
 
-const transformFnProps = (node, store) => {
+const walkFnProps = (node, store, consts) => {
   const props = node.params[0]
   if (props && props.type === 'ObjectPattern') {
     let styleStart
     for (const prop of props.properties) {
       const name = prop.key && prop.key.name
+      if (consts && name in consts) {
+        delete consts[name]
+      }
       if (name === 'className') {
         break
       }
@@ -123,29 +126,38 @@ const getClassNames = (
 
   if (type === 'Identifier') {
     if (consts && node.name in consts) {
-      console.warn('NEED TO REFACTOR CONSTS HANDLING!!')
-      // const styleObj = consts[node.name]
-      // if (!styleObj.classNames) {
-      //   styleObj.classNames = getClassNames(
-      //     [],
-      //     styleObj,
-      //     meta,
-      //     store,
-      //     hasArg,
-      //     styleObj.consts,
-      //     keyframes
-      //   )
-      // }
-      // console.log('???', styleObj.classNames)
-      // return styleObj.classNames
+      const styleObj = consts[node.name]
+      if (!styleObj.classNames) {
+        const styleOffset = styleObj.offset
+        const storeOffset = store.offset
+        store.offset = styleOffset
+        styleObj.classNames = getClassNames(
+          [],
+          styleObj,
+          meta,
+          store,
+          hasArg,
+          styleObj.consts,
+          keyframes
+        )
+        store.correction = store.offset - styleOffset
+        store.offset = storeOffset + store.correction
+      }
+      return styleObj.classNames
     }
     if (hasArg && node.name === 'style') {
       return `\${className}`
     }
   } else if (type === 'SpreadElement') {
-    if (hasArg && !path && node.argument.name === 'style') {
-      return `\${className}`
-    }
+    return getClassNames(
+      path,
+      node.argument,
+      meta,
+      store,
+      hasArg,
+      consts,
+      keyframes
+    )
   } else if (type === 'ConditionalExpression') {
     const nPath = path || []
     if (
@@ -173,6 +185,7 @@ const getClassNames = (
   } else if (type === 'ObjectExpression') {
     const keyframes = path && path[path.length - 1] === '@keyframes'
     const names = []
+
     for (const prop of node.properties) {
       const name = getClassNames(
         path,
@@ -187,6 +200,7 @@ const getClassNames = (
         names.push(name)
       }
     }
+
     if (names.length) {
       let value
       node.type = 'StringLiteral'
@@ -203,13 +217,40 @@ const getClassNames = (
   }
 }
 
-const walkEach = (elements, meta, store, hasArg, consts, node) => {
+const cleanClassNameTemplate = str => {
+  let clean
+  for (let i = str.length - 1; i >= 0; i--) {
+    let l = str[i]
+    if (clean) {
+      if (l === '"') {
+        // add space
+        str = `${str.substring(0, i + 1)} ${str.substring(i + 1)}`
+      } else if (l === '{') {
+        if (str[--i] === '$') {
+          // remove space
+          str = `${str.substring(0, i - 1)}${str.substring(i)}`
+          clean = false
+        }
+      }
+    } else if (l === '}') {
+      if (str[--i] === '"' && str[--i] === '"') {
+        i -= 5
+        if (str[i] !== '"') {
+          clean = true
+        }
+      }
+    }
+  }
+  return str
+}
+
+const walkEach = (elements, meta, store, hasArg, consts, node, path) => {
   for (const el of elements) {
-    walk(el, meta, store, hasArg, consts, node)
+    walk(el, meta, store, hasArg, consts, node, path)
   }
 }
 
-const walk = (node, meta, store, hasArg, consts, pNode) => {
+const walk = (node, meta, store, hasArg, consts, pNode, path) => {
   if (!node) {
     return
   }
@@ -218,10 +259,8 @@ const walk = (node, meta, store, hasArg, consts, pNode) => {
   }
   const { type } = node
   if (type === 'JSXElement') {
-    // console.log(Object.keys(consts))
     const r: {
       classNames?: string
-      // @ts-ignore
       csStart?: number
       csEnd?: number
       csNode?: object
@@ -231,72 +270,81 @@ const walk = (node, meta, store, hasArg, consts, pNode) => {
     const { openingElement, children } = node
     const { name, attributes } = openingElement
 
-    if (store.dataPath) {
-      insertAtIndex(
-        store,
-        name.end + store.offset,
-        ` data-dev-url="${store.dataPath}"`
-      )
+    if (path) {
+      insertAtIndex(store, name.end + store.offset, ` _="${path}"`)
     }
 
     for (const childNode of attributes) {
-      const res = walk(childNode, meta, store, hasArg, consts, node)
+      const res = walk(childNode, meta, store, hasArg, consts, node, null)
       if (res) {
         Object.assign(r, res)
       }
     }
 
     if (r.classNames) {
+      const correction = store.correction || 0
+      store.correction = 0
+
       if (r.csNode) {
         // @ts-ignore
         const { expression } = r.node.value
         if (expression) {
           if (expression.type === 'TemplateLiteral') {
-            insertAtIndex(store, r.csEnd - 2, ` ${r.classNames}`)
+            insertAtIndex(store, r.csEnd - 2 + correction, ` ${r.classNames}`)
           } else if (expression.type === 'Identifier') {
-            insertAtIndex(store, r.csStart + 1, '`${')
-            insertAtIndex(store, r.csEnd + 2, `} ${r.classNames}\``)
+            insertAtIndex(store, r.csStart + 1 + correction, '`${')
+            insertAtIndex(
+              store,
+              r.csEnd + 2 + correction,
+              `} ${r.classNames}\``
+            )
           } else {
             console.warn('UNHANDLED STYLE!!! FIX')
           }
         } else {
-          replaceCharAtIndex(store, r.csStart, '{`')
-          replaceCharAtIndex(store, r.csEnd, '`}')
-          insertAtIndex(store, r.csEnd, ` ${r.classNames}`)
+          replaceCharAtIndex(store, r.csStart + correction, '{`')
+          replaceCharAtIndex(store, r.csEnd + correction, '`}')
+          insertAtIndex(store, r.csEnd + correction, ` ${r.classNames}`)
         }
       } else {
-        insertAtIndex(store, r.start, `className={\`${r.classNames}\`} `)
+        insertAtIndex(
+          store,
+          r.start + correction,
+          `className={\`${r.classNames}\`} `
+        )
       }
     }
 
     if (children) {
-      walkEach(children, meta, store, hasArg, consts, node)
+      walkEach(children, meta, store, hasArg, consts, node, null)
     }
   } else if (type === 'JSXExpressionContainer') {
-    walk(node.expression, meta, store, hasArg, consts, node)
+    walk(node.expression, meta, store, hasArg, consts, node, path)
   } else if (type === 'ReturnStatement') {
-    walk(node.argument, meta, store, hasArg, consts, node)
+    walk(node.argument, meta, store, hasArg, consts, node, path)
   } else if (type === 'BlockStatement') {
-    walkEach(node.body, meta, store, hasArg, consts, node)
+    walkEach(node.body, meta, store, hasArg, consts, node, path)
   } else if (
     type === 'ArrowFunctionExpression' ||
     type === 'FunctionDeclaration'
   ) {
-    const hasArg = transformFnProps(node, store)
-    walk(node.body, meta, store, hasArg, consts, node)
-  } else if (type === 'VariableDeclarator') {
-    if (pNode.kind === 'const' && node.init.type === 'ObjectExpression') {
-      node.init.consts = consts
-      consts[node.id.name] = node.init
-      console.log('----------', node.id.name)
+    const hasArg = walkFnProps(node, store, consts)
+    if (pNode.id && pNode.id.name) {
+      path += `:${pNode.id.name}`
     }
-    walk(node.init, meta, store, hasArg, consts, node)
+    walk(node.body, meta, store, hasArg, consts, node, path)
+  } else if (type === 'VariableDeclarator') {
+    if (pNode.kind === 'const') {
+      node.init.consts = consts
+      node.init.offset = store.offset
+      consts[node.id.name] = node.init
+    }
+    walk(node.init, meta, store, hasArg, consts, node, path)
   } else if (type === 'JSXAttribute') {
     if (node.name.name === 'style') {
       const { expression } = node.value
       const start = node.start + store.offset
-      console.log('---', consts)
-      const classNames = getClassNames(
+      let classNames = getClassNames(
         null,
         expression,
         meta,
@@ -305,12 +353,20 @@ const walk = (node, meta, store, hasArg, consts, pNode) => {
         consts
       )
       const end = node.end + store.offset
+
+      if (classNames && classNames.indexOf('""}') !== -1) {
+        classNames = cleanClassNameTemplate(classNames)
+      }
+
       return {
         classNames,
         start,
         end
       }
     } else if (node.name.name === 'className') {
+      if (store.correction) {
+        store.correction = 0
+      }
       return {
         csStart: node.value.start + store.offset,
         csEnd: node.value.end + store.offset,
@@ -321,44 +377,44 @@ const walk = (node, meta, store, hasArg, consts, pNode) => {
     if (!pNode.consts) {
       pNode.consts = consts ? { ...consts } : {}
     }
-    walkEach(node.declarations, meta, store, hasArg, pNode.consts, node)
+    walkEach(node.declarations, meta, store, hasArg, pNode.consts, node, path)
   } else if (
     type === 'ExportNamedDeclaration' ||
     type === 'ExportDefaultDeclaration'
   ) {
-    walk(node.declaration, meta, store, hasArg, consts, node)
+    walk(node.declaration, meta, store, hasArg, consts, node, path)
   } else if (type === 'IfStatement' || type === 'ConditionalExpression') {
-    walk(node.consequent, meta, store, hasArg, consts, node)
-    walk(node.alternate, meta, store, hasArg, consts, node)
+    walk(node.consequent, meta, store, hasArg, consts, node, path)
+    walk(node.alternate, meta, store, hasArg, consts, node, path)
   } else if (type === 'CallExpression') {
-    walkEach(node.arguments, meta, store, hasArg, consts, node)
+    walkEach(node.arguments, meta, store, hasArg, consts, node, path)
   } else if (type === 'ForInStatement' || type === 'ForStatement') {
-    walk(node.body, meta, store, hasArg, consts, node)
+    walk(node.body, meta, store, hasArg, consts, node, path)
   } else if (type === 'ExpressionStatement') {
-    walk(node.expression, meta, store, hasArg, consts, node)
+    walk(node.expression, meta, store, hasArg, consts, node, path)
   } else if (type === 'AssignmentExpression' || type === 'LogicalExpression') {
-    walk(node.left, meta, store, hasArg, consts, node)
-    walk(node.right, meta, store, hasArg, consts, node)
+    walk(node.left, meta, store, hasArg, consts, node, path)
+    walk(node.right, meta, store, hasArg, consts, node, path)
   } else if (type === 'ObjectExpression') {
-    walkEach(node.properties, meta, store, hasArg, consts, node)
+    walkEach(node.properties, meta, store, hasArg, consts, node, path)
   } else if (type === 'ArrayExpression' || type === 'ArrayPattern') {
-    walkEach(node.elements, meta, store, hasArg, consts, node)
+    walkEach(node.elements, meta, store, hasArg, consts, node, path)
   } else if (type === 'ObjectProperty') {
-    walk(node.value, meta, store, hasArg, consts, node)
-  } else {
-    // console.log(type)
-    // console.log(generate(node).code)
+    walk(node.value, meta, store, hasArg, consts, node, path)
+  } else if (type === 'JSXFragment') {
+    walkEach(node.children, meta, store, hasArg, consts, node, path)
   }
 }
 
 const parseStyle = (text, meta, path) => {
-  const store = { offset: 0, text }
+  const store = { offset: 0, text, path }
   const ast = parse(text, {
     sourceType: 'unambiguous',
     plugins: ['jsx', 'typescript', 'classProperties', 'classStaticBlock']
   })
 
-  walkEach(ast.program.body, meta, store, null, null, ast.program)
+  walkEach(ast.program.body, meta, store, null, null, ast.program, store.path)
+
   return store.text
 }
 

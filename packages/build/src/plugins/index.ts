@@ -6,10 +6,19 @@ import imageminMozjpeg from 'imagemin-mozjpeg'
 import imageminPngquant from 'imagemin-pngquant'
 import imageminSvgo from 'imagemin-svgo'
 import { relative } from 'path'
+
 export default (opts, meta) => {
   meta.styleCnt = 0
   meta.keyframesCnt = 0
+
   const cwd = process.cwd()
+  const toDevPath = path => {
+    path = relative(cwd, path)
+    while (/\.\.\//.test(path)) {
+      path = path.substring(3)
+    }
+    return path.substring(0, path.lastIndexOf('.'))
+  }
 
   const plugin = {
     name: 'aristotle',
@@ -26,10 +35,9 @@ export default (opts, meta) => {
           if (!(path in meta.fileCache)) {
             try {
               const text = await fs.promises.readFile(path, 'utf8')
-              const contents = parseStyle(text, meta, path) //relative(cwd, path))
+              const contents = parseStyle(text, meta, toDevPath(path)) //
               meta.fileCache[path] = { contents, loader: 'tsx' }
             } catch (e) {
-              console.log(e)
               meta.errors.push(e)
               return
             }
