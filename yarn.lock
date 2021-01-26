@@ -1547,34 +1547,48 @@
   resolved "https://registry.yarnpkg.com/@saulx/get-package/-/get-package-1.0.7.tgz#87172070016a65ed0a39a9c80a61e1b54a0e8780"
   integrity sha512-3ZzCj+SyHdvdH8p9/yV/qk03A5SSSqtQmNTp/ti9fYE8aTBvSDL2xet5e2oeQmbGx4ctWyc5ny64pvGAxzMcaw==
 
-"@saulx/hub@^3.3.2":
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/@saulx/hub/-/hub-3.3.2.tgz#3ec33664d1ce8d7025341e0c38ae1839447e0acb"
-  integrity sha512-fC2wKUmtIon1IMiaKv4OGtbgnnOV7FMHhpgSNeQ2n7tShWVadr9QgVamUOybggjoFfkWW0d3N05No0NTrvGNrg==
+"@saulx/hub@^3.3.2||^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@saulx/hub/-/hub-4.0.1.tgz#6f85d7d03010b3cc055f2d515a693d0feddd5327"
+  integrity sha512-3Zjz1N9JBO8bEYlCfpCQqlAS2jq8rP9auQHspFkLAlEn08n2n6TUv4gfVEh4NJMGyZWxdDAIm50e7B47GkajGw==
   dependencies:
-    "@saulx/selva-diff" "^1.0.10"
-    "@saulx/utils" "^1.0.6"
+    "@saulx/selva-diff" "^1.0.15"
+    "@saulx/utils" "^1.6.2"
     chalk "^2.4.2"
     path-to-regexp "^6.1.0"
     prop-types "^15.6.1"
     query-string "^6.4.2"
-    react "^16.8.0"
+    react "^17.0.1"
     resolve-from "^5.0.0"
-    saulx-murmur "0.1.0"
+    saulx-murmur "^0.2.2"
     vigour-ua "^4.0.0"
     ws "^6.1.2"
 
-"@saulx/selva-diff@^1.0.10", "@saulx/selva-diff@^1.0.11":
+"@saulx/selva-diff@^1.0.11":
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/@saulx/selva-diff/-/selva-diff-1.0.11.tgz#032317cefb17fba43d29230003c32155fabff82a"
   integrity sha512-8843olW0/533Yf5zAHS8zD28lG9gPuBvBmFe+ybFqTo3ZDr00783v4EPhX4BXvOFRG9ydAGCrAxLVdNxOILzPw==
   dependencies:
     "@saulx/utils" "^1.0.6"
 
+"@saulx/selva-diff@^1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@saulx/selva-diff/-/selva-diff-1.0.15.tgz#6d48e696dd6fe263ebd74ee17d8fd121bebf46dd"
+  integrity sha512-EiI+3+XEyJQZVLf4jsjsBoHwX9Dq97zAltVvtCfiM1NeUzsQPgzfgOe+PBDYbHMzfLrH1gRes7KiJGjbegduoA==
+  dependencies:
+    "@saulx/utils" "^1.4.9"
+
 "@saulx/utils@^1.0.6":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@saulx/utils/-/utils-1.0.6.tgz#80f62c79ad04898ce02518bb7e3d4e1a93dab3d5"
   integrity sha512-fmC3Dj7PknuSWldQXWZgoiKWP7knFvB9otwQaHPYMmDIqZNyrA/naBOM7xgBJydtX5kC8FsZ8BQVwBJR8XUSTQ==
+
+"@saulx/utils@^1.4.9", "@saulx/utils@^1.6.2":
+  version "1.6.6"
+  resolved "https://registry.yarnpkg.com/@saulx/utils/-/utils-1.6.6.tgz#4be3cab609a4ad70b043a8487056812964327cac"
+  integrity sha512-JNH7jM2HmG/JsCO+QnYb998iyoQ50Xf/eIp2STLKC/kbLzM/Yu+ONsbPBcElxeVkFmk1c3ZFLkJ3A/neOeEhgA==
+  dependencies:
+    is-plain-obj "^3.0.0"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -6649,6 +6663,11 @@ is-plain-obj@^1.0.0, is-plain-obj@^1.1.0:
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-1.1.0.tgz#71a50c8429dfca773c92a390a4a03b39fcd51d3e"
   integrity sha1-caUMhCnfync8kqOQpKA7OfzVHT4=
 
+is-plain-obj@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-3.0.0.tgz#af6f2ea14ac5a646183a5bbdb5baabbc156ad9d7"
+  integrity sha512-gwsOE28k+23GP1B6vFl1oVh/WOzmawBrKwo5Ev6wMKzPkaXaCDIQKzLnvsA42DRlbVTWorkgTKIviAKCWkfUwA==
+
 is-plain-object@^2.0.3, is-plain-object@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-2.0.4.tgz#2c163b3fafb1b606d9d17928f05c2a1c38e07677"
@@ -11074,7 +11093,7 @@ react-with-styles@^4.0.1, react-with-styles@^4.1.0:
     prop-types "^15.7.2"
     react-with-direction "^1.3.1"
 
-react@16.13.1, react@^16.3.0, react@^16.8.0:
+react@16.13.1, react@^16.3.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
@@ -11082,6 +11101,14 @@ react@16.13.1, react@^16.3.0, react@^16.8.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     prop-types "^15.6.2"
+
+react@^17.0.1:
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-17.0.1.tgz#6e0600416bd57574e3f86d92edba3d9008726127"
+  integrity sha512-lG9c9UuMHdcAexXtigOZLX8exLWkW0Ku29qPRU8uhF2R9BN96dLCt0psvzPLlHc5OWkgymP3qwTRgbnw5BKx3w==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 reactcss@^1.2.0:
   version "1.2.3"
@@ -11708,10 +11735,10 @@ sane@^4.0.3:
     minimist "^1.1.1"
     walker "~1.0.5"
 
-saulx-murmur@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/saulx-murmur/-/saulx-murmur-0.1.0.tgz#d72ca0e28b3ff0d2bd21a116ff57855d83085b37"
-  integrity sha512-O6VMC694bjHHK08SS9DRXq7oY51Uxbg4hKDnwuJJ4o+8B9x9sTwiDSG1LQUU2U9QSRhJgGz/gxfPJ56mTh+V2w==
+saulx-murmur@^0.2.2:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/saulx-murmur/-/saulx-murmur-0.2.3.tgz#b7d3735babb2123098e4cc01099bc4b81460d136"
+  integrity sha512-ztQbici1vh9gUB5nHpB7AlY9ARbzChzjdcB5qbePv75MBuPemdklFLJfjHiMqXHC7m393oIZA/ErCmUyYBUkiQ==
 
 sax@^1.2.1, sax@^1.2.4, sax@~1.2.4:
   version "1.2.4"
