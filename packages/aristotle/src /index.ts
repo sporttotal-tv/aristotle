@@ -31,14 +31,14 @@ program
   .command('watch')
   .requiredOption('-t, --target <target>', 'Target to build')
   .option('-p, --port <port>', 'Port')
-  .action(async cmd => {
+  .action(async (cmd) => {
     let { target, port } = cmd
     target = resolvePath(target)
     const config = await readPkgConfig(target)
     await createWatcher({
       target,
       port,
-      external: config ? config.external : undefined
+      external: config ? config.external : undefined,
     })
   })
 
@@ -46,7 +46,7 @@ program
   .command('build')
   .requiredOption('-t, --target <target>', 'Target to build')
   .requiredOption('-d, --dest <dest>', 'Build Destination')
-  .action(async cmd => {
+  .action(async (cmd) => {
     const d = Date.now()
     let { target, dest } = cmd
     target = resolvePath(target)
@@ -58,7 +58,7 @@ program
     await createServer({
       target,
       dest,
-      external: config ? config.external : undefined
+      external: config ? config.external : undefined,
     })
 
     console.info(

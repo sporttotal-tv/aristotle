@@ -6,10 +6,10 @@ const execAsync = promisify(exec)
 
 const PACKAGES = 'packages'
 
-readdir(PACKAGES).then(async files => {
+readdir(PACKAGES).then(async (files) => {
   const updated = {}
   const pkgs = await Promise.all(
-    files.map(async f => {
+    files.map(async (f) => {
       const pkgDir = join(__dirname, PACKAGES, f)
       const pkgPath = join(pkgDir, 'package.json')
       const pkgText = await readFile(pkgPath)

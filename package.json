@@ -7,6 +7,7 @@
     "packages/*"
   ],
   "scripts": {
+    "upgrade-all": "find packages -maxdepth 1 -mindepth 1 -type d -exec bash -c \"cd '{}' && ncu -u\" \\; && yarn",
     "clean-all": "find packages -maxdepth 1 -mindepth 1 -type d -exec bash -c \"cd '{}' && pwd && rm -rf dist\" \\;",
     "build-all": "find packages -maxdepth 1 -mindepth 1 -type d -exec bash -c \"cd '{}' && pwd && yarn build\" \\;",
     "update-all": "node update-versions.js",
@@ -17,24 +18,12 @@
     "extends": "@saulx/eslint-config"
   },
   "devDependencies": {
-    "ava": "2.4.0",
-    "ts-node": "^8.5.4",
-    "typescript": "^3.7.3",
-    "eslint": "^6.5.1",
-    "prettier": "^1.18.2",
+    "ava": "3.15.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3",
+    "eslint": "^7.18.0",
+    "prettier": "^2.2.1",
     "@saulx/eslint-config": "https://github.com/atelier-saulx/eslint-config",
     "@saulx/prettier-config": "https://github.com/atelier-saulx/prettier-config"
-  },
-  "dependencies": {
-    "acorn": "^8.0.4",
-    "acorn-jsx": "^5.3.1",
-    "acorn-walk": "^8.0.0",
-    "autoprefixer": "^10.1.0",
-    "cssnano": "^4.1.10",
-    "esbuild": "^0.8.22",
-    "mime-types": "^2.1.27",
-    "postcss": "^8.2.2",
-    "postcss-default-unit": "^1.0.0",
-    "postcss-flexbugs-fixes": "^5.0.2"
   }
 }
