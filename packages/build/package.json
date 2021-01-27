@@ -1,0 +1,53 @@
+{
+  "name": "@saulx/aristotle-build",
+  "main": "./dist/index.js",
+  "public": true,
+  "version": "1.0.12",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc",
+    "watch": "tsc --watch",
+    "test": "ava --verbose"
+  },
+  "ava": {
+    "files": [
+      "test/**/index.ts",
+      "test/*.ts"
+    ],
+    "concurrency": 1,
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "repository": "https://github.com/atelier-saulx/aristotle",
+  "dependencies": {
+    "@babel/generator": "^7.12.11",
+    "@babel/parser": "^7.12.11",
+    "@saulx/aristotle-types": "^1.0.0",
+    "@saulx/get-package": "^1.0.7",
+    "@saulx/utils": "^1.6.1",
+    "autoprefixer": "^10.1.0",
+    "chokidar": "^3.5.1",
+    "cssnano": "^4.1.10",
+    "esbuild": "^0.8.22",
+    "exit-hook": "^2.2.0",
+    "imagemin": "^7.0.1",
+    "imagemin-mozjpeg": "^9.0.0",
+    "imagemin-pngquant": "^9.0.1",
+    "imagemin-svgo": "^8.0.0",
+    "mime-types": "^2.1.27",
+    "murmurhash-native": "^3.5.0",
+    "postcss": "^8.2.2",
+    "postcss-default-unit": "^1.0.0",
+    "postcss-flexbugs-fixes": "^5.0.2"
+  },
+  "devDependencies": {
+    "ava": "2.4.0",
+    "react": "^17.0.1",
+    "redis": "*",
+    "ts-node": "^8.5.4"
+  }
+}

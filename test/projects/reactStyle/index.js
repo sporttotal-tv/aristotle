@@ -1,5 +1,0 @@
-const React = require('react')
-const ReactDom = require('react-dom')
-const App = require('./App')
-// const registryConfig = require('../../../../v2/packages/registry-config')
-ReactDom.render(<App />, document.body)

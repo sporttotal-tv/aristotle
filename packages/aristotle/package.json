@@ -1,0 +1,24 @@
+{
+  "name": "@saulx/aristotle",
+  "version": "3.0.12",
+  "dependencies": {
+    "commander": "^7.0.0",
+    "chalk": "^4.1.0",
+    "@saulx/aristotle-build": "^1.0.12",
+    "@saulx/aristotle-watcher": "^1.0.12",
+    "@saulx/aristotle-create-server-dist": "^1.0.13",
+    "@saulx/get-package": "^1.0.7",
+    "expand-home-dir": "^0.0.3"
+  },
+  "bin": {
+    "aristotle": "bin/cmd.js"
+  },
+  "scripts": {
+    "build": "rm -rf ./dist && tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  }
+}
