@@ -208,7 +208,6 @@ const getClassNames = (
         path = [...path]
         path[path.length - 1] = 'animationName'
         value = getClassName(path, names.join(','), meta)
-        console.log({ value, names })
       } else {
         value = names.join(keyframes ? ',' : ' ')
       }
