@@ -19,7 +19,7 @@ import {
   defaultRenderer,
   genServeFromFile,
   genServeFromRender,
-  hasServer
+  hasServer,
 } from '@saulx/aristotle-server-utils'
 
 const loadingHtml = fs.readFileSync(join(__dirname, '../static/loading.html'))
@@ -50,7 +50,7 @@ export default async ({
   target,
   port = 3001,
   reloadPort = 6634,
-  external
+  external,
 }: Opts) => {
   const ip = await v4()
 
@@ -61,7 +61,7 @@ export default async ({
     entryPoints: [target],
     platform: 'browser',
     external,
-    sourcemap: true
+    sourcemap: true,
   }
 
   const { update, browser } = startLiveReload(reloadPort)
@@ -89,13 +89,13 @@ export default async ({
         return {
           type: 'build',
           build,
-          buildError: err
+          buildError: err,
         }
       }
     )
   }
 
-  build(buildOpts, async result => {
+  build(buildOpts, async (result) => {
     if (result.errors.length) {
       buildresult = result
       buildErrors = setBuildErrors(result)
@@ -126,10 +126,10 @@ export default async ({
       entryPoints: [serverTarget],
       platform: 'node',
       sourcemap: true,
-      external
+      external,
     }
     if (serverTarget) {
-      build(buildOptsServer, async result => {
+      build(buildOptsServer, async (result) => {
         if (result.errors.length) {
           serverBuildErrors = setBuildErrors(result)
           renderer = undefined
@@ -161,13 +161,13 @@ export default async ({
 
             const makeRenderer = async () => {
               renderer = await genWorker(result)
-              renderer.once('error', async err => {
+              renderer.once('error', async (err) => {
                 console.log(chalk.red('Server crashed'), err.message)
                 renderer.stop()
                 rendererError = {
                   type: 'runtime',
                   error: err,
-                  build: renderer.build
+                  build: renderer.build,
                 }
                 renderer = undefined
                 update()
@@ -252,7 +252,7 @@ export default async ({
               type: 'render',
               error: err,
               build: renderer.build,
-              parsedReq
+              parsedReq,
             }
           }
         } else {

@@ -1,7 +1,7 @@
 import img from './large.jpg'
 import img2 from './nasa.jpg'
 
-import fetch from 'node-fetch'
+// import fetch from 'node-fetch'
 // import App from './App'
 // need to parse req at the top!
 
@@ -10,7 +10,7 @@ export const cache = (req) => {
 }
 
 const render = async (opts) => {
-  const google = await fetch('http://google.com')
+  // const google = await fetch('http://google.com')
 
   if (opts.url.pathname === '/no') {
     // this kill sthe connectionxxxx
@@ -23,7 +23,7 @@ const render = async (opts) => {
       ${opts.head}
     </head>
     <body>
-      YESH  for  mxxyexxxxxxxxxxxxsh!
+      YESH!xxxxxxx
       <img src="${img}" />
       <img src="${img2}" />
 
@@ -36,9 +36,7 @@ const render = async (opts) => {
 
 export default render
 
-setTimeout(() => {
-  // console.log(lfapper.drol)
-}, 1e3)
+// setTimeout(() => {}, 1e3)
 
 // import x
 

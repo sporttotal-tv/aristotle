@@ -9,8 +9,6 @@ import {
 
 type ServerFunction = (...args: any[]) => any
 
-console.log(Object.keys(global))
-
 /*
   'global',
   'process',

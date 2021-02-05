@@ -2,7 +2,7 @@ import { findNodeAround } from 'acorn-walk'
 import React, { useState } from 'react'
 
 const Purf = ({ style }) => {
-  return <div style={style}>PERV</div>
+  return <div style={style}>xxxx</div>
 }
 
 // const Snurk = ({ style }) => {
@@ -33,7 +33,6 @@ const Purf = ({ style }) => {
 // }
 
 const functi2 = () => true
-
 const App = () => {
   const [state, setState] = useState('A')
   return (
@@ -53,28 +52,28 @@ const App = () => {
             ? {
                 '0%': {
                   opacity: 1,
-                  transform: 'rotate(0deg)'
+                  transform: 'rotate(0deg)',
                 },
                 '50%': {
                   opacity: 1,
-                  transform: 'rotate(0deg)'
+                  transform: 'rotate(0deg)',
                 },
 
                 '100%': {
                   opacity: 0,
-                  transform: 'rotate(360deg)'
-                }
+                  transform: 'rotate(360deg)',
+                },
               }
             : {
                 '0%': {
                   opacity: 1,
-                  transform: 'rotate(0deg)'
+                  transform: 'rotate(0deg)',
                 },
                 '100%': {
                   opacity: 0,
-                  transform: 'rotate(-360deg)'
-                }
-              }
+                  transform: 'rotate(-360deg)',
+                },
+              },
       }}
     >
       {new Array(12).fill(state)}
