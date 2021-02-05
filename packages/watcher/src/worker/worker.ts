@@ -4,10 +4,30 @@ import { BuildResult, File } from '@saulx/aristotle-types'
 import {
   CacheFunction,
   genRenderOpts,
-  defaultCache
+  defaultCache,
 } from '@saulx/aristotle-server-utils'
 
 type ServerFunction = (...args: any[]) => any
+
+console.log(Object.keys(global))
+
+/*
+  'global',
+  'process',
+  'GLOBAL',
+  'root',
+  'Buffer',
+  'setTimeout',
+  'setInterval',
+  'clearTimeout',
+  'clearInterval',
+  'setImmediate',
+  'clearImmediate',
+  'console',
+  'module',
+  'require',
+  '_' 
+*/
 
 const evalServer = (
   code: string
@@ -62,14 +82,14 @@ const buildresult: BuildResult = {
   env: [],
   errors: [],
   files: {},
-  dependencies: {}
+  dependencies: {},
 }
 
 parentPort.postMessage({
-  type: 'initialized'
+  type: 'initialized',
 })
 
-parentPort.on('message', async message => {
+parentPort.on('message', async (message) => {
   const { type, reqId, req } = message
   if (type === 'updateCode') {
     const { code } = message
@@ -84,7 +104,7 @@ parentPort.on('message', async message => {
       server = serverFunction
       parentPort.postMessage({
         type: 'updateCode',
-        reqId
+        reqId,
       })
     } else {
       server = undefined
@@ -92,7 +112,7 @@ parentPort.on('message', async message => {
       parentPort.postMessage({
         type: 'updateCode',
         error,
-        reqId
+        reqId,
       })
     }
   } else if (type === 'buildresult') {
@@ -101,14 +121,14 @@ parentPort.on('message', async message => {
       buildresult.files[key] = new File({
         ...file,
         gzip: file.gzip || false,
-        contents: Buffer.from(data)
+        contents: Buffer.from(data),
       })
     } else if (operation === 'delete') {
       delete buildresult.files[key]
     } else if (operation === 'meta') {
       buildresult.entryPoints = meta.entryPoints
-      buildresult.js = meta.js.map(v => buildresult.files[v])
-      buildresult.css = meta.css.map(v => buildresult.files[v])
+      buildresult.js = meta.js.map((v) => buildresult.files[v])
+      buildresult.css = meta.css.map((v) => buildresult.files[v])
       buildresult.env = meta.env
       buildresult.dependencies = meta.dependencies
       buildresult.errors = []
@@ -117,14 +137,14 @@ parentPort.on('message', async message => {
       type: 'buildresult',
       reqId,
       operation,
-      key
+      key,
     })
   } else if (type === 'render' || type === 'cache') {
     if (!server) {
       parentPort.postMessage({
         type: 'ready',
         reqId,
-        error: buildError
+        error: buildError,
       })
     } else {
       try {
@@ -135,13 +155,13 @@ parentPort.on('message', async message => {
         parentPort.postMessage({
           type: 'ready',
           reqId,
-          payload: result
+          payload: result,
         })
       } catch (err) {
         parentPort.postMessage({
           type: 'ready',
           reqId,
-          error: err
+          error: err,
         })
       }
     }

@@ -1,13 +1,17 @@
 import img from './large.jpg'
 import img2 from './nasa.jpg'
+
+import fetch from 'node-fetch'
 // import App from './App'
 // need to parse req at the top!
 
-export const cache = req => {
+export const cache = (req) => {
   return req.url.pathname
 }
 
-const render = async opts => {
+const render = async (opts) => {
+  const google = await fetch('http://google.com')
+
   if (opts.url.pathname === '/no') {
     // this kill sthe connectionxxxx
     return null
