@@ -95,6 +95,7 @@ const getCssReset = async () => {
 
 const parseStyles = async meta => {
   let str = ''
+  let mediaQueries = ''
   const keyframes = meta.css['@keyframes']
   if (keyframes) {
     for (const val in keyframes) {
@@ -116,11 +117,11 @@ const parseStyles = async meta => {
         if (prop === '@keyframes') {
         } else if (prop[0] === '@') {
           // it's a media query or something funky
-          str += `${prop}{`
+          mediaQueries += `${prop}{`
           for (const i in className) {
-            str += `.${className[i]}{${toKebabCase(val)}:${i}}`
+            mediaQueries += `.${className[i]}{${toKebabCase(val)}:${i}}`
           }
-          str += '}'
+          mediaQueries += '}'
         } else {
           for (const i in className) {
             str += `.${className[i]}${prop}{${toKebabCase(val)}:${i}}`
@@ -132,7 +133,7 @@ const parseStyles = async meta => {
     }
   }
 
-  return parseCss(str)
+  return parseCss(str + mediaQueries)
 }
 
 const parseBuild = async (

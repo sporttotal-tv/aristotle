@@ -183,7 +183,7 @@ const getClassNames = (
       return `\${${generate(node).code}}`
     }
   } else if (type === 'ObjectExpression') {
-    const keyframes = path && path[path.length - 1] === '@keyframes'
+    const isKeyframes = path && path[path.length - 1] === '@keyframes'
     const names = []
 
     for (const prop of node.properties) {
@@ -194,7 +194,7 @@ const getClassNames = (
         store,
         hasArg,
         consts,
-        keyframes
+        isKeyframes
       )
       if (name) {
         names.push(name)
@@ -204,12 +204,13 @@ const getClassNames = (
     if (names.length) {
       let value
       node.type = 'StringLiteral'
-      if (keyframes) {
+      if (isKeyframes) {
         path = [...path]
         path[path.length - 1] = 'animationName'
         value = getClassName(path, names.join(','), meta)
+        console.log({ value, names })
       } else {
-        value = names.join(' ')
+        value = names.join(keyframes ? ',' : ' ')
       }
       node.value = value
       return value

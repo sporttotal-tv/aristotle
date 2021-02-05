@@ -13,6 +13,14 @@ const createBuild = async (
     dependencies: {},
     errors: []
   }
+  const define = {
+    'process.env.NODE_ENV': production ? '"production"' : '"dev"',
+    ...opts.define
+  }
+  if (opts.platform !== 'node') {
+    // @ts-ignore
+    define.global = 'window'
+  }
   // @ts-ignore
   const result = await esbuild({
     bundle: true,
@@ -32,11 +40,7 @@ const createBuild = async (
       '.gif': 'file',
       ...opts.loader
     },
-    define: {
-      global: 'window',
-      'process.env.NODE_ENV': production ? '"production"' : '"dev"',
-      ...opts.define
-    },
+    define,
     plugins: [plugins(opts, meta)],
     write: false
   }).catch(e => e)

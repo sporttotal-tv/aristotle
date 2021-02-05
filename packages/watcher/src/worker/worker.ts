@@ -17,7 +17,7 @@ const evalServer = (
   cacheFunction?: CacheFunction
 } => {
   try {
-    const server = evalCode(code, 'app-server', {}, true)
+    const server = evalCode(code, 'app-server', { Buffer }, true)
     let serverFunction: ServerFunction
     let cacheFunction: CacheFunction
 
