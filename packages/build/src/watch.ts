@@ -29,7 +29,7 @@ const watch = async (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
     // reset errors
     store.meta.errors = []
     // rebuild it
-    const result = await store.result.rebuild().catch((e) => e)
+    const result = await store.result.rebuild().catch(e => e)
     res = await parseBuild(opts, result, store.meta)
     // unwatch removed files
     for (const path in prevPaths) {
@@ -53,7 +53,7 @@ const watch = async (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
       // create new watcher
       // @ts-ignore
       const watcher = chokidar.watch(Array.from(meta.paths))
-      const update = (file) => {
+      const update = file => {
         // remove file from file cache
         delete meta.fileCache[isAbsolute(file) ? file : join(cwd, file)]
         // update bundleCache
@@ -65,7 +65,7 @@ const watch = async (opts: BuildOpts, cb: WatchCb): Promise<BuildResult> => {
       bundleStore.set(opts, {
         watcher,
         meta,
-        result,
+        result
       })
     }
   }
