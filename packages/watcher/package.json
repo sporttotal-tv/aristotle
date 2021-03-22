@@ -1,11 +1,11 @@
 {
-  "name": "@saulx/aristotle-watcher",
+  "name": "@sporttotal/aristotle-watcher",
   "version": "1.0.16",
   "dependencies": {
-    "@saulx/aristotle-build": "^1.0.15",
-    "@saulx/aristotle-types": "^1.0.0",
-    "@saulx/aristotle-server-utils": "^1.0.1",
-    "@saulx/utils": "^1.6.6",
+    "@sporttotal/aristotle-build": "^1.0.15",
+    "@sporttotal/aristotle-types": "^1.0.0",
+    "@sporttotal/aristotle-server-utils": "^1.0.1",
+    "@sporttotal/utils": "^1.6.6",
     "chalk": "^4.1.0",
     "eval": "^0.1.4",
     "get-port": "5.1.1",

@@ -1,5 +1,5 @@
 {
-  "name": "@saulx/aristotle-build",
+  "name": "@sporttotal/aristotle-build",
   "main": "./dist/index.js",
   "public": true,
   "version": "1.0.15",
@@ -25,9 +25,9 @@
   "dependencies": {
     "@babel/generator": "^7.12.11",
     "@babel/parser": "^7.12.11",
-    "@saulx/aristotle-types": "^1.0.0",
-    "@saulx/get-package": "^1.0.7",
-    "@saulx/utils": "^1.6.6",
+    "@sporttotal/aristotle-types": "^1.0.0",
+    "@sporttotal/get-package": "^1.0.7",
+    "@sporttotal/utils": "^1.6.6",
     "autoprefixer": "^10.2.3",
     "chokidar": "^3.5.1",
     "cssnano": "^4.1.10",

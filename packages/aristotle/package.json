@@ -1,13 +1,13 @@
 {
-  "name": "@saulx/aristotle",
+  "name": "@sporttotal/aristotle",
   "version": "3.0.16",
   "dependencies": {
     "commander": "^7.0.0",
     "chalk": "^4.1.0",
-    "@saulx/aristotle-build": "^1.0.15",
-    "@saulx/aristotle-watcher": "^1.0.16",
-    "@saulx/aristotle-create-server-dist": "^1.0.16",
-    "@saulx/get-package": "^1.0.7",
+    "@sporttotal/aristotle-build": "^1.0.15",
+    "@sporttotal/aristotle-watcher": "^1.0.16",
+    "@sporttotal/aristotle-create-server-dist": "^1.0.16",
+    "@sporttotal/get-package": "^1.0.7",
     "expand-home-dir": "^0.0.3"
   },
   "bin": {

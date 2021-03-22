@@ -1,5 +1,5 @@
 {
-  "name": "@saulx/aristotle-types",
+  "name": "@sporttotal/aristotle-types",
   "main": "./dist/index.js",
   "public": true,
   "version": "1.0.0",

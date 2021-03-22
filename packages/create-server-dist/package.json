@@ -1,5 +1,5 @@
 {
-  "name": "@saulx/aristotle-create-server-dist",
+  "name": "@sporttotal/aristotle-create-server-dist",
   "main": "./dist/index.js",
   "public": true,
   "version": "1.0.16",
@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "@saulx/get-package": "^1.0.7",
+    "@sporttotal/get-package": "^1.0.7",
     "fs-extra": "^9.1.0",
-    "@saulx/aristotle-build": "^1.0.15",
-    "@saulx/aristotle-server-utils": "^1.0.1"
+    "@sporttotal/aristotle-build": "^1.0.15",
+    "@sporttotal/aristotle-server-utils": "^1.0.1"
   }
 }

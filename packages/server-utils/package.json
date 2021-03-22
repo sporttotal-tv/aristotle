@@ -1,5 +1,5 @@
 {
-  "name": "@saulx/aristotle-server-utils",
+  "name": "@sporttotal/aristotle-server-utils",
   "main": "./dist/index.js",
   "public": true,
   "version": "1.0.1",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "vigour-ua": "^4.0.0",
-    "@saulx/utils": "^1.6.6",
-    "@saulx/aristotle-types": "^1.0.0"
+    "@sporttotal/utils": "^1.6.6",
+    "@sporttotal/aristotle-types": "^1.0.0"
   }
 }
