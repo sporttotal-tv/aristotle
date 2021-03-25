@@ -6,22 +6,22 @@ import cssnano from 'cssnano'
 import fbFixes from 'postcss-flexbugs-fixes'
 import unit from 'postcss-default-unit'
 // import { murmurHash } from 'murmurhash-native'
-import { hash } from '@saulx/utils'
+import { hash } from '@sporttotal/utils'
 import zlib from 'zlib'
 import { promisify } from 'util'
 import fs from 'fs'
 import { BuildOpts } from './'
-import { File, BuildResult } from '@saulx/aristotle-types'
+import { File, BuildResult } from '@sporttotal/aristotle-types'
 
 const STYLES_PATH = '/generated-styles.css'
 const RESET_PATH = '/reset-styles.css'
 const gzip = promisify(zlib.gzip)
 
-const replacer = g => {
+const replacer = (g) => {
   return `-${g[0].toLowerCase()}`
 }
 
-const toKebabCase = str => {
+const toKebabCase = (str) => {
   return str.replace(/([A-Z])/g, replacer)
 }
 
@@ -58,23 +58,23 @@ const parseFile = (parsed: BuildResult, file, envs) => {
 
 let cssReset
 
-const parseCss = async str => {
+const parseCss = async (str) => {
   return (
     await postcss([
       unit({
         ignore: {
           'stop-opacity': true,
-          'animation-name': true
-        }
+          'animation-name': true,
+        },
       }),
       fbFixes,
       autoprefixer({
-        overrideBrowserslist: ['last 1 version', 'cover 95%', 'IE 10']
+        overrideBrowserslist: ['last 1 version', 'cover 95%', 'IE 10'],
       }),
-      cssnano
+      cssnano,
     ]).process(str, {
       from: STYLES_PATH,
-      to: STYLES_PATH
+      to: STYLES_PATH,
     })
   ).css
 }
@@ -87,13 +87,13 @@ const getCssReset = async () => {
     cssReset = {
       path: RESET_PATH,
       text,
-      contents: Buffer.from(text)
+      contents: Buffer.from(text),
     }
   }
   return cssReset
 }
 
-const parseStyles = async meta => {
+const parseStyles = async (meta) => {
   let str = ''
   let mediaQueries = ''
   const keyframes = meta.css['@keyframes']
@@ -148,7 +148,7 @@ const parseBuild = async (
     files: {},
     env: [],
     dependencies: meta.dependencies,
-    entryPoints: opts.entryPoints
+    entryPoints: opts.entryPoints,
   }
 
   if (result.errors) {
@@ -163,7 +163,7 @@ const parseBuild = async (
     result.outputFiles.push({
       path: STYLES_PATH,
       text: meta.cssCache,
-      contents: Buffer.from(meta.cssCache)
+      contents: Buffer.from(meta.cssCache),
     })
   }
 

@@ -1,7 +1,7 @@
 import { Worker } from 'worker_threads'
-import { BuildResult } from '@saulx/aristotle-types'
+import { BuildResult } from '@sporttotal/aristotle-types'
 import { join } from 'path'
-import { ParsedReq, RenderResult } from '@saulx/aristotle-server-utils'
+import { ParsedReq, RenderResult } from '@sporttotal/aristotle-server-utils'
 import { EventEmitter } from 'events'
 
 export class RenderWorker extends EventEmitter {
@@ -10,13 +10,13 @@ export class RenderWorker extends EventEmitter {
     this.build = build
     const file = build.js[0]
     const worker = new Worker(join(__dirname, './worker.js'), {
-      workerData: file.text
+      workerData: file.text,
     })
-    worker.on('message', msg => {
+    worker.on('message', (msg) => {
       const { type, reqId } = msg
       if (type === 'initialized') {
         this.initialized = true
-        this.initializedListeners.forEach(fn => {
+        this.initializedListeners.forEach((fn) => {
           fn()
           this.initializedListeners.delete(fn)
         })
@@ -24,10 +24,10 @@ export class RenderWorker extends EventEmitter {
         this.requests[reqId](msg)
       }
     })
-    worker.on('error', err => {
+    worker.on('error', (err) => {
       this.emit('error', err)
     })
-    worker.on('exit', code => {
+    worker.on('exit', (code) => {
       this.emit('exit', code)
     })
     this.worker = worker
@@ -57,7 +57,7 @@ export class RenderWorker extends EventEmitter {
   public render(req: ParsedReq): Promise<RenderResult> {
     return new Promise((resolve, reject) => {
       const reqId = this.genReqId()
-      this.requests[reqId] = x => {
+      this.requests[reqId] = (x) => {
         delete this.requests[reqId]
         if (x.error) {
           reject(x.error)
@@ -68,7 +68,7 @@ export class RenderWorker extends EventEmitter {
       this.worker.postMessage({
         type: 'render',
         reqId,
-        req
+        req,
       })
     })
   }
@@ -76,7 +76,7 @@ export class RenderWorker extends EventEmitter {
   public checkCache(req: ParsedReq): Promise<string> {
     return new Promise((resolve, reject) => {
       const reqId = this.genReqId()
-      this.requests[reqId] = x => {
+      this.requests[reqId] = (x) => {
         delete this.requests[reqId]
         if (x.error) {
           reject(x.error)
@@ -87,7 +87,7 @@ export class RenderWorker extends EventEmitter {
       this.worker.postMessage({
         type: 'cache',
         reqId,
-        req
+        req,
       })
     })
   }
@@ -97,7 +97,7 @@ export class RenderWorker extends EventEmitter {
     const file = build.js[0]
     return new Promise((resolve, reject) => {
       const reqId = this.genReqId()
-      this.requests[reqId] = x => {
+      this.requests[reqId] = (x) => {
         this.checksum = file.checksum
         delete this.requests[reqId]
         if (x.error) {
@@ -109,13 +109,13 @@ export class RenderWorker extends EventEmitter {
       this.worker.postMessage({
         type: 'updateCode',
         reqId,
-        code: file.text
+        code: file.text,
       })
     })
   }
 
   public updateBuildResult(buildresult: BuildResult): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const sharedBuilds = this.sharedBuilds
       const reqId = this.genReqId()
       let cnt = 0
@@ -127,7 +127,7 @@ export class RenderWorker extends EventEmitter {
             type: 'buildresult',
             operation: 'delete',
             key,
-            reqId
+            reqId,
           })
           delete sharedBuilds[key]
         }
@@ -156,20 +156,20 @@ export class RenderWorker extends EventEmitter {
               path: file.path,
               checksum: file.checksum,
               gzip: file.gzip,
-              mime: file.mime
+              mime: file.mime,
             },
-            data: uint8
+            data: uint8,
           })
         }
       }
 
       if (cnt) {
-        this.requests[reqId] = x => {
+        this.requests[reqId] = (x) => {
           cnt--
           if (cnt === 0) {
             delete this.requests[reqId]
             const newReq = this.genReqId()
-            this.requests[newReq] = x => {
+            this.requests[newReq] = (x) => {
               resolve()
               delete this.requests[newReq]
             }
@@ -179,12 +179,12 @@ export class RenderWorker extends EventEmitter {
               reqId: newReq,
               key: 'build',
               meta: {
-                js: buildresult.js.map(v => v.url),
-                css: buildresult.css.map(v => v.url),
+                js: buildresult.js.map((v) => v.url),
+                css: buildresult.css.map((v) => v.url),
                 dependencies: buildresult.dependencies,
                 env: buildresult.env,
-                entryPoints: buildresult.entryPoints
-              }
+                entryPoints: buildresult.entryPoints,
+              },
             })
           }
         }
@@ -195,7 +195,7 @@ export class RenderWorker extends EventEmitter {
   }
 
   public isInitialized(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (this.initialized) {
         resolve()
       } else {

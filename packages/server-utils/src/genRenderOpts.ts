@@ -1,5 +1,5 @@
 import { RenderOpts, ParsedReq } from './types'
-import { BuildResult } from '@saulx/aristotle-types'
+import { BuildResult } from '@sporttotal/aristotle-types'
 import genEnvfile from './genEnvfile'
 
 export default (req: ParsedReq, build: BuildResult): RenderOpts => {
@@ -8,7 +8,7 @@ export default (req: ParsedReq, build: BuildResult): RenderOpts => {
   const renderOpts: RenderOpts = {
     ...req,
     body: `${build.js
-      .map(file => {
+      .map((file) => {
         return `<script src="${file.url}"></script>`
       })
       .join('')}`,
@@ -17,12 +17,12 @@ export default (req: ParsedReq, build: BuildResult): RenderOpts => {
     env: build.env,
     js: build.js,
     css: build.css,
-    files: build.files
+    files: build.files,
   }
 
   if (build.css.length) {
     renderOpts.head += `<style>${build.css
-      .map(file => {
+      .map((file) => {
         return file.text
       })
       .join('')}</style>`

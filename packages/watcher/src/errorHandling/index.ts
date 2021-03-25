@@ -1,5 +1,5 @@
-import { BuildError, BuildResult } from '@saulx/aristotle-types'
-import { ParsedReq } from '@saulx/aristotle-server-utils'
+import { BuildError, BuildResult } from '@sporttotal/aristotle-types'
+import { ParsedReq } from '@sporttotal/aristotle-server-utils'
 import escape from 'escape-html'
 import { SourceMapConsumer } from 'source-map'
 import { join, dirname } from 'path'
@@ -91,10 +91,10 @@ const parseError = async (error: AristotleError): Promise<string> => {
         const source = await SourceMapConsumer.with(
           parsedMap,
           null,
-          consumer => {
+          (consumer) => {
             return consumer.originalPositionFor({
               line: Number(lines[0]),
-              column: Number(lines[1])
+              column: Number(lines[1]),
             })
           }
         )
@@ -106,7 +106,7 @@ const parseError = async (error: AristotleError): Promise<string> => {
           source: source.source,
           line: source.line - 1,
           column: source.column - 1,
-          code: await readfile(path, { encoding: 'utf8' })
+          code: await readfile(path, { encoding: 'utf8' }),
         })
       }
       return `<a class="error" href="vscode://file${fullpath}">
@@ -127,7 +127,7 @@ const parseError = async (error: AristotleError): Promise<string> => {
       source: file,
       line: error.buildError.location.line - 1,
       column: error.buildError.location.column - 1,
-      code: await readfile(path, { encoding: 'utf8' })
+      code: await readfile(path, { encoding: 'utf8' }),
     })
     return `<a class="error" href="vscode://file${fullpath}">
     <div class="type">${type}</div>
@@ -196,7 +196,7 @@ export const genErrorPage = async (
       </style>
     </head>
     <body>
-       ${await Promise.all(errors.map(err => parseError(err)))}
+       ${await Promise.all(errors.map((err) => parseError(err)))}
     </body>
   </html>`
 }

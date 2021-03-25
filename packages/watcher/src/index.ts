@@ -3,8 +3,8 @@ import { v4 } from 'internal-ip'
 import http from 'http'
 import getPort from 'get-port'
 import startLiveReload from './livereload'
-import build, { BuildOpts } from '@saulx/aristotle-build'
-import { BuildError, BuildResult, File } from '@saulx/aristotle-types'
+import build, { BuildOpts } from '@sporttotal/aristotle-build'
+import { BuildError, BuildResult, File } from '@sporttotal/aristotle-types'
 import { genWorker, RenderWorker } from './worker'
 import fs from 'fs'
 import { join } from 'path'
@@ -20,7 +20,7 @@ import {
   genServeFromFile,
   genServeFromRender,
   hasServer,
-} from '@saulx/aristotle-server-utils'
+} from '@sporttotal/aristotle-server-utils'
 
 const loadingHtml = fs.readFileSync(join(__dirname, '../static/loading.html'))
 

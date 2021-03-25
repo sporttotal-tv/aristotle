@@ -1,6 +1,6 @@
 import { RenderResult, ServeResult } from './types'
-import { hash } from '@saulx/utils'
-import { File } from '@saulx/aristotle-types'
+import { hash } from '@sporttotal/utils'
+import { File } from '@sporttotal/aristotle-types'
 import util from 'util'
 import zlib from 'zlib'
 
@@ -59,7 +59,7 @@ export const genServeFromRender = async (
       contentLength: realContents.byteLength,
       gzip: renderResult.gzip || compress,
       mime: renderResult.mime || 'text/html',
-      statusCode: renderResult.statusCode || 200
+      statusCode: renderResult.statusCode || 200,
     }
     return serveResult
   } else {
@@ -75,7 +75,7 @@ export const genServeFromRender = async (
       contentLength: contents.byteLength,
       gzip: compress,
       mime: 'text/html',
-      statusCode: 200
+      statusCode: 200,
     }
     return serveResult
   }
@@ -90,7 +90,7 @@ export const genServeFromFile = (file: File): ServeResult => {
     contentLength: file.contents.byteLength,
     gzip: !!file.gzip,
     mime: file.mime,
-    statusCode: 200
+    statusCode: 200,
   }
   return serveResult
 }

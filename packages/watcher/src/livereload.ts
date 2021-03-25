@@ -1,6 +1,6 @@
 import WebSocket from 'ws'
-import { File } from '@saulx/aristotle-types'
-import { hash } from '@saulx/utils'
+import { File } from '@sporttotal/aristotle-types'
+import { hash } from '@sporttotal/utils'
 
 const genBrowser = (
   port: number
@@ -31,7 +31,7 @@ type LiveReload = {
 const startWs = (port: number): LiveReload => {
   const { clients } = new WebSocket.Server({ port })
   const update = () => {
-    clients.forEach(client => {
+    clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send('')
       }
@@ -55,8 +55,8 @@ const startWs = (port: number): LiveReload => {
       gzip: false,
       url: '/' + checksum + '.js',
       contents: buf,
-      text: browserScript
-    }
+      text: browserScript,
+    },
   }
 }
 

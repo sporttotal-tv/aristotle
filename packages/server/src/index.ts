@@ -1,4 +1,4 @@
-import { BuildResult } from '@saulx/aristotle-types'
+import { BuildResult } from '@sporttotal/aristotle-types'
 import {
   RenderFunction,
   CacheFunction,
@@ -9,9 +9,9 @@ import {
   serve,
   genRenderOpts,
   genServeFromFile,
-  genServeFromRender
-} from '@saulx/aristotle-server-utils'
-import getSsl from '@saulx/ops-get-ssl'
+  genServeFromRender,
+} from '@sporttotal/aristotle-server-utils'
+import getSsl from '@sporttotal/ops-get-ssl'
 import https from 'https'
 import http from 'http'
 import chalk from 'chalk'
@@ -32,7 +32,7 @@ const createServer = async ({
   buildResult,
   buildJson,
   renderer,
-  cacheFunction
+  cacheFunction,
 }: ServerOpts) => {
   // @ts-ignore pretty strange it does have types...
   const ssl = getSsl()
@@ -59,7 +59,7 @@ const createServer = async ({
     ts = Date.now()
     for (let key in cache) {
       if (cache[key].ts + cache[key].result.memCache * 1e3 < ts) {
-        cache[key].refs.forEach(v => {
+        cache[key].refs.forEach((v) => {
           delete cachedPaths[v]
         })
         delete cache[key]
@@ -96,7 +96,7 @@ const createServer = async ({
               cache[result.checksum] = {
                 ts,
                 result: result,
-                refs: new Set()
+                refs: new Set(),
               }
             }
             cachedPaths[cacheKey] = result.checksum

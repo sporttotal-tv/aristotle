@@ -1,5 +1,5 @@
-import { BuildResult, File } from '@saulx/aristotle-types'
-import { BuildJson, BuildJsonFile } from '@saulx/aristotle-server-utils'
+import { BuildResult, File } from '@sporttotal/aristotle-types'
+import { BuildJson, BuildJsonFile } from '@sporttotal/aristotle-server-utils'
 import fs from 'fs'
 import util from 'util'
 import { join, dirname } from 'path'
@@ -19,7 +19,7 @@ export default async (buildJson: string): Promise<BuildResult> => {
     const buffer: Buffer = await readFile(join(dirname(buildJson), contents))
     parsedFiles[file.url] = new File({
       ...rest,
-      contents: buffer
+      contents: buffer,
     })
   }
   const q = []
@@ -30,12 +30,12 @@ export default async (buildJson: string): Promise<BuildResult> => {
 
   const buildResult: BuildResult = {
     files: parsedFiles,
-    js: js.map(file => parsedFiles[file]),
-    css: css.map(file => parsedFiles[file]),
+    js: js.map((file) => parsedFiles[file]),
+    css: css.map((file) => parsedFiles[file]),
     env,
     entryPoints,
     errors: [],
-    dependencies
+    dependencies,
   }
 
   return buildResult

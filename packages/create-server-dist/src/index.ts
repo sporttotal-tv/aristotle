@@ -1,13 +1,13 @@
 import { emptyDir, writeFile, writeJson } from 'fs-extra'
 import { join, relative, basename } from 'path'
-import build from '@saulx/aristotle-build'
+import build from '@sporttotal/aristotle-build'
 import {
   hasServer,
   isPublicFile,
   BuildJson,
-  BuildJsonFile
-} from '@saulx/aristotle-server-utils'
-import getPkg from '@saulx/get-package'
+  BuildJsonFile,
+} from '@sporttotal/aristotle-server-utils'
+import getPkg from '@sporttotal/get-package'
 import gzip from 'zlib'
 import util from 'util'
 
@@ -30,7 +30,7 @@ const unzip = util.promisify(gzip.gunzip)
 export default async ({
   target,
   dest,
-  external
+  external,
 }: {
   target: string
   dest: string
@@ -46,7 +46,7 @@ export default async ({
     platform: 'browser',
     production: true,
     gzip: true,
-    external
+    external,
   })
 
   const folderPkg = await getPkg(target)
@@ -55,11 +55,11 @@ export default async ({
     name: folderPkg.name,
     version: folderPkg.version,
     scripts: {
-      start: 'node ./server/index.js'
+      start: 'node ./server/index.js',
     },
     dependencies: {
-      '@saulx/aristotle-server': '^1.0.1'
-    }
+      '@sporttotal/aristotle-server': '^1.0.1',
+    },
   }
 
   const q = []
@@ -74,7 +74,7 @@ export default async ({
       minify: true,
       production: true,
       gzip: true,
-      external
+      external,
     })
     for (const key in serverBuild.files) {
       const file = serverBuild.files[key]
@@ -97,7 +97,7 @@ export default async ({
     const serverFile = `
       const renderer = require('./server.js')
       const { join } = require('path')
-      const startServer = require('@saulx/aristotle-server').default
+      const startServer = require('@sporttotal/aristotle-server').default
       startServer({ 
         port: process.env.PORT ? Number(process.env.PORT) : 443, 
         renderer: renderer.default, 
@@ -109,7 +109,7 @@ export default async ({
     q.push(writeFile(join(path, 'index.js'), serverFile))
   } else {
     const serverFile = `
-    const startServer = require('@saulx/aristotle-server').default
+    const startServer = require('@sporttotal/aristotle-server').default
     const { join } = require('path')
     startServer({ 
       port: process.env.PORT ? Number(process.env.PORT) : 443, 
@@ -127,7 +127,7 @@ export default async ({
 
   q.push(
     writeJson(join(dest, 'package.json'), pkg, {
-      spaces: 2
+      spaces: 2,
     })
   )
 
@@ -152,17 +152,19 @@ export default async ({
       checksum: file.checksum,
       path: basename(file.path),
       mime: file.mime,
-      contents: file.gzip ? join('./files', key + '.gz') : join('./files', key)
+      contents: file.gzip ? join('./files', key + '.gz') : join('./files', key),
     }
   }
 
   const buildJson: BuildJson = {
-    js: browserBuild.js.map(v => v.url),
-    css: browserBuild.css.map(v => v.url),
+    js: browserBuild.js.map((v) => v.url),
+    css: browserBuild.css.map((v) => v.url),
     files,
     dependencies: browserBuild.dependencies,
     env: browserBuild.env,
-    entryPoints: browserBuild.entryPoints.map(v => relative(process.cwd(), v))
+    entryPoints: browserBuild.entryPoints.map((v) =>
+      relative(process.cwd(), v)
+    ),
   }
 
   q.push(writeJson(buildPath, buildJson))

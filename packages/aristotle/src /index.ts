@@ -1,8 +1,8 @@
-import createServer from '@saulx/aristotle-create-server-dist'
-import createWatcher from '@saulx/aristotle-watcher'
+import createServer from '@sporttotal/aristotle-create-server-dist'
+import createWatcher from '@sporttotal/aristotle-watcher'
 import { isAbsolute, join } from 'path'
 import { program } from 'commander'
-import getPkg from '@saulx/get-package'
+import getPkg from '@sporttotal/get-package'
 import chalk, { keyword } from 'chalk'
 import expandHomeDir from 'expand-home-dir'
 

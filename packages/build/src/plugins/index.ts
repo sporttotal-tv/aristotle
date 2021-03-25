@@ -1,6 +1,6 @@
 import fs from 'fs'
 import parseStyle from './style'
-import getPkg from '@saulx/get-package'
+import getPkg from '@sporttotal/get-package'
 import imagemin from 'imagemin'
 import imageminMozjpeg from 'imagemin-mozjpeg'
 import imageminPngquant from 'imagemin-pngquant'
@@ -12,7 +12,7 @@ export default (opts, meta) => {
   meta.keyframesCnt = 0
 
   const cwd = process.cwd()
-  const toDevPath = path => {
+  const toDevPath = (path) => {
     path = relative(cwd, path)
     while (/\.\.\//.test(path)) {
       path = path.substring(3)
@@ -50,13 +50,13 @@ export default (opts, meta) => {
         // store dependencies
         build.onResolve(
           { filter: new RegExp(opts.external.join('|')) },
-          async args => {
+          async (args) => {
             if (!(args.path in meta.dependencies)) {
               try {
                 // try to get the installed version
                 const contents = await fs.promises.readFile(
                   require.resolve(`${args.path}/package.json`, {
-                    paths: [args.resolveDir]
+                    paths: [args.resolveDir],
                   }),
                   'utf-8'
                 )
@@ -84,9 +84,9 @@ export default (opts, meta) => {
                     imageminMozjpeg(),
                     imageminPngquant({ quality: [65, 80] }),
                     imageminSvgo({
-                      plugins: [{ removeViewBox: false }]
-                    })
-                  ]
+                      plugins: [{ removeViewBox: false }],
+                    }),
+                  ],
                 })
                 meta.fileCache[path] = { contents: data, loader: 'file' }
               } catch (e) {
@@ -97,7 +97,7 @@ export default (opts, meta) => {
           }
         )
       }
-    }
+    },
   }
   return plugin
 }

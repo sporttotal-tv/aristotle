@@ -1,6 +1,6 @@
 import build from './build'
 import watch from './watch'
-import { BuildResult } from '@saulx/aristotle-types'
+import { BuildResult } from '@sporttotal/aristotle-types'
 
 export type BuildOpts = {
   entryPoints: string[]

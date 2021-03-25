@@ -1,4 +1,4 @@
-import { File } from '@saulx/aristotle-types'
+import { File } from '@sporttotal/aristotle-types'
 
 export type Ua = {
   version: number

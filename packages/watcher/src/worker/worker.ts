@@ -1,11 +1,11 @@
 import { parentPort, workerData } from 'worker_threads'
 import evalCode from 'eval'
-import { BuildResult, File } from '@saulx/aristotle-types'
+import { BuildResult, File } from '@sporttotal/aristotle-types'
 import {
   CacheFunction,
   genRenderOpts,
   defaultCache,
-} from '@saulx/aristotle-server-utils'
+} from '@sporttotal/aristotle-server-utils'
 
 type ServerFunction = (...args: any[]) => any
 
