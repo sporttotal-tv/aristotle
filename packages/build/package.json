@@ -2,7 +2,7 @@
   "name": "@sporttotal/aristotle-build",
   "main": "./dist/index.js",
   "public": true,
-  "version": "1.0.15",
+  "version": "1.0.16",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch",

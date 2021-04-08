@@ -2,7 +2,7 @@
   "name": "@sporttotal/aristotle-types",
   "main": "./dist/index.js",
   "public": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "rm -rf ./dist && tsc",
     "watch": "tsc --watch"

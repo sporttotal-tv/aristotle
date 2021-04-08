@@ -1,6 +1,6 @@
 {
   "name": "@sporttotal/aristotle-watcher",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "dependencies": {
     "@sporttotal/aristotle-build": "^1.0.15",
     "@sporttotal/aristotle-types": "^1.0.0",

@@ -1,6 +1,6 @@
 {
   "name": "@sporttotal/aristotle",
-  "version": "3.0.16",
+  "version": "3.0.17",
   "dependencies": {
     "commander": "^7.0.0",
     "chalk": "^4.1.0",
